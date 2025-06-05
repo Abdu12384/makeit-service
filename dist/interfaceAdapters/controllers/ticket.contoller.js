@@ -34,8 +34,8 @@ let TicketController = class TicketController {
         try {
             console.log(req.body);
             const { ticket, paymentIntentId, totalAmount, totalCount, vendorId } = req.body;
-            const { userId, role } = req.user;
-            const { stripeClientId, createdTicket } = await this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, userId);
+            const { userId: clientId, role } = req.user;
+            const { stripeClientId, createdTicket } = await this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId);
             console.log('created ticket', stripeClientId, createdTicket);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

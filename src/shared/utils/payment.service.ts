@@ -1,7 +1,7 @@
 import Stripe from "stripe";
-import { IStripeService } from "../../domain/interface/servicesInterface/payment.service.interface";
+import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface";
 
-export class PaymentService implements IStripeService {
+export class PaymentService implements IPaymentService {
     private stripe: Stripe
     constructor() {
         this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

@@ -117,7 +117,11 @@ let ChatUseCase = class ChatUseCase {
         if (!chatId) {
             throw new Error("Chat ID is required");
         }
-        return await this.chatRepository.findOne({ chatId });
+        const chat = await this.chatRepository.findOne({ chatId });
+        if (!chat) {
+            throw new Error("Chat not found");
+        }
+        return chat;
     }
 };
 ChatUseCase = __decorate([

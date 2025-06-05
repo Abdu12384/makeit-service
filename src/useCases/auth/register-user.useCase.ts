@@ -9,6 +9,7 @@ import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
 import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface.js";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
 
 @injectable()
 export class RegisterClientUseCase implements IRegisterUseCase{
@@ -62,7 +63,7 @@ async createUsers(user: UserDTO): Promise<IClientEntity | null> {
             ...user,
             password: hashedPassword ?? "",
             userId : userId
-          }
+          } as Partial<IClientEntity | IVendorEntity>
         ) 
       
       }

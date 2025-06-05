@@ -34,8 +34,8 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       if(!eventDetails){throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)}
     if(eventDetails.status === "cancelled") throw new CustomError("Event cancelled",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails.status === "completed") throw new CustomError("Event already completed",HTTP_STATUS.FORBIDDEN) 
-    if(eventDetails?.ticketPurchased > eventDetails.totalTicket) throw new CustomError("Ticket Sold Out",HTTP_STATUS.FORBIDDEN)
-    if (eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
+    if(eventDetails?.ticketPurchased && eventDetails?.ticketPurchased > eventDetails.totalTicket) throw new CustomError("Ticket Sold Out",HTTP_STATUS.FORBIDDEN)
+    if (eventDetails?.ticketPurchased && eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
      
       const HOSTNAME = process.env.HOSTNAME
       const ticketId = generateUniqueId("ticket")
@@ -56,7 +56,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         clientId: clientId,
         ticketId: ticketId,    
       }
-      const paymentDocument = await this._paymentRepository.save(paymentDetails)
+      const paymentDocument = await this._paymentRepository.save(paymentDetails as any)
       if(!paymentDocument){throw new CustomError("Error while saving payment details",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
 
       let attendeesCount = eventDetails?.ticketPurchased || 0

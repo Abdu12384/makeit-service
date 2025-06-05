@@ -6,6 +6,8 @@ import { IMessageEntity } from "../../domain/entities/message.entity.js";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
+import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
+import { IClientEntity } from "../../domain/entities/client.entity.js";
 
 
 
@@ -151,7 +153,7 @@ console.log("startChat-------------------------------------------", data);
 
 
   //======================================================
-  async findUserById(userId: string, model: "client" | "vendor"): Promise<IChatEntity> {
+  async findUserById(userId: string, model: "client" | "vendor"): Promise<IChatEntity | IClientEntity | IVendorEntity | null> {
     if (!userId) {
       throw new Error("User ID is required");
     }
@@ -168,7 +170,11 @@ console.log("startChat-------------------------------------------", data);
     if (!chatId) {
       throw new Error("Chat ID is required");
     }
-    return await this.chatRepository.findOne({chatId});
+    const chat = await this.chatRepository.findOne({chatId});
+    if (!chat) {
+      throw new Error("Chat not found");
+    }
+    return chat;
   }
 
 }

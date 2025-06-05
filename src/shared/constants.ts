@@ -1,7 +1,7 @@
 
 
 export type TRole = "client" | "admin" | "vendor";
-export type statusTypes = "active" | "pending" | "blocked";
+export type statusTypes = "active" |"approved" | "pending" | "rejected" | "blocked";
 
 
 export const HTTP_STATUS = {

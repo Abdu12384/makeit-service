@@ -48,16 +48,16 @@ export class TicketController implements ITicketController {
           console.log(req.body)
 
         const {ticket,paymentIntentId,totalAmount,totalCount,vendorId} = req.body
-        const {userId,role} = (req as CustomRequest).user 
+        const {userId:clientId,role} = (req as CustomRequest).user 
 
         const {stripeClientId, createdTicket} = await this._createTicketUseCase.execute(
             ticket,
             paymentIntentId,
             totalAmount,
             totalCount,
-            vendorId
-            userId,
-        )
+            vendorId,
+            clientId
+            )
         console.log('created ticket',stripeClientId, createdTicket)
 
         res.status(HTTP_STATUS.OK).json({

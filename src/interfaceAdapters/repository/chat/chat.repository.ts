@@ -4,13 +4,14 @@ import { IChatRepository } from "../../../domain/interface/repositoryInterfaces/
 import { IChatEntity } from "../../../domain/entities/chat.entity.js";
 import { messageModel } from "../../../frameworks/database/mongodb/model/message.model.js";
 import mongoose, { FilterQuery } from "mongoose";
+import { injectable } from "tsyringe";
 
 
 
 
 
 
-
+@injectable()
 export  class ChatRepository extends BaseRepository<IChatModel> implements IChatRepository {
     constructor() {
         super(chatModel);
@@ -23,9 +24,9 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
 
     async findOrCreateChat(
       senderId: string,
-      senderModel: "client" | "vendors",
+      senderModel: "client" | "vendor",
       receiverId: string,
-      receiverModel: "client" | "vendors",
+      receiverModel: "client" | "vendor",
       chatId: string
     ): Promise<IChatEntity> {
       let chat = await chatModel.findOne({
@@ -55,7 +56,7 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
     async saveMessage(message: {
       chatId: string;
       senderId: string;
-      senderModel: "client" | "vendors";
+      senderModel: "client" | "vendor";
       messageContent: string;
       sendedTime: Date;
       messageId: string;

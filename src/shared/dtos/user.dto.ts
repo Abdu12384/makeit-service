@@ -1,4 +1,4 @@
-import { TRole } from "../constants";
+import { statusTypes, TRole } from "../constants";
 
 export interface AdminDTO {
    userId?:string;
@@ -27,7 +27,7 @@ export interface VendorDTO {
    email: string;
    phone?: string;
    password: string
-   vendorStatus?:string
+   vendorStatus?: "active" | "pending" | "rejected" | "blocked";
    idProof: string;
    role:"vendor"
 }

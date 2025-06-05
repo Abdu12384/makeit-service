@@ -12,5 +12,7 @@ export interface IChatEntity {
       updatedAt:string,
       receiverName?:string,
       receiverProfileImage?:string,
+      name:string,
+      profileImage?:string
       
 }

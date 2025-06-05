@@ -26,8 +26,12 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
        if (booking.paymentStatus == "Successfull") throw new Error('This booking is Already paid')
 
         const service = await this._serviceRepository.findOne({serviceId: booking.serviceId})
-        
-        const totalAmount = booking.date.length * service.servicePrice
+
+        if(!service){
+            throw new Error("Service not found")
+        }
+
+        const totalAmount = service.servicePrice
         
                 const clientStripeId = await this._paymentService.createPaymentIntent(
                   totalAmount,

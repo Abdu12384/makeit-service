@@ -1,5 +1,7 @@
 import { IChatEntity } from "../../../entities/chat.entity";
+import { IClientEntity } from "../../../entities/client.entity";
 import { IMessageEntity } from "../../../entities/message.entity";
+import { IVendorEntity } from "../../../entities/vendor.entity";
 
 export interface IChatUseCase {
   startChat(data: {
@@ -22,7 +24,7 @@ export interface IChatUseCase {
 
   markMessagesAsSeen(chatId: string, userId: string): Promise<void>;
 
-  findUserById(userId: string, model: "client" | "vendor"): Promise<IChatEntity>;
+  findUserById(userId: string, model: "client" | "vendor"): Promise<IChatEntity | IClientEntity | IVendorEntity | null>;
 
   getChatById(chatId: string): Promise<IChatEntity>;
 }
