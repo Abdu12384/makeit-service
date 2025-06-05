@@ -1,0 +1,52 @@
+import { inject, injectable } from "tsyringe";
+import { IWalletController } from "../../domain/interface/controllerInterfaces/wallet/wallet-controller.interface.js";
+import { Request, Response } from "express";
+import { CustomRequest } from "../middlewares/auth.middleware.js";
+import { HTTP_STATUS } from "../../shared/constants.js";
+import { handleErrorResponse } from "../../shared/utils/error.handler.js";
+import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface";
+
+
+
+
+@injectable()
+export class WalletController implements IWalletController{
+    
+    constructor(
+        @inject("IGetWalletByIdUseCase")
+        private readonly _getWalletByIdUseCase:IGetWalletByIdUseCase
+    ){}
+
+
+
+
+    
+ // ══════════════════════════════════════════════════════════
+ //   Get Wallet By Id
+ // ══════════════════════════════════════════════════════════
+  
+
+    async getWalletById(req:Request,res:Response):Promise<void>{
+        try {
+            const {userId} = (req as CustomRequest).user
+            const {page,limit} = req.query
+            const pageNumber = Number(page)
+            const pageSize = Number(limit)
+            const wallet = await this._getWalletByIdUseCase.execute(
+              userId,
+              pageNumber,
+              pageSize
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                wallet
+            })
+        } catch (error) {
+            handleErrorResponse(res,error)
+        }
+    }
+
+
+    
+        
+}

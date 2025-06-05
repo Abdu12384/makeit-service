@@ -1,0 +1,44 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+import { inject, injectable } from "tsyringe";
+let GetAllEventsUseCase = class GetAllEventsUseCase {
+    _eventRepository;
+    constructor(_eventRepository) {
+        this._eventRepository = _eventRepository;
+    }
+    async execute(pageNumber, pageSize, searchTermString) {
+        const validPageNumber = Math.max(1, pageNumber || 1);
+        const validPageSize = Math.max(1, pageSize || 10);
+        const skip = (validPageNumber - 1) * validPageSize;
+        let filter = {};
+        if (searchTermString) {
+            filter.$or = [
+                { name: { $regex: searchTermString, $options: "i" } },
+                { description: { $regex: searchTermString, $options: "i" } }
+            ];
+        }
+        const { items, total } = await this._eventRepository.findAll(filter, skip, validPageSize, { createdAt: -1 });
+        const response = {
+            events: items,
+            total: Math.ceil(total / validPageSize)
+        };
+        return response;
+    }
+};
+GetAllEventsUseCase = __decorate([
+    injectable(),
+    __param(0, inject("IEventRepository")),
+    __metadata("design:paramtypes", [Object])
+], GetAllEventsUseCase);
+export { GetAllEventsUseCase };
+//# sourceMappingURL=get-all-events.usecase.js.map

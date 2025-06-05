@@ -1,0 +1,63 @@
+import { inject, injectable } from "tsyringe";
+import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
+import { IWalletEntity } from "../../domain/entities/wallet.entity.js";
+import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface.js";
+import { CustomError } from "../../domain/utils/custom.error.js";
+import { HTTP_STATUS } from "../../shared/constants.js";
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js";
+import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+
+
+
+
+
+
+
+
+@injectable()
+export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
+    
+    constructor(
+        @inject("IWalletRepository")
+        private readonly walletRepository:IWalletRepository,
+        @inject("ITransactionRepository")
+        private readonly transactionRepository:ITransactionRepository
+    ){}
+
+    async execute(userId:string,pageNumber:number,pageSize:number):Promise<any>{
+
+       const validPageNumber = Math.max(1, pageNumber || 1);
+       const validPageSize = Math.max(1, pageSize || 10);
+       const skip = (validPageNumber - 1) * validPageSize;
+       const limit = validPageSize;
+       const sort = { createdAt: -1 };
+       console.log(skip,limit,userId)
+
+        let wallet = await this.walletRepository.findOne({userId})
+        if (!wallet) {
+          const walletId = generateUniqueId("wallet")
+          const newWallet = {
+            walletId,
+            userId,
+            balance: 0,
+            userModel:"client",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+          wallet = await this.walletRepository.save(newWallet);
+        }
+      
+        console.log('wallet',wallet)
+
+        const {items,total} = await this.transactionRepository.findAll({walletId:wallet.walletId},skip,limit,sort)
+        console.log('transaction',items)
+
+        const response = {
+            wallet,
+            transaction:items,
+            total:Math.ceil(total/validPageSize)
+        }
+        return response
+    }
+}

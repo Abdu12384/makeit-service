@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                          // Latest JS features
+    "module": "ESNext",                          // ESM support
+    "moduleResolution": "node",                  // Node-style module resolution
+    "outDir": "./dist",                          // Output folder
+    "rootDir": "./src",                          // Source folder
+    "strict": true,                              // Strict type checking
+    "esModuleInterop": true,                     // Allows default imports from CommonJS
+    "forceConsistentCasingInFileNames": true,    // Avoid file case issues (cross-platform)
+    "skipLibCheck": true,                        // Speeds up builds by skipping type checks in node_modules
+    "resolveJsonModule": true,                   // Import JSON files
+    "types": ["node"],                           // Include Node.js types
+    "sourceMap": true,                            // Useful for debugging
+    "experimentalDecorators": true,              // Enable decorators
+    "emitDecoratorMetadata": true                
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

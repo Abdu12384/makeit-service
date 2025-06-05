@@ -1,0 +1,78 @@
+import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
+import { IPaymentController } from "../../domain/interface/controllerInterfaces/payment/payment-cantroller.interface.js";
+import { handleErrorResponse } from "../../shared/utils/error.handler.js";
+import { HTTP_STATUS } from "../../shared/constants.js";
+import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface.js";
+import { IBookingConfirmPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-confirm-payment-usecase.interface.js";
+
+
+
+
+
+
+
+
+
+
+
+@injectable()
+export class PaymentController implements IPaymentController{
+    constructor(
+      @inject("IBookingPaymentUseCase")
+      private _createBookingPaymentUseCase: IBookingPaymentUseCase,
+      @inject("IBookingConfirmPaymentUseCase")
+      private _confirmPayment: IBookingConfirmPaymentUseCase
+    ){}
+
+
+
+// ══════════════════════════════════════════════════════════
+//  Handle Booking Payment 
+// ══════════════════════════════════════════════════════════
+
+    async handleBookingPayment(req:Request,res:Response): Promise<void>{
+        try {
+
+          const {bookingId, paymentIntentId} = req.body
+          const {clientStripeId,booking} = await this._createBookingPaymentUseCase.confirmPayment(
+          paymentIntentId,
+          bookingId,
+        )
+         res.status(HTTP_STATUS.OK).json({
+            success:true,
+            clientStripeId,
+            booking,
+         })
+            
+        } catch (error) {
+            handleErrorResponse(res, error)
+        }
+    }
+
+
+// ══════════════════════════════════════════════════════════
+//  Confirm Payment 
+// ══════════════════════════════════════════════════════════
+
+    async confirmPayment(req:Request,res:Response): Promise<void>{
+        try {
+
+          const {booking, paymentIntentId} = req.body
+          console.log('confirmPayment',req.body)
+          const confirmPayment = await this._confirmPayment.confirmPayment(
+            paymentIntentId,
+            booking,
+          )
+          res.status(HTTP_STATUS.OK).json({
+            success:true,
+            message:"Payment Confirmed"
+          })
+            
+        } catch (error) {
+            handleErrorResponse(res, error)
+        }
+
+
+  }
+}
