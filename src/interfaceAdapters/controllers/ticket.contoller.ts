@@ -45,18 +45,23 @@ export class TicketController implements ITicketController {
 // ══════════════════════════════════════════════════════════
   async createTicket(req: Request, res: Response): Promise<void> {
         try {
-          console.log(req.body)
+          console.log("req.body",req.body)
 
-        const {ticket,paymentIntentId,totalAmount,totalCount,vendorId} = req.body
+        const {ticket,email,phone,eventId,paymentIntentId,totalAmount,totalCount,vendorId} = req.body
         const {userId:clientId,role} = (req as CustomRequest).user 
 
+        console.log("eventId", eventId)
+        
         const {stripeClientId, createdTicket} = await this._createTicketUseCase.execute(
             ticket,
             paymentIntentId,
             totalAmount,
             totalCount,
             vendorId,
-            clientId
+            clientId,
+            eventId,
+            email,
+            phone
             )
         console.log('created ticket',stripeClientId, createdTicket)
 

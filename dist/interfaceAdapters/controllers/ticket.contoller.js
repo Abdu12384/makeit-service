@@ -32,10 +32,11 @@ let TicketController = class TicketController {
     // ══════════════════════════════════════════════════════════
     async createTicket(req, res) {
         try {
-            console.log(req.body);
-            const { ticket, paymentIntentId, totalAmount, totalCount, vendorId } = req.body;
+            console.log("req.body", req.body);
+            const { ticket, email, phone, eventId, paymentIntentId, totalAmount, totalCount, vendorId } = req.body;
             const { userId: clientId, role } = req.user;
-            const { stripeClientId, createdTicket } = await this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId);
+            console.log("eventId", eventId);
+            const { stripeClientId, createdTicket } = await this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone);
             console.log('created ticket', stripeClientId, createdTicket);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

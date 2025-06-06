@@ -27,10 +27,11 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       @inject("ITicketRepository") private _ticketRepository: ITicketRepository
    ){}
 
-   async execute(ticket:any, paymentIntentId: string, totalAmount: number, totalCount: number, vendorId: string,clientId:string): Promise<{ stripeClientId: string, createdTicket: any }> {
+   async execute(ticket:any, paymentIntentId: string, totalAmount: number, totalCount: number, vendorId: string,clientId:string,eventId:string,email:string,phone:string): Promise<{ stripeClientId: string, createdTicket: any }> {
     console.log('clientId her',clientId)
     console.log("vendorId ",vendorId)
-      const eventDetails = await this._eventRepository.findOne({eventId:ticket.eventId})
+      const eventDetails = await this._eventRepository.findOne({eventId})
+      console.log("eventDetails",eventDetails)
       if(!eventDetails){throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)}
     if(eventDetails.status === "cancelled") throw new CustomError("Event cancelled",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails.status === "completed") throw new CustomError("Event already completed",HTTP_STATUS.FORBIDDEN) 
@@ -39,7 +40,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
      
       const HOSTNAME = process.env.HOSTNAME
       const ticketId = generateUniqueId("ticket")
-      const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${ticket.eventId}`
+      const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${eventId}`
       const qrCode = await this._qrService.generateQRCode(qrLink)
       if(!qrCode){throw new CustomError("QR Code generation failed",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
       const clientStripeId = await this._stripeService.createPaymentIntent(totalAmount,"ticket",{ticket:ticket})
@@ -75,12 +76,14 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
        console.log('updatedEvent',updatedEvent)
 
       const ogTicket = {
-        ...ticket,
+        email,
+        phone,
+        eventId,
         ticketId: ticketId,
         qrCodeLink: qrCode,
         clientId: clientId,
-        paymentStatus: "pending",
-        ticketStatus: "unused",
+        paymentStatus: "pending" as "pending",
+        ticketStatus: "unused" as "unused",
         ticketCount: totalCount,
         totalAmount: totalAmount,
         paymentTransactionId: paymentDocument.paymentId,

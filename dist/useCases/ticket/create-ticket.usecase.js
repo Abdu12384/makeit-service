@@ -27,10 +27,11 @@ let CreateTicketUseCase = class CreateTicketUseCase {
         this._paymentRepository = _paymentRepository;
         this._ticketRepository = _ticketRepository;
     }
-    async execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId) {
+    async execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone) {
         console.log('clientId her', clientId);
         console.log("vendorId ", vendorId);
-        const eventDetails = await this._eventRepository.findOne({ eventId: ticket.eventId });
+        const eventDetails = await this._eventRepository.findOne({ eventId });
+        console.log("eventDetails", eventDetails);
         if (!eventDetails) {
             throw new CustomError("Event not found", HTTP_STATUS.NOT_FOUND);
         }
@@ -44,7 +45,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`, HTTP_STATUS.FORBIDDEN);
         const HOSTNAME = process.env.HOSTNAME;
         const ticketId = generateUniqueId("ticket");
-        const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${ticket.eventId}`;
+        const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${eventId}`;
         const qrCode = await this._qrService.generateQRCode(qrLink);
         if (!qrCode) {
             throw new CustomError("QR Code generation failed", HTTP_STATUS.INTERNAL_SERVER_ERROR);
@@ -79,7 +80,9 @@ let CreateTicketUseCase = class CreateTicketUseCase {
         const updatedEvent = await this._eventRepository.update({ eventId: eventDetails.eventId }, eventUpdate);
         console.log('updatedEvent', updatedEvent);
         const ogTicket = {
-            ...ticket,
+            email,
+            phone,
+            eventId,
             ticketId: ticketId,
             qrCodeLink: qrCode,
             clientId: clientId,
