@@ -27,7 +27,7 @@ export class UpdateServiceStatusUseCase implements IUpdateServiceStatusUseCase {
     
     service.status = status
     await this._serviceRepository.update(
-      serviceId,
+      {serviceId},
        service
       )      
     

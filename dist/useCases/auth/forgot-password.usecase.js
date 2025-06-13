@@ -25,8 +25,7 @@ let ForgotPasswordUseCase = class ForgotPasswordUseCase {
     }
     async execute(email) {
         const { exists, user } = await this._userExitenceService.findUserByEmail(email);
-        console.log('user', user);
-        if (!exists) {
+        if (!exists || !user) {
             throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
         }
         const token = await this._generateTokenUseCase.execute(user.userId, user.email, user.role);

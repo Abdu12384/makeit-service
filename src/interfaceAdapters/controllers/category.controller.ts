@@ -38,7 +38,6 @@ export class CategoryController implements ICategoryController {
    async createCategory(req:Request,res:Response):Promise<void>{
         try {
             const data = req.body
-            console.log(data)
             const category = await this._createCategoryUseCase.execute(data)
             res.status(HTTP_STATUS.OK).json({
                 success:true,
@@ -62,7 +61,6 @@ export class CategoryController implements ICategoryController {
           console.log(req.query)
           const {search,page,limit} = req.query
           const {role} = (req as CustomRequest).user 
-          console.log(page,limit)
            const pageNumber = Number(page)
            const pageSize = Number(limit)
             const categories = await this._getAllCategoriesUseCase.execute(
@@ -95,7 +93,6 @@ export class CategoryController implements ICategoryController {
         console.log(req.params)
         const {id} = req.params
         const {status} = req.body
-        console.log(id,status)
         const category = await this._updateStatusCategoryUseCase.execute(
           id,
           status

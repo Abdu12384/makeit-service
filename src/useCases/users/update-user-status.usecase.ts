@@ -18,7 +18,7 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
       ) {}
 
 
-      async execute(userType: string, userId: any): Promise<void> {
+      async execute(userType: string, userId: string): Promise<void> {
          let repo;
 
          if(userType === "client"){

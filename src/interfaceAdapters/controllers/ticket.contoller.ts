@@ -45,12 +45,10 @@ export class TicketController implements ITicketController {
 // ══════════════════════════════════════════════════════════
   async createTicket(req: Request, res: Response): Promise<void> {
         try {
-          console.log("req.body",req.body)
 
         const {ticket,email,phone,eventId,paymentIntentId,totalAmount,totalCount,vendorId} = req.body
         const {userId:clientId,role} = (req as CustomRequest).user 
 
-        console.log("eventId", eventId)
         
         const {stripeClientId, createdTicket} = await this._createTicketUseCase.execute(
             ticket,
@@ -63,7 +61,6 @@ export class TicketController implements ITicketController {
             email,
             phone
             )
-        console.log('created ticket',stripeClientId, createdTicket)
 
         res.status(HTTP_STATUS.OK).json({
             success:true,
@@ -88,7 +85,6 @@ export class TicketController implements ITicketController {
     async confirmTicketAndPayment(req: Request, res: Response): Promise<void> {
         try {
             const {ticket, paymentIntentId, vendorId} = req.body
-              console.log('confirm ticket',ticket,paymentIntentId,vendorId)
             const confirmTicket = await this._confirmTicketUseCase.execute(
                 ticket,
                 paymentIntentId,
@@ -139,7 +135,6 @@ export class TicketController implements ITicketController {
     async verifyTicket(req: Request, res: Response): Promise<void> {
         try {
             const {ticketId,eventId} = req.params
-            console.log(ticketId,eventId)
             const verifyTicket = await this._verifyTicketUseCase.execute(
                 ticketId,
                 eventId,
@@ -163,7 +158,6 @@ export class TicketController implements ITicketController {
 
     async cancelTicket(req: Request, res: Response): Promise<void> {
         const {ticketId} = req.params
-        console.log(ticketId)
         try {
 
             const cancelTicket = await this._cancelTicketUseCase.execute(

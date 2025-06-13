@@ -17,7 +17,9 @@ let EventRepository = class EventRepository extends BaseRepository {
     async findWithAggregation(eventId) {
         const result = await this.model.aggregate([
             {
-                $match: { eventId: eventId }
+                $match: {
+                    eventId: eventId,
+                }
             },
             {
                 $lookup: {

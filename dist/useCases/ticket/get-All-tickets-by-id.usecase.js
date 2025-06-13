@@ -23,7 +23,6 @@ let GetAllTicketsByIdUseCase = class GetAllTicketsByIdUseCase {
         const limit = validPageSize;
         const sort = { createdAt: -1 };
         const { items, total } = await this._ticketRepository.getAllTicketsById(userId, skip, limit, sort);
-        console.log(items);
         const response = {
             tickets: items,
             total: Math.ceil(total / validPageSize)

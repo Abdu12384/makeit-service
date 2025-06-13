@@ -68,8 +68,6 @@ export class ReviewController implements IReviewController {
     async getAllReviews(req: Request, res: Response): Promise<void> {
         try {
             const { limit,page,targetId,targetType } = req.query
-            console.log('query',req.query)
-            console.log('body',req.body)
              const pageNumber = Number(page)
              const pageSize = Number(limit)
             const reviews = await this._getAllReviewsUseCase.execute(

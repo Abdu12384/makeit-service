@@ -53,7 +53,6 @@ export class ServiceController implements IServiceController {
           vendorId: userId,
 
          })
-         console.log('service added',service)
          res.status(HTTP_STATUS.OK).json({
             success: true,
             service,
@@ -115,7 +114,6 @@ async editService(req: Request, res: Response): Promise<void> {
       try {
         const {serviceId} = req.params
         const data = req.body
-        console.log('data',data)
         const {userId, role} = (req as CustomRequest).user 
         if(!userId || role !== "vendor"){
           res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -129,7 +127,6 @@ async editService(req: Request, res: Response): Promise<void> {
           serviceId,
           data
         )
-        console.log('service edited',service)
         res.status(HTTP_STATUS.OK).json({
            success: true,
            message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -154,7 +151,6 @@ async editService(req: Request, res: Response): Promise<void> {
       try {
         const {serviceId} = req.params
         const data = req.body
-        console.log('data',data)
         const {userId, role} = (req as CustomRequest).user 
         if(!userId || role !== "vendor"){
           res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -168,7 +164,6 @@ async editService(req: Request, res: Response): Promise<void> {
           serviceId,
           data
         )
-        console.log('service edited',service)
         res.status(HTTP_STATUS.OK).json({
            success: true,
            message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -191,7 +186,6 @@ async getServiceById(req: Request, res: Response): Promise<void> {
       try {
         const {serviceId} = req.params
         const service = await this._getServiceByIdUseCase.execute(serviceId)
-        console.log('service',service)
         res.status(HTTP_STATUS.OK).json({
            success: true,
            service,

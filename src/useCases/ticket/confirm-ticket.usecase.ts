@@ -10,6 +10,7 @@ import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
+import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
 
 
 
@@ -38,7 +39,7 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
         private _walletRepository: IWalletRepository
     ){}
 
-    async execute(ticket:any, paymentIntentId: string, vendorId: string): Promise<any> {
+    async execute(ticket:ITicketEntity, paymentIntentId: string, vendorId: string): Promise<any> {
         const confirmPayment = await this._stripeService.confirmPayment(paymentIntentId)
         if(!confirmPayment){throw new CustomError("Error while confirming payment",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
 

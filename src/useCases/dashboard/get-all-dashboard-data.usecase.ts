@@ -33,9 +33,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     
   async execute(role:string,userId:string):Promise<any>{
 
-
-  console.log("role",role)
-let events = await this._eventRepository.find();
+   let events = await this._eventRepository.find();
     let bookings = await this._bookingRepository.find();
     let vendors = await this._vendorRepository.find();
     let tickets = await this._ticketRepository.find();
@@ -73,7 +71,7 @@ let events = await this._eventRepository.find();
       }));
     }
      
-    const sort = {createdAt:-1}
+    const sort = {createdAt:-1 as -1}
     const skip = 0
     const limit = 5
     const filter = {vendorId:userId}

@@ -25,7 +25,6 @@ let VendorCantroller = class VendorCantroller {
     // ══════════════════════════════════════════════════════════
     async getAllVendors(req, res) {
         try {
-            console.log('qury here', req.query);
             const { page = 1, limit = 10, search = "", forType } = req.query;
             const pageNumber = Number(page);
             const pageSize = Number(limit);

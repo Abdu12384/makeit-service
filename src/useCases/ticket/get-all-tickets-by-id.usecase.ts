@@ -24,15 +24,15 @@ export class GetAllTicketsByIdUseCase implements IGetAllTicketsByIdUseCase {
         private _ticketRepository: ITicketRepository
     ){}
 
-    async execute(userId: string,pageNumber:number,pageSize:number): Promise<any> {
+    async execute(userId: string,pageNumber:number,pageSize:number): Promise<{tickets:ITicketEntity[],total:number}> {
          const validPageNumber = Math.max(1, pageNumber || 1);
          const validPageSize = Math.max(1, pageSize || 10);
          const skip = (validPageNumber - 1) * validPageSize;
          const limit = validPageSize;
-         const sort = { createdAt: -1 };
+         const sort = { createdAt: -1 as -1 };
 
         const {items , total} = await this._ticketRepository.getAllTicketsById(userId,skip,limit,sort)
-        console.log(items)
+
         const response = {
             tickets:items,
             total:Math.ceil(total/validPageSize)

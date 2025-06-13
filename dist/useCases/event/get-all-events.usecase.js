@@ -20,7 +20,9 @@ let GetAllEventsUseCase = class GetAllEventsUseCase {
         const validPageNumber = Math.max(1, pageNumber || 1);
         const validPageSize = Math.max(1, pageSize || 10);
         const skip = (validPageNumber - 1) * validPageSize;
-        let filter = {};
+        let filter = {
+            status: "upcoming"
+        };
         if (searchTermString) {
             filter.$or = [
                 { name: { $regex: searchTermString, $options: "i" } },

@@ -41,7 +41,6 @@ let UserController = class UserController {
             const searchTermString = typeof search === "string" ? search : "";
             if (userType === "vendor") {
                 const { users, total } = await this._getAllUserUserCase.execute("vendor", pageNumber, pageSize, searchTermString);
-                console.log('vendor-------------------', users);
                 res.status(HTTP_STATUS.OK).json({
                     success: true,
                     users,
@@ -68,7 +67,6 @@ let UserController = class UserController {
     async updateUserStatus(req, res) {
         try {
             const { userType, userId } = req.query;
-            console.log(userType);
             await this._updateUserStatusUseCase.execute(userType, userId);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -131,7 +129,6 @@ let UserController = class UserController {
     async changePassword(req, res) {
         try {
             const { currentPassword, newPassword } = req.body;
-            console.log(currentPassword, newPassword);
             const { userId, role } = req.user;
             const updatedUser = await this._changePasswordUseCase.execute(userId, currentPassword, newPassword, role);
             res.status(HTTP_STATUS.OK).json({

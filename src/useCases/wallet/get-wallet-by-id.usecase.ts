@@ -25,14 +25,13 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
         private readonly transactionRepository:ITransactionRepository
     ){}
 
-    async execute(userId:string,pageNumber:number,pageSize:number):Promise<any>{
+    async execute(userId:string,pageNumber:number,pageSize:number):Promise<{wallet:IWalletEntity,transaction:ITransactionsEntity[],total:number}>{
 
        const validPageNumber = Math.max(1, pageNumber || 1);
        const validPageSize = Math.max(1, pageSize || 10);
        const skip = (validPageNumber - 1) * validPageSize;
        const limit = validPageSize;
-       const sort = { createdAt: -1 };
-       console.log(skip,limit,userId)
+       const sort: Record<string, 1 | -1> = { createdAt: -1 as -1 };
 
         let wallet = await this.walletRepository.findOne({userId})
         if (!wallet) {

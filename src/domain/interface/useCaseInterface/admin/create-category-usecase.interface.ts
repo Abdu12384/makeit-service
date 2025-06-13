@@ -1,4 +1,6 @@
+import { ICategoryEntity } from "../../../entities/category.entity";
+import { CreateCategoryDTO } from "../../../../shared/constants";
 
 export interface ICategoryUseCase{
-    execute(data: any): Promise<any>
+    execute(data: CreateCategoryDTO): Promise<ICategoryEntity>
 }

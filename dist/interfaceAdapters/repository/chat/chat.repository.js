@@ -15,10 +15,6 @@ let ChatRepository = class ChatRepository extends BaseRepository {
     constructor() {
         super(chatModel);
     }
-    // async findOneObj(chatId: string) {
-    //   console.log("findOneObj-------------------------------------------", chatId);
-    //   return this.model.findOne({_id:new mongoose.Types.ObjectId(chatId)});
-    // }
     async findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId) {
         let chat = await chatModel.findOne({
             $or: [

@@ -4,6 +4,7 @@ import { TicketRepository } from "../../interfaceAdapters/repository/ticket/tick
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
+import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
 
 
 
@@ -23,7 +24,7 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
        ){}
   
 
-    async execute(ticketId: string, eventId: string): Promise<any> {
+    async execute(ticketId: string, eventId: string): Promise<ITicketEntity | null> {
 
           const ticket = await this._ticketRepository.findOne({ticketId})
            console.log('ticket',ticket)

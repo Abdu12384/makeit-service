@@ -59,7 +59,6 @@ export class PaymentController implements IPaymentController{
         try {
 
           const {booking, paymentIntentId} = req.body
-          console.log('confirmPayment',req.body)
           const confirmPayment = await this._confirmPayment.confirmPayment(
             paymentIntentId,
             booking,

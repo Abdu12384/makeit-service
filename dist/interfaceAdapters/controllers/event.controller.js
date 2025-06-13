@@ -34,7 +34,6 @@ let EventController = class EventController {
     async createEvent(req, res) {
         try {
             const data = req.body;
-            console.log(data);
             const { userId, role } = req.user;
             const event = await this._createEventUseCase.execute(data, userId);
             console.log(data);
@@ -53,7 +52,6 @@ let EventController = class EventController {
     async getAllEvents(req, res) {
         try {
             const { page, limit, search } = req.query;
-            console.log('working');
             const pageNumber = Number(page);
             const pageSize = Number(limit);
             const searchTermString = typeof search === "string" ? search : "";
@@ -93,7 +91,6 @@ let EventController = class EventController {
         try {
             const { eventId } = req.params;
             const data = req.body;
-            console.log(eventId, data);
             const event = await this._editEventUseCase.execute(eventId, data);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

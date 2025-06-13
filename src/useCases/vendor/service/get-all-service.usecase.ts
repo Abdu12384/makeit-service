@@ -26,13 +26,10 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
       if (vendorId) {
         filter.vendorId = vendorId;
       } 
-      // const sort: Record<string, number> = {};
-      // if (sortBy && sortOrder) {
-      //   sort[sortBy] = sortOrder === "asc" ? 1 : -1;
-      // }
+      
       const limit = validPageSize;
 
-      const sort = { createdAt: -1 };  
+      const sort = { createdAt: -1 } as const;  
 
       const {items , total} = await this._serviceRepository.findAllWithPopulate(filter,skip,limit,sort)
           const response: IPaginatedService = {

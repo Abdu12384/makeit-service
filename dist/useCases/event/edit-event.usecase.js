@@ -24,7 +24,7 @@ let EditEventUseCase = class EditEventUseCase {
         if (!event) {
             throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
         }
-        await this._eventRepository.update(event, data);
+        await this._eventRepository.update({ event: event.eventId }, data);
     }
 };
 EditEventUseCase = __decorate([

@@ -29,6 +29,7 @@ let GetServiceByIdUseCase = class GetServiceByIdUseCase {
                 vendor
             };
         }
+        return null;
     }
 };
 GetServiceByIdUseCase = __decorate([

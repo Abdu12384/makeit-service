@@ -55,7 +55,7 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase{
           const skip = (validPageNumber - 1) * validPageSize;
           const limit = validPageSize;
           
-       const sort = { createdAt: -1 };  
+       const sort: Record<string, 1 | -1> = { createdAt: -1 as -1 };  
 
        const {items , total} = await repo.findAll(filter,skip,limit,sort);
 

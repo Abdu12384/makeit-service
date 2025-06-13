@@ -34,6 +34,7 @@ let ServiceRepository = class ServiceRepository extends BaseRepository {
                 }
             },
             { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+            { $match: { "category.status": "active" } },
             {
                 $project: {
                     serviceId: 1,
@@ -52,7 +53,9 @@ let ServiceRepository = class ServiceRepository extends BaseRepository {
                     cancellationPolicy: 1,
                     category: {
                         title: 1,
-                        image: 1
+                        image: 1,
+                        status: 1,
+                        categoryId: 1
                     },
                     vendor: {
                         name: 1,
@@ -67,6 +70,16 @@ let ServiceRepository = class ServiceRepository extends BaseRepository {
         ];
         const countPipeline = [
             { $match: filter },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categoryId",
+                    foreignField: "categoryId",
+                    as: "category"
+                }
+            },
+            { $unwind: { path: "$category", preserveNullAndEmptyArrays: false } },
+            { $match: { "category.status": "active" } },
             { $count: "total" }
         ];
         const [items, countResult] = await Promise.all([

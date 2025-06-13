@@ -43,7 +43,6 @@ export class BookingController implements IBookingController{
            const {serviceId} = req.params
            const {date,email,phone,vendorId} = req.body
            const {userId,role} = (req as CustomRequest).user 
-          console.log('user',userId, serviceId,req.body)
          const booking = await this._createBookingUseCase.execute(
             serviceId,
             date,

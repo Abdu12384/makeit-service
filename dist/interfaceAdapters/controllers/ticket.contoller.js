@@ -32,12 +32,9 @@ let TicketController = class TicketController {
     // ══════════════════════════════════════════════════════════
     async createTicket(req, res) {
         try {
-            console.log("req.body", req.body);
             const { ticket, email, phone, eventId, paymentIntentId, totalAmount, totalCount, vendorId } = req.body;
             const { userId: clientId, role } = req.user;
-            console.log("eventId", eventId);
             const { stripeClientId, createdTicket } = await this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone);
-            console.log('created ticket', stripeClientId, createdTicket);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 stripeClientId,
@@ -54,7 +51,6 @@ let TicketController = class TicketController {
     async confirmTicketAndPayment(req, res) {
         try {
             const { ticket, paymentIntentId, vendorId } = req.body;
-            console.log('confirm ticket', ticket, paymentIntentId, vendorId);
             const confirmTicket = await this._confirmTicketUseCase.execute(ticket, paymentIntentId, vendorId);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -91,7 +87,6 @@ let TicketController = class TicketController {
     async verifyTicket(req, res) {
         try {
             const { ticketId, eventId } = req.params;
-            console.log(ticketId, eventId);
             const verifyTicket = await this._verifyTicketUseCase.execute(ticketId, eventId);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -108,7 +103,6 @@ let TicketController = class TicketController {
     // ══════════════════════════════════════════════════════════
     async cancelTicket(req, res) {
         const { ticketId } = req.params;
-        console.log(ticketId);
         try {
             const cancelTicket = await this._cancelTicketUseCase.execute(ticketId);
             res.status(HTTP_STATUS.OK).json({

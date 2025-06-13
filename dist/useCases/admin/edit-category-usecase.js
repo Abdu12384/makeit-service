@@ -28,7 +28,7 @@ let EditCategoryUseCase = class EditCategoryUseCase {
         if (existingCategory && existingCategory.categoryId !== id) {
             throw new CustomError("Category title already exists", HTTP_STATUS.CONFLICT);
         }
-        await this._categoryRepository.update(category, {
+        await this._categoryRepository.update({ categoryId: category?.categoryId }, {
             title,
             description,
             image

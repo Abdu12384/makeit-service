@@ -34,8 +34,8 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase{
       
      const {exists, user} = await this._userExitenceService.findUserByEmail(email)
      
-     console.log('user',user)
-      if(!exists){
+
+      if(!exists || !user){
         throw new CustomError(
           ERROR_MESSAGES.USER_NOT_FOUND,
           HTTP_STATUS.NOT_FOUND

@@ -43,7 +43,6 @@ let PaymentController = class PaymentController {
     async confirmPayment(req, res) {
         try {
             const { booking, paymentIntentId } = req.body;
-            console.log('confirmPayment', req.body);
             const confirmPayment = await this._confirmPayment.confirmPayment(paymentIntentId, booking);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

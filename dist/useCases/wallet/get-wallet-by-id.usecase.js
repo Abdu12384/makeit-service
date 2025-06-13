@@ -25,7 +25,6 @@ let GetWalletByIdUseCase = class GetWalletByIdUseCase {
         const skip = (validPageNumber - 1) * validPageSize;
         const limit = validPageSize;
         const sort = { createdAt: -1 };
-        console.log(skip, limit, userId);
         let wallet = await this.walletRepository.findOne({ userId });
         if (!wallet) {
             const walletId = generateUniqueId("wallet");

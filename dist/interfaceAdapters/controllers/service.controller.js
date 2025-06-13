@@ -44,7 +44,6 @@ let ServiceController = class ServiceController {
                 ...data,
                 vendorId: userId,
             });
-            console.log('service added', service);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 service,
@@ -86,7 +85,6 @@ let ServiceController = class ServiceController {
         try {
             const { serviceId } = req.params;
             const data = req.body;
-            console.log('data', data);
             const { userId, role } = req.user;
             if (!userId || role !== "vendor") {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -96,7 +94,6 @@ let ServiceController = class ServiceController {
                 return;
             }
             const service = await this._editServiceUseCase.execute(serviceId, data);
-            console.log('service edited', service);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -114,7 +111,6 @@ let ServiceController = class ServiceController {
         try {
             const { serviceId } = req.params;
             const data = req.body;
-            console.log('data', data);
             const { userId, role } = req.user;
             if (!userId || role !== "vendor") {
                 res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -124,7 +120,6 @@ let ServiceController = class ServiceController {
                 return;
             }
             const service = await this._updateServiceStatusUseCase.execute(serviceId, data);
-            console.log('service edited', service);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -142,7 +137,6 @@ let ServiceController = class ServiceController {
         try {
             const { serviceId } = req.params;
             const service = await this._getServiceByIdUseCase.execute(serviceId);
-            console.log('service', service);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 service,

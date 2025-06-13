@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { ICreateEventUseCase } from "../../domain/interface/useCaseInterface/event/create-event-usecase.interface.js";
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+import { IEventEntity } from "../../domain/entities/event.entity.js";
 
 
 
@@ -13,7 +14,7 @@ export class CreateEventUseCase implements ICreateEventUseCase{
         @inject("IEventRepository") private _eventRepository: IEventRepository
     ){}
 
-    async execute(data:any,userId:string):Promise<any>{
+    async execute(data:any,userId:string):Promise<IEventEntity>{
         
         const eventId = generateUniqueId("event")
         const event = await this._eventRepository.save(

@@ -15,7 +15,6 @@ let BookingRepository = class BookingRepository extends BaseRepository {
         super(BookingModel);
     }
     async findAllWithVendorClient(filter, skip, limit, sort) {
-        // Use a single aggregation pipeline with $facet for better performance
         const pipeline = [
             { $match: filter },
             { $sort: sort },

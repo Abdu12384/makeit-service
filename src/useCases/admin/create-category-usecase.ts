@@ -4,6 +4,8 @@ import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
+import { ICategoryEntity } from "../../domain/entities/category.entity.js";
+import { CreateCategoryDTO } from "../../shared/constants.js";
 
 
 
@@ -16,7 +18,7 @@ export class CategoryUseCase implements ICategoryUseCase{
       private _categoryRepository: ICategoryRepository
    ){}
       
-   async execute(data: any): Promise<any> {
+   async execute(data: CreateCategoryDTO): Promise<ICategoryEntity> {
 
       const categoryId = generateUniqueId("category")
 

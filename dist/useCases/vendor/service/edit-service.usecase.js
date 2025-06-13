@@ -20,11 +20,10 @@ let EditServiceUseCase = class EditServiceUseCase {
     }
     async execute(serviceId, data) {
         const service = await this._serviceRepository.findOne({ serviceId });
-        console.log('service', service);
         if (!service) {
             throw new CustomError(ERROR_MESSAGES.SERVICE_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
         }
-        await this._serviceRepository.update(service, {
+        await this._serviceRepository.update({ serviceId }, {
             ...data
         });
     }

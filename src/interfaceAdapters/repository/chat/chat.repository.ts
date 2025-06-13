@@ -5,6 +5,7 @@ import { IChatEntity } from "../../../domain/entities/chat.entity.js";
 import { messageModel } from "../../../frameworks/database/mongodb/model/message.model.js";
 import mongoose, { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
+import { IMessageEntity } from "../../../domain/entities/message.entity.js";
 
 
 
@@ -16,11 +17,6 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
     constructor() {
         super(chatModel);
     }
-
-    // async findOneObj(chatId: string) {
-    //   console.log("findOneObj-------------------------------------------", chatId);
-    //   return this.model.findOne({_id:new mongoose.Types.ObjectId(chatId)});
-    // }
 
     async findOrCreateChat(
       senderId: string,
@@ -60,7 +56,7 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
       messageContent: string;
       sendedTime: Date;
       messageId: string;
-    }): Promise<any> {
+    }): Promise<IMessageEntity> {
       const newMessage = new messageModel({
         ...message,
         seen: false,
@@ -81,7 +77,7 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
     }
 
 
-    async getMessages(chatId: string, skip: number, limit: number): Promise<any[]> {
+    async getMessages(chatId: string, skip: number, limit: number): Promise<IMessageEntity[]> {
       return await messageModel.find({ chatId })
         // .sort({ sendedTime: 1 })
         // .skip(skip)

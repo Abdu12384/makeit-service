@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IGetAllEventsUseCase } from "../../domain/interface/useCaseInterface/event/get-all-events-usecase.interface";
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
+import { IEventEntity } from "../../domain/entities/event.entity";
 
 
 
@@ -19,7 +20,7 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
       private _eventRepository: IEventRepository
     ){}
 
-    async execute(pageNumber: number, pageSize: number, searchTermString: string): Promise<any> {
+    async execute(pageNumber: number, pageSize: number, searchTermString: string): Promise<{events:IEventEntity[],total:number}> {
 
 
         const validPageNumber = Math.max(1, pageNumber || 1)
@@ -27,7 +28,9 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
         const skip = (validPageNumber - 1) * validPageSize
 
 
-        let filter: any = {}
+        let filter: any = {
+          status: "upcoming"
+        }
         if(searchTermString){
           filter.$or = [
             {name: {$regex: searchTermString, $options: "i"}},

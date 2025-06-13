@@ -2,7 +2,9 @@ import { BaseRepository } from "../base.repository.js";
 import { eventModel, IEventModel } from "../../../frameworks/database/mongodb/model/event.model.js";
 import { injectable } from "tsyringe";
 import { IEventRepository } from "../../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
-import { date } from "zod";
+import { IVendorEntity } from "../../../domain/entities/vendor.entity.js";
+import { IClientEntity } from "../../../domain/entities/client.entity.js";
+import { IEventEntity } from "../../../domain/entities/event.entity.js";
 
 
 @injectable()
@@ -11,10 +13,12 @@ export class EventRepository extends BaseRepository<IEventModel> implements IEve
       super(eventModel)
    }
 
-   async findWithAggregation(eventId: string): Promise<any> {
+   async findWithAggregation(eventId: string): Promise<IVendorEntity|IEventEntity> {
     const result = await this.model.aggregate([
       {
-        $match: { eventId: eventId } 
+        $match: { 
+          eventId: eventId,
+        } 
       },
       {
         $lookup: {
@@ -66,7 +70,7 @@ export class EventRepository extends BaseRepository<IEventModel> implements IEve
   
     return result[0] || null;
   }
-  async findAttendeesById(eventId: string): Promise<any> {
+  async findAttendeesById(eventId: string): Promise<IClientEntity[]> {
     const result = await this.model.aggregate([
       {
         $match: { eventId: eventId }

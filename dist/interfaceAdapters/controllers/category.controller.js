@@ -30,7 +30,6 @@ let CategoryController = class CategoryController {
     async createCategory(req, res) {
         try {
             const data = req.body;
-            console.log(data);
             const category = await this._createCategoryUseCase.execute(data);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -50,7 +49,6 @@ let CategoryController = class CategoryController {
             console.log(req.query);
             const { search, page, limit } = req.query;
             const { role } = req.user;
-            console.log(page, limit);
             const pageNumber = Number(page);
             const pageSize = Number(limit);
             const categories = await this._getAllCategoriesUseCase.execute(pageNumber, pageSize, search, role);
@@ -72,7 +70,6 @@ let CategoryController = class CategoryController {
             console.log(req.params);
             const { id } = req.params;
             const { status } = req.body;
-            console.log(id, status);
             const category = await this._updateStatusCategoryUseCase.execute(id, status);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

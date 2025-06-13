@@ -55,8 +55,6 @@ let ReviewController = class ReviewController {
     async getAllReviews(req, res) {
         try {
             const { limit, page, targetId, targetType } = req.query;
-            console.log('query', req.query);
-            console.log('body', req.body);
             const pageNumber = Number(page);
             const pageSize = Number(limit);
             const reviews = await this._getAllReviewsUseCase.execute(targetId, targetType, pageNumber, pageSize);

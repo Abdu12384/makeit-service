@@ -3,6 +3,7 @@ import { IReviewEntity } from "../../../domain/entities/review.entity.js";
 import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface.js";
 import { injectable } from "tsyringe";
 import { reviewModel } from "../../../frameworks/database/mongodb/model/review.model.js";
+import { FilterType, SortType } from "../../../shared/constants.js";
 
 
 
@@ -18,7 +19,7 @@ export class ReviewRepository extends BaseRepository<IReviewEntity> implements I
         super(reviewModel)
     }
 
-   async findAllWithPopulate(filter: any, skip: number, limit: number, sort:any){
+   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort:SortType){
     const pipeline = [
         {
             $match: filter
@@ -72,7 +73,7 @@ export class ReviewRepository extends BaseRepository<IReviewEntity> implements I
         }
     ]
     const [items, countResult] = await Promise.all([
-        this.model.aggregate(pipeline),
+        this.model.aggregate(pipeline as any),
         this.model.aggregate(countPipeline)
     ])
     return {

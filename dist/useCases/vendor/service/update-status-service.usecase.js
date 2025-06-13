@@ -24,7 +24,7 @@ let UpdateServiceStatusUseCase = class UpdateServiceStatusUseCase {
             throw new CustomError("Service not found", HTTP_STATUS.NOT_FOUND);
         }
         service.status = status;
-        await this._serviceRepository.update(serviceId, service);
+        await this._serviceRepository.update({ serviceId }, service);
     }
 };
 UpdateServiceStatusUseCase = __decorate([

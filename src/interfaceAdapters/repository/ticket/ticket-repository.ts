@@ -3,6 +3,7 @@ import { ticketModel } from "../../../frameworks/database/mongodb/model/ticket.m
 import { BaseRepository } from "../base.repository.js";
 import { ITicketModel } from "../../../frameworks/database/mongodb/model/ticket.model.js";
 import { ITicketRepository } from "../../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
+import { FilterType, SortType } from "../../../shared/constants.js";
 
 
 
@@ -12,7 +13,7 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         super(ticketModel)
     }
 
-    async getAllTicketsById(userId: string, skip: number, limit: number, sort: any): Promise<{ items: ITicketModel[], total: number }> {
+    async getAllTicketsById(userId: string, skip: number, limit: number, sort: SortType): Promise<{ items: ITicketModel[], total: number }> {
         const pipeline: any[] = [
             {
                 $match: { clientId: userId }
@@ -91,7 +92,7 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         }
     }
 
-    async findOneWithPopulate(filter:any){
+    async findOneWithPopulate(filter:FilterType){
            const pipeline = [
             {
                 $match: filter

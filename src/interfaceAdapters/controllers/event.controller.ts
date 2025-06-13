@@ -43,7 +43,6 @@ export class EventController implements IEventController{
     async createEvent(req:Request,res:Response):Promise<void>{
       try {
         const data = req.body
-        console.log(data)
         const {userId,role} = (req as CustomRequest).user
 
       const event = await this._createEventUseCase.execute(
@@ -72,7 +71,6 @@ export class EventController implements IEventController{
     async getAllEvents(req:Request,res:Response):Promise<void>{
       try {
         const {page,limit,search} = req.query
-        console.log('working')
         const pageNumber = Number(page)
         const pageSize = Number(limit)
         const searchTermString = typeof search === "string" ? search : ""
@@ -130,7 +128,6 @@ export class EventController implements IEventController{
       try {
         const {eventId} = req.params
         const data = req.body
-        console.log(eventId,data)
         const event = await this._editEventUseCase.execute(
           eventId,
           data

@@ -1,7 +1,16 @@
+import { FilterQuery, SortOrder } from "mongoose";
+import { IBookingEntity } from "../domain/entities/booking.entity";
+import { IServiceEntity } from "../domain/entities/service.entity";
+import { ICategoryEntity } from "../domain/entities/category.entity";
 
 
 export type TRole = "client" | "admin" | "vendor";
 export type statusTypes = "active" |"approved" | "pending" | "rejected" | "blocked";
+
+export type FilterType = FilterQuery<IBookingEntity>;            
+export type SortType = Record<string, SortOrder>; 
+export type PopulatedItem = IServiceEntity;  
+export type CreateCategoryDTO = Omit<ICategoryEntity, "categoryId">;
 
 
 export const HTTP_STATUS = {

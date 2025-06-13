@@ -32,7 +32,6 @@ let BookingController = class BookingController {
             const { serviceId } = req.params;
             const { date, email, phone, vendorId } = req.body;
             const { userId, role } = req.user;
-            console.log('user', userId, serviceId, req.body);
             const booking = await this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
             console.log('created booking', booking);
             res.status(HTTP_STATUS.OK).json({

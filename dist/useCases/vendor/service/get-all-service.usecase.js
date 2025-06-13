@@ -27,10 +27,6 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
         if (vendorId) {
             filter.vendorId = vendorId;
         }
-        // const sort: Record<string, number> = {};
-        // if (sortBy && sortOrder) {
-        //   sort[sortBy] = sortOrder === "asc" ? 1 : -1;
-        // }
         const limit = validPageSize;
         const sort = { createdAt: -1 };
         const { items, total } = await this._serviceRepository.findAllWithPopulate(filter, skip, limit, sort);

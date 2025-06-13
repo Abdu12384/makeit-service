@@ -4,6 +4,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/
 import { IServiceRepository } from "../../domain/interface/repositoryInterfaces/service/service-repository.interface"
 import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface"
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository"
+import { IBookingEntity } from "../../domain/entities/booking.entity"
 
 
 
@@ -18,7 +19,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository
     ){}
 
-    async confirmPayment(paymentIntentId:string,bookingId:string):Promise<{clientStripeId:string,booking:any}>{
+    async confirmPayment(paymentIntentId:string,bookingId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
         const booking = await this._bookingRepository.findOne({bookingId})
         console.log("booking",booking)
         if(!booking) throw new Error("Booking not found")

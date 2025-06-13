@@ -28,7 +28,7 @@ export class EditCategoryUseCase implements IEditCategoryUseCase{
         );
       }
       await this._categoryRepository.update(
-        category,
+        { categoryId:category?.categoryId},
         {
           title,
           description,

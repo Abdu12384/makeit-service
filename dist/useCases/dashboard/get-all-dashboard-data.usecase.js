@@ -29,7 +29,6 @@ let GetAllDashboardDataUseCase = class GetAllDashboardDataUseCase {
         this._transactionRepository = _transactionRepository;
     }
     async execute(role, userId) {
-        console.log("role", role);
         let events = await this._eventRepository.find();
         let bookings = await this._bookingRepository.find();
         let vendors = await this._vendorRepository.find();

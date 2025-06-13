@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { BaseRepository } from "../base.repository.js";
 import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface.js";
 import { IServiceModel, serviceModel } from "../../../frameworks/database/mongodb/model/service.model.js";
+import { FilterType, PopulatedItem, SortType } from "../../../shared/constants.js";
 
 
 
@@ -12,7 +13,7 @@ export class ServiceRepository extends BaseRepository<IServiceModel> implements 
    }
 
 
-   async findAllWithPopulate(filter: any, skip: number, limit: number, sort: any): Promise<{ items: any[], total: number }> {
+   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items: PopulatedItem[], total: number }> {
     const pipeline: any[] = [
       { $match: filter },
   
@@ -33,6 +34,8 @@ export class ServiceRepository extends BaseRepository<IServiceModel> implements 
         }
       },
       { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+
+      { $match: { "category.status": "active" } },
   
       {
         $project: {
@@ -52,7 +55,9 @@ export class ServiceRepository extends BaseRepository<IServiceModel> implements 
           cancellationPolicy: 1,
           category: {
             title: 1,
-            image: 1
+            image: 1,
+            status: 1,
+            categoryId: 1
           },
           vendor: {
             name: 1,
@@ -70,9 +75,19 @@ export class ServiceRepository extends BaseRepository<IServiceModel> implements 
   
     const countPipeline = [
       { $match: filter },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "categoryId",
+          as: "category"
+        }
+      },
+      { $unwind: { path: "$category", preserveNullAndEmptyArrays: false } },
+      { $match: { "category.status": "active" } },
       { $count: "total" }
     ];
-  
+
     const [items, countResult] = await Promise.all([
       this.model.aggregate(pipeline),
       this.model.aggregate(countPipeline)

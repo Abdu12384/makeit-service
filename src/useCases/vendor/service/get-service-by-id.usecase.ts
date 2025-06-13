@@ -3,6 +3,7 @@ import { IGetServiceByIdUseCase } from "../../../domain/interface/useCaseInterfa
 import { IServiceEntity } from "../../../domain/entities/service.entity"
 import { IVendorRepository } from "../../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
 import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface"
+import { IServiceWithVendor } from "../../../domain/entities/DTO/service-with-vendor.dto"
 
 
 
@@ -21,7 +22,7 @@ export class GetServiceByIdUseCase implements IGetServiceByIdUseCase {
     private _vendorRepository: IVendorRepository  
 	){}
 
-	async execute(serviceId: string): Promise<any | null> {
+	async execute(serviceId: string): Promise<IServiceWithVendor | null> {
 
      const service = await this._serviceRepository.findOne({ serviceId })
 
@@ -34,5 +35,6 @@ export class GetServiceByIdUseCase implements IGetServiceByIdUseCase {
         vendor
       }
      }  
+     return null
 	}
 }

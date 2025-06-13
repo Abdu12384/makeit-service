@@ -8,11 +8,6 @@ import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants.js";
 
 
 
-
-
-
-
-
 @injectable()
 export class EditServiceUseCase implements IEditServiceUseCase{
     constructor(
@@ -22,16 +17,14 @@ export class EditServiceUseCase implements IEditServiceUseCase{
     
     async execute(serviceId: string, data: Partial<IServiceEntity>): Promise<void> {
         const service = await this._serviceRepository.findOne({serviceId})
-        console.log('service',service)
         if(!service){
             throw new CustomError(
                 ERROR_MESSAGES.SERVICE_NOT_FOUND,
                 HTTP_STATUS.NOT_FOUND
             )
         }
-
         await this._serviceRepository.update(
-          service,
+          {serviceId},
           {
             ...data
           }

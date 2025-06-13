@@ -58,7 +58,6 @@ async getAllUsers(req: Request, res: Response): Promise<void> {
                       pageSize,
                       searchTermString
                   )
-                  console.log('vendor-------------------',users)
                   res.status(HTTP_STATUS.OK).json({
                       success:true,
                       users,
@@ -99,9 +98,9 @@ async getAllUsers(req: Request, res: Response): Promise<void> {
 
         const {userType, userId} = req.query as{
            userType: string,
-           userId: any
+           userId: string
         }
-            console.log(userType)
+
         await this._updateUserStatusUseCase.execute(userType, userId)
 
         res.status(HTTP_STATUS.OK).json({
@@ -190,7 +189,7 @@ async refreshSession(req: Request, res: Response): Promise<void> {
 async changePassword(req: Request, res: Response): Promise<void> {
      try {
         const {currentPassword, newPassword} = req.body
-       console.log(currentPassword, newPassword)
+
        const {userId, role} = (req as CustomRequest).user;
        const updatedUser = await this._changePasswordUseCase.execute(
          userId,

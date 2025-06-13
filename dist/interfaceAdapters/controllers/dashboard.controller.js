@@ -20,7 +20,6 @@ let DashboardController = class DashboardController {
     }
     async getAllDashboardData(req, res) {
         const { role, userId } = req.user;
-        console.log('period', req.query);
         const { period } = req.query;
         try {
             const data = await this._getAllDashboardDataUseCase.execute(role, userId);

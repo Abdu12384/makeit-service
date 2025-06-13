@@ -1,3 +1,5 @@
+import { IEventEntity } from "../../../entities/event.entity";
+
 export interface ICreateEventUseCase{
-    execute(data:any,userId:string):Promise<any>
+    execute(data:IEventEntity,userId:string):Promise<IEventEntity>
 }

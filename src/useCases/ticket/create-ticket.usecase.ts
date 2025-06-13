@@ -8,6 +8,7 @@ import { IPaymentService } from "../../domain/interface/servicesInterface/paymen
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
 import { ICreateTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/create-ticket-usecase.interface.js";
+import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
 
 
 
@@ -27,7 +28,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       @inject("ITicketRepository") private _ticketRepository: ITicketRepository
    ){}
 
-   async execute(ticket:any, paymentIntentId: string, totalAmount: number, totalCount: number, vendorId: string,clientId:string,eventId:string,email:string,phone:string): Promise<{ stripeClientId: string, createdTicket: any }> {
+   async execute(ticket:ITicketEntity, paymentIntentId: string, totalAmount: number, totalCount: number, vendorId: string,clientId:string,eventId:string,email:string,phone:string): Promise<{ stripeClientId: string, createdTicket: ITicketEntity }> {
     console.log('clientId her',clientId)
     console.log("vendorId ",vendorId)
       const eventDetails = await this._eventRepository.findOne({eventId})
@@ -35,7 +36,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       if(!eventDetails){throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)}
     if(eventDetails.status === "cancelled") throw new CustomError("Event cancelled",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails.status === "completed") throw new CustomError("Event already completed",HTTP_STATUS.FORBIDDEN) 
-    if(eventDetails?.ticketPurchased && eventDetails?.ticketPurchased > eventDetails.totalTicket) throw new CustomError("Ticket Sold Out",HTTP_STATUS.FORBIDDEN)
+    if(eventDetails?.ticketPurchased && eventDetails?.ticketPurchased === eventDetails.totalTicket) throw new CustomError("Ticket Sold Out",HTTP_STATUS.FORBIDDEN)
     if (eventDetails?.ticketPurchased && eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
      
       const HOSTNAME = process.env.HOSTNAME

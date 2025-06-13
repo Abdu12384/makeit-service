@@ -1,3 +1,3 @@
 export interface IUpdateUserStatusUseCase {
-	execute(userType: string, userId: any): Promise<void>;
+	execute(userType: string, userId: string): Promise<void>;
 }

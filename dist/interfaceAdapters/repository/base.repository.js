@@ -6,7 +6,7 @@ export class BaseRepository {
     async find(filter = {}) {
         return this.model.find(filter);
     }
-    async findAll(filter = {}, skip = 0, limit = 10, sort) {
+    async findAll(filter = {}, skip = 0, limit = 10, sort = {}) {
         const [items, total] = await Promise.all([
             this.model.find(filter).skip(skip).limit(limit).sort(sort).lean(),
             this.model.countDocuments(filter),

@@ -25,6 +25,9 @@ export class EditEventUseCase implements IEditEventUseCase{
                 HTTP_STATUS.NOT_FOUND
             )
         }
-        await this._eventRepository.update(event,data)
+        await this._eventRepository.update(
+            {event: event.eventId},
+            data
+        )
     }
 }

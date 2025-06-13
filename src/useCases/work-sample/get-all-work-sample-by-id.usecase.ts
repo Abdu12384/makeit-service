@@ -27,7 +27,7 @@ export class GetAllWorkSampleByIdUseCase implements IGetAllWorkSampleByIdUseCase
         const validPageSize = Math.max(1, pageSize || 10);
         const skip = (validPageNumber - 1) * validPageSize;
         const limit = validPageSize;
-        const sort = { createdAt: -1 };
+        const sort: Record<string, 1 | -1> = { createdAt: -1 as -1 };
 
         const {items , total} = await this._workSampleRepository.findAll({vendorId},skip,limit,sort)
         return {
