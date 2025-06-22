@@ -55,7 +55,7 @@ let EventRepository = class EventRepository extends BaseRepository {
                     posterImage: 1,
                     title: 1,
                     attendeesCount: 1,
-                    maxTicketPerUser: 1,
+                    maxTicketsPerUser: 1,
                     isActive: 1,
                     description: 1,
                     vendorDetails: {

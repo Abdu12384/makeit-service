@@ -12,14 +12,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { inject, injectable } from "tsyringe";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+import { messaging } from "../../shared/config.js";
 let ChatUseCase = class ChatUseCase {
     chatRepository;
     clientRepository;
     vendorRepository;
-    constructor(chatRepository, clientRepository, vendorRepository) {
+    pushNotificationService;
+    constructor(chatRepository, clientRepository, vendorRepository, pushNotificationService) {
         this.chatRepository = chatRepository;
         this.clientRepository = clientRepository;
         this.vendorRepository = vendorRepository;
+        this.pushNotificationService = pushNotificationService;
     }
     //======================================================
     async startChat(data) {
@@ -58,6 +61,20 @@ let ChatUseCase = class ChatUseCase {
             messageId,
         });
         await this.chatRepository.updateChatLastMessage(chatId, messageContent, sendedTime.toISOString());
+        const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
+        const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
+        console.log("receiverModel-------------------------------------------", receiverModel);
+        const receiver = await this.findUserById(receiverId, receiverModel);
+        console.log("receiver-------------------------------------------", receiver?.fcmToken);
+        if (receiver?.fcmToken) {
+            await messaging.send({
+                notification: {
+                    title: "New Message",
+                    body: "You have a new message"
+                },
+                token: receiver.fcmToken
+            });
+        }
         return newMessage;
     }
     //======================================================
@@ -80,7 +97,6 @@ let ChatUseCase = class ChatUseCase {
             const receiverId = chat.senderId === userId ? chat.receiverId : chat.senderId;
             const receiverModel = chat.senderId === userId ? chat.receiverModel : chat.senderModel;
             const receiver = await this.findUserById(receiverId, receiverModel);
-            console.log("receiver-------------------------------------------", chats);
             return {
                 ...chat,
                 receiverName: receiver?.name || receiverId,
@@ -129,7 +145,8 @@ ChatUseCase = __decorate([
     __param(0, inject("IChatRepository")),
     __param(1, inject("IClientRepository")),
     __param(2, inject("IVendorRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, inject("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], ChatUseCase);
 export { ChatUseCase };
 //# sourceMappingURL=chat.usecase.js.map

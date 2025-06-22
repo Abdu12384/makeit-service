@@ -70,6 +70,9 @@ let BookingController = class BookingController {
         try {
             const { bookingId } = req.params;
             const { status, reason } = req.body;
+            console.log('bookingId', bookingId);
+            console.log('status', status);
+            console.log('reason', reason);
             const booking = await this._updateBookingStatusUseCase.execute(bookingId, status, reason);
             res.status(HTTP_STATUS.OK).json({
                 success: true,

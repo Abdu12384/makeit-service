@@ -86,6 +86,10 @@ export const eventSchema = new Schema({
         type: Number,
         default: 0
     },
+    checkedInCount: {
+        type: Number,
+        default: 0
+    },
     isActive: {
         type: Boolean,
         default: true

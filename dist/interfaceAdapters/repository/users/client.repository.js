@@ -20,6 +20,12 @@ let ClientRepository = class ClientRepository extends BaseRepository {
     async findByEmail(email) {
         return await ClientModel.findOne({ email: email });
     }
+    async updateFcmToken(userId, token) {
+        await ClientModel.updateOne({ userId }, { $set: { fcmToken: token } });
+    }
+    async clearFcmToken(userId) {
+        await ClientModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
+    }
 };
 ClientRepository = __decorate([
     injectable(),

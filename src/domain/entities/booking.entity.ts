@@ -5,7 +5,7 @@ export interface IBookingEntity {
     serviceId: string;
     clientId: string;
     vendorId: string;
-    date: Date;
+    date: Date[];
     email: string;
     phone: string;
     vendorApproval: string

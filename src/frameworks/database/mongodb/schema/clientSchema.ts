@@ -53,6 +53,11 @@ export const clientSchema = new Schema<IClientModel>({
     type:Boolean,
     default:false,
     required:false
+   },
+   fcmToken:{
+    type:String,
+    default:null,
+    required:false
    }
 },{
  timestamps:true

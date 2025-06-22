@@ -1,6 +1,6 @@
 import { Request,RequestHandler,Response,Router } from "express";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
-import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController } from "../../di/resolver.js";
+import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController, notificationController } from "../../di/resolver.js";
 
 
 
@@ -33,6 +33,18 @@ export class VendorRoute {
             }
           )
 
+
+      /** ==========================
+       *  FCM Token Management Routes
+      * ========================== */
+
+          this.vendorRoute.post("/vendor/fcm-token",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              userController.saveFCMToken(req,res)
+            }
+          )
         
 
       /** ==========================
@@ -84,6 +96,24 @@ export class VendorRoute {
 
 
 
+
+      /** ==========================
+       *  Session Management Routes
+      * ========================== */         
+     
+          this.vendorRoute.get("/vendor/notifications",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              notificationController.getNotifications(req,res)
+            })
+
+            this.vendorRoute.put("/vendor/notifications/read",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              notificationController.markNotificationAsRead(req,res)
+            })
 
 
 

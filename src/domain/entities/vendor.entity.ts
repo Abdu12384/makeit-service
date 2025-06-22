@@ -5,5 +5,6 @@ export interface IVendorEntity extends User{
     vendorId: string,
     vendorStatus:'pending'| 'approved' | 'rejected'
     rejectionReason?:string,
-    aboutVendor?:string
+    aboutVendor?:string,
+    fcmToken?:string
 }

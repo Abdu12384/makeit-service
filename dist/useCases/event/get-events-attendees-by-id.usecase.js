@@ -13,19 +13,32 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { inject, injectable } from "tsyringe";
 let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
     _eventRepository;
-    constructor(_eventRepository) {
+    _ticketRepository;
+    constructor(_eventRepository, _ticketRepository) {
         this._eventRepository = _eventRepository;
+        this._ticketRepository = _ticketRepository;
     }
     async execute(eventId) {
         const attendees = await this._eventRepository.findAttendeesById(eventId);
-        console.log('attendees', attendees);
-        return attendees || [];
+        const tickets = await this._ticketRepository.findAll({ eventId });
+        if (!attendees || attendees.length === 0)
+            return [];
+        const enrichedAttendees = attendees.map((attendee) => {
+            const userId = typeof attendee === 'string' ? attendee : attendee.userId;
+            const userTicket = tickets.items.find((ticket) => ticket.clientId === userId);
+            return {
+                ...attendee,
+                ticket: userTicket || null
+            };
+        });
+        return enrichedAttendees || [];
     }
 };
 GetEventsAttendeesByIdUseCase = __decorate([
     injectable(),
     __param(0, inject("IEventRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, inject("ITicketRepository")),
+    __metadata("design:paramtypes", [Object, Object])
 ], GetEventsAttendeesByIdUseCase);
 export { GetEventsAttendeesByIdUseCase };
 //# sourceMappingURL=get-events-attendees-by-id.usecase.js.map

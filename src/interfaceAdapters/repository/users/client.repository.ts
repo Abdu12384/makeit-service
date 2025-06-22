@@ -16,6 +16,14 @@ export class ClientRepository extends BaseRepository<IClientModel>{
    async findByEmail(email: string): Promise<IClientEntity | null> {
      return await ClientModel.findOne({email:email})
    }
-   
+
+   async updateFcmToken(userId: string, token: string): Promise<void> {
+    await ClientModel.updateOne({ userId }, { $set: { fcmToken: token } });
+   }
+
+   async clearFcmToken(userId: string): Promise<void> {
+    await ClientModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
+   }
+    
 }
 

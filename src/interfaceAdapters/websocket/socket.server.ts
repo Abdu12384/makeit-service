@@ -125,6 +125,10 @@ export class SocketConfig {
               const chat = await this._chatUseCase.getChatById(data.chatId);
               if (chat) {
                 const receiverId = chat.senderId === data.senderId ? chat.receiverId : chat.senderId;
+                const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
+
+                
+
                 this.io.to(receiverId).emit("notification", {
                   type: "new-message",
                   chatId: data.chatId,
@@ -159,31 +163,6 @@ socket.on("typing", (data: { chatId: string; senderId: string; isTyping: boolean
   const { chatId, senderId, isTyping } = data;
   socket.to(chatId).emit("typing", { senderId, isTyping });
 });
-
-
-
-
-//==========================================================
-// socket.on("get-user-details", async (data: { userId: string, model: "client" | "vendors" }, response) => {
-//   try {
-//     console.log(`Fetching details for user ${data.userId} at ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`);
-//     const user = await this._chatUseCase.findUserById(data.userId,data.model);
-//     if (!user) {
-//       throw new Error("User not found");
-//     }
-//     console.log("user",user)
-//     response({ 
-//       status: "success", 
-//       data: { userId: user?.userId, name: user?.name, profilePicture: user?.profileImage } 
-//     });
-//   } catch (error: any) {
-//     console.error("Error fetching user details:", error);
-//     response({ status: "error", message: error.message });
-//   }
-// });
-
-
-
 
 
 //==========================================================

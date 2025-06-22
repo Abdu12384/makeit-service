@@ -5,8 +5,7 @@ import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
 import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
-
-
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
 
 
 
@@ -20,25 +19,38 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
  
        constructor(
         @inject("ITicketRepository")
-        private _ticketRepository: ITicketRepository
+        private _ticketRepository: ITicketRepository,
+        @inject("IEventRepository")
+        private _eventRepository: IEventRepository
        ){}
   
 
     async execute(ticketId: string, eventId: string): Promise<ITicketEntity | null> {
 
           const ticket = await this._ticketRepository.findOne({ticketId})
+          const event = await this._eventRepository.findOne({eventId})
            console.log('ticket',ticket)
 
+           if(!event) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
           if(!ticket) throw new CustomError("Ticket not found",HTTP_STATUS.NOT_FOUND)
           console.log('ticket.eventId',ticket.eventId)
           if(ticket.eventId !== eventId) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
 
           if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)
+          
 
           ticket.ticketStatus = "used"
+          ticket.checkedIn = "checked_in"
+          event.checkedInCount! += ticket.ticketCount
+          
           const updatedTicket = await this._ticketRepository.update(
             {ticketId},
             ticket
+          )
+
+          const updatedEvent = await this._eventRepository.update(
+            {eventId},
+            event
           )
 
           return updatedTicket

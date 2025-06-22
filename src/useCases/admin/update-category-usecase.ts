@@ -17,15 +17,14 @@ export class UpdateStatusCategoryUseCase implements IUpdateStatusCategoryUseCase
    ){}
       
    async execute(categoryId:string,status:string): Promise<ICategoryEntity | null> {
-      console.log('data',categoryId)
       const category = await this._categoryRepository.update(
         {categoryId},
         {status}
       )
-       console.log('category',category)
       return category
    }
 }
 
 
 
+ 

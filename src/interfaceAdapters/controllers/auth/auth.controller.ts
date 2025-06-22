@@ -19,6 +19,7 @@ import { IRefreshTokenUseCase } from "../../../domain/interface/useCaseInterface
 import { IBlackListTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/blacklist-token-usecase.interface.js";
 import { IForgotPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface.js";
 import { IResetPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface.js";
+import { IClearFCMTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/clear-fcm-token-usecase.interface.js";
 
 
 @injectable()
@@ -57,6 +58,9 @@ export class AuthController implements IClientAuthController{
 
        @inject("IResetPasswordUseCase")
        private _resetPasswordUseCase: IResetPasswordUseCase,
+
+       @inject("IClearFCMTokenUseCase")
+       private _clearFCMTokenUseCase: IClearFCMTokenUseCase,
 
      ) {}
  
@@ -247,6 +251,11 @@ export class AuthController implements IClientAuthController{
 			await this._revokeRefreshTokenUseCase.execute(
 				(req as CustomRequest).user.refresh_token
 			);
+
+      await this._clearFCMTokenUseCase.execute(
+        (req as CustomRequest).user.userId,
+        (req as CustomRequest).user.role
+      )
 
 			const user = (req as CustomRequest).user;
       console.log(user,'logout user')

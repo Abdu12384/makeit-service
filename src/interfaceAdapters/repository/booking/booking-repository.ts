@@ -121,6 +121,22 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
       date: { $gte: startOfDay, $lte: endOfDay },
     });
   }
+
+
+  async checkVendorBookingConflict(vendorId: string, bookingDate: Date, currentBookingId: string): Promise<boolean> {
+    const parsedDate = new Date(bookingDate);
+    const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(parsedDate.setHours(23, 59, 59, 999));
+  
+    const conflict = await this.model.findOne({
+      vendorId,
+      vendorApproval: "Approved",
+      date: { $gte: startOfDay, $lte: endOfDay },
+      bookingId: { $ne: currentBookingId }  
+    });
+  
+    return !!conflict;
+  }
   
 
 }

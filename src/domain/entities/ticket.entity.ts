@@ -9,11 +9,17 @@ export interface ITicketEntity {
     ticketCount: number
     phone: string;
     email: string;
-    paymentStatus: 'pending' | 'successfull' | 'failed';
+    paymentStatus: 'pending' | 'successfull' | 'failed';   
     qrCodeLink: string;
     eventId: string;
     clientId: string;
-    ticketStatus: 'used' | 'refunded' | 'unused'
+    ticketStatus: 'used' | 'refunded' | 'unused'|'partially_refunded'
     paymentTransactionId: string
+    checkedIn?: string
     checkInHistory?: Date[]
+    cancellationHistory?: {
+        count: number,
+        amount: number,
+        date: Date
+    }[]
 }

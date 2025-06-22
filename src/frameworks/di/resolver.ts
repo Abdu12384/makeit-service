@@ -27,7 +27,9 @@ import { IReviewController } from "../../domain/interface/controllerInterfaces/r
 import { ReviewController } from "../../interfaceAdapters/controllers/review.controller.js"
 import { IDashboardControllerInterface } from "../../domain/interface/controllerInterfaces/dashboard/dashboard-controller.interface.js"
 import DashboardController from "../../interfaceAdapters/controllers/dashboard.controller.js"
-            
+import { INotificationController } from "../../domain/interface/controllerInterfaces/notification/notification-controller.interface.js"
+import { NotificationController } from "../../interfaceAdapters/controllers/notification.controller.js"
+        
 
 
 
@@ -78,4 +80,7 @@ export const reviewController =
 
 export const dashboardController = 
          container.resolve<IDashboardControllerInterface>(DashboardController)
+
+export const notificationController = 
+         container.resolve<INotificationController>(NotificationController)
          

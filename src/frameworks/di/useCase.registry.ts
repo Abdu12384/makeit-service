@@ -120,6 +120,17 @@ import { ChatUseCase } from "../../useCases/chat/chat.usecase.js";
 import { IChatUseCase } from "../../domain/interface/useCaseInterface/chat/chat-usecaes.interface.js";
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface.js";
 import { CancelBookingUseCase } from "../../useCases/booking/cancel-booking-usecase.js";
+import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface.js";
+import { SaveFCMTokenUseCase } from "../../useCases/users/save-fcm-tocken.usecase.js";
+import { IClearFCMTokenUseCase } from "../../domain/interface/useCaseInterface/auth/clear-fcm-token-usecase.interface.js";
+import { ClearFCMTokenUseCase } from "../../useCases/auth/clear-fcm-token.usecase.js";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
+import {  pushNotificationService } from "../../useCases/services/firebase-push-notification.js";
+import { IGetNotificationByIdUseCase } from "../../domain/interface/useCaseInterface/notification/get-notification-id-by-usecase-interface.js";
+import { GetNotificationByIdUseCase } from "../../useCases/notification/get-notification-by-id-usecase.js";
+import { IUpdateNotificationReadUseCase } from "../../domain/interface/useCaseInterface/notification/update-notificaton-read-usecase.interface.js";
+import { register } from "module";
+import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase.js";
 
 
 
@@ -341,7 +352,14 @@ export class UseCaseRegistry {
     container.register<ICancelBookingUseCase>("ICancelBookingUseCase",{
       useClass: CancelBookingUseCase
     })
+    
+    container.register<ISaveFCMTokenUseCase>("ISaveFCMTokenUseCase",{
+      useClass: SaveFCMTokenUseCase
+    })
 
+    container.register<IClearFCMTokenUseCase>("IClearFCMTokenUseCase",{
+      useClass: ClearFCMTokenUseCase
+    })
     
    //======================= Register Bycripts =======================//
 
@@ -386,6 +404,17 @@ export class UseCaseRegistry {
       useClass: QRService
     })
 
+    container.register<IPushNotificationService>("IPushNotificationService",{
+      useClass: pushNotificationService
+    })
+
+    container.register<IGetNotificationByIdUseCase>("IGetNotificationByIdUseCase",{
+      useClass: GetNotificationByIdUseCase
+    })
+
+    container.register<IUpdateNotificationReadUseCase>("IUpdateNotificationReadUseCase",{
+      useClass: UpdateNotificationReadUseCase
+    })
 
   
    }

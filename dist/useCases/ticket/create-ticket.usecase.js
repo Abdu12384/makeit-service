@@ -73,9 +73,13 @@ let CreateTicketUseCase = class CreateTicketUseCase {
         let attendeesCount = eventDetails?.ticketPurchased || 0;
         attendeesCount += totalCount;
         console.log('attendeesCount', attendeesCount);
+        let currentAttendees = eventDetails.attendees || [];
+        if (!currentAttendees.includes(clientId)) {
+            currentAttendees.push(clientId);
+        }
         const eventUpdate = {
             attendeesCount,
-            attendees: [clientId]
+            attendees: currentAttendees
         };
         const updatedEvent = await this._eventRepository.update({ eventId: eventDetails.eventId }, eventUpdate);
         console.log('updatedEvent', updatedEvent);

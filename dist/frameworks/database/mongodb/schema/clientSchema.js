@@ -51,6 +51,11 @@ export const clientSchema = new Schema({
         type: Boolean,
         default: false,
         required: false
+    },
+    fcmToken: {
+        type: String,
+        default: null,
+        required: false
     }
 }, {
     timestamps: true

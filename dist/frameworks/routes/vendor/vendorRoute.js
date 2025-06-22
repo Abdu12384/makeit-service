@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
-import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController } from "../../di/resolver.js";
+import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController, notificationController } from "../../di/resolver.js";
 export class VendorRoute {
     vendorRoute;
     constructor() {
@@ -19,6 +19,12 @@ export class VendorRoute {
             userController.changePassword(req, res);
         });
         /** ==========================
+         *  FCM Token Management Routes
+        * ========================== */
+        this.vendorRoute.post("/vendor/fcm-token", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            userController.saveFCMToken(req, res);
+        });
+        /** ==========================
          *  Service Management Routes
         * ========================== */
         this.vendorRoute.post("/vendor/service", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
@@ -35,6 +41,15 @@ export class VendorRoute {
         });
         this.vendorRoute.get("/vendor/categories", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             categoryController.getAllCategories(req, res);
+        });
+        /** ==========================
+         *  Session Management Routes
+        * ========================== */
+        this.vendorRoute.get("/vendor/notifications", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            notificationController.getNotifications(req, res);
+        });
+        this.vendorRoute.put("/vendor/notifications/read", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            notificationController.markNotificationAsRead(req, res);
         });
         /** ==========================
          *   Booking Management Routes

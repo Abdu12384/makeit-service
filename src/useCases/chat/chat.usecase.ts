@@ -8,6 +8,8 @@ import { IClientRepository } from "../../domain/interface/repositoryInterfaces/u
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
 import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
 import { IClientEntity } from "../../domain/entities/client.entity.js";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
+import { messaging } from "../../shared/config.js";
 
 
 
@@ -19,7 +21,8 @@ export class ChatUseCase implements IChatUseCase {
   constructor(
     @inject("IChatRepository") private chatRepository: IChatRepository,
     @inject("IClientRepository") private clientRepository: IClientRepository,
-    @inject("IVendorRepository") private vendorRepository: IVendorRepository
+    @inject("IVendorRepository") private vendorRepository: IVendorRepository,
+    @inject("IPushNotificationService") private pushNotificationService: IPushNotificationService
   ) {}
 
   //======================================================
@@ -94,6 +97,22 @@ console.log("startChat-------------------------------------------", data);
       sendedTime.toISOString()
     );
 
+    const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
+    const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
+    console.log("receiverModel-------------------------------------------", receiverModel)
+    const receiver = await this.findUserById(receiverId, receiverModel);
+
+    console.log("receiver-------------------------------------------", receiver?.fcmToken);
+       if(receiver?.fcmToken) {
+            await messaging.send({
+                notification: {
+                    title: "New Message",
+                    body: "You have a new message"
+                },
+                token: receiver.fcmToken
+            });
+        }
+
     return newMessage;
   }
 
@@ -124,8 +143,8 @@ console.log("startChat-------------------------------------------", data);
       const receiverModel = chat.senderId === userId ? chat.receiverModel : chat.senderModel;
 
       const receiver = await this.findUserById(receiverId, receiverModel);
-      console.log("receiver-------------------------------------------", chats);
 
+    
       return {
         ...chat,
         receiverName: receiver?.name || receiverId,

@@ -17,9 +17,7 @@ let UpdateStatusCategoryUseCase = class UpdateStatusCategoryUseCase {
         this._categoryRepository = _categoryRepository;
     }
     async execute(categoryId, status) {
-        console.log('data', categoryId);
         const category = await this._categoryRepository.update({ categoryId }, { status });
-        console.log('category', category);
         return category;
     }
 };

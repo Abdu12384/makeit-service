@@ -35,6 +35,8 @@ import { IReviewRepository } from '../../domain/interface/repositoryInterfaces/r
 import { ReviewRepository } from '../../interfaceAdapters/repository/review/review.repository.js';
 import { IChatRepository } from '../../domain/interface/repositoryInterfaces/chat/chat-repository.interface.js';
 import { ChatRepository } from '../../interfaceAdapters/repository/chat/chat.repository.js';
+import { NotificationRepository } from '../../interfaceAdapters/repository/notification/notification.repository.js';
+import { INotificationRepository } from '../../domain/interface/repositoryInterfaces/notification/notification-repository.interface.js';
 
 export class RepositoryRegistry {
    static registerRepositories():void{
@@ -106,6 +108,10 @@ export class RepositoryRegistry {
       container.register<IChatRepository>("IChatRepository",{
          useClass: ChatRepository
       }) 
+
+      container.register<INotificationRepository>("INotificationRepository",{
+         useClass: NotificationRepository
+      })
     
    }
 }

@@ -65,9 +65,14 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       attendeesCount += totalCount
        console.log('attendeesCount',attendeesCount)
 
+       let currentAttendees = eventDetails.attendees || []
+        if (!currentAttendees.includes(clientId)) {
+          currentAttendees.push(clientId)
+        }
+
        const eventUpdate = {
         attendeesCount,
-        attendees:[clientId]
+        attendees:currentAttendees
        }
 
        const updatedEvent = await this._eventRepository.update(

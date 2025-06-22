@@ -5,12 +5,12 @@ import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/use
 import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES, TRole } from "../../shared/constants.js";
 import { handleErrorResponse } from "../../shared/utils/error.handler.js";
 import { IUpdateUserStatusUseCase } from "../../domain/interface/useCaseInterface/users/update-user-status-usecase.interface.js";
-import { IGetAllVendorUseCase } from "../../domain/interface/useCaseInterface/vendor/get-all-vendor-usecase.interface.js";
 import { CustomRequest } from "../middlewares/auth.middleware.js";
 import { IGetUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/get-user-details-usecase.interface.js";
 import { IUpdateUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/update-user-details-usecase.interface.js";
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/users/change-password-usecase.interface.js";
+import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface.js";
 
 
 @injectable()
@@ -22,9 +22,6 @@ export class UserController implements IUserController{
       @inject("IUpdateUserStatusUseCase")
       private _updateUserStatusUseCase : IUpdateUserStatusUseCase,
 
-      @inject("IGetAllVendorUseCase")
-      private _getAllVendorUseCase : IGetAllVendorUseCase,
-
       @inject("IGetUserDetailsUseCase")
       private _getUserDetailsUseCase: IGetUserDetailsUseCase,
 
@@ -32,7 +29,10 @@ export class UserController implements IUserController{
       private _updateUserDetailsUseCase : IUpdateUserDetailsUseCase,
 
       @inject("IChangePasswordUseCase")
-      private _changePasswordUseCase : IChangePasswordUseCase
+      private _changePasswordUseCase : IChangePasswordUseCase,
+
+      @inject("ISaveFCMTokenUseCase")
+      private _saveFCMTokenUseCase : ISaveFCMTokenUseCase,
    ){}
 
 
@@ -207,5 +207,26 @@ async changePassword(req: Request, res: Response): Promise<void> {
    }
 
 
+// ══════════════════════════════════════════════════════════
+//   Save FCM Token
+// ══════════════════════════════════════════════════════════
 
+async saveFCMToken(req: Request, res: Response): Promise<void> {
+     try {
+        const {token} = req.body
+
+       const {userId, role} = (req as CustomRequest).user;
+       const updatedUser = await this._saveFCMTokenUseCase.execute(
+         userId,
+         token,
+         role
+       )
+   res.status(HTTP_STATUS.OK).json({
+       success:true,
+       message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+   })
+     } catch (error) {
+       handleErrorResponse(res,error)      
+     }
+   }
 }

@@ -13,6 +13,7 @@ export interface IChatEntity {
       receiverName?:string,
       receiverProfileImage?:string,
       name:string,
-      profileImage?:string
+      profileImage?:string,
+      fcmToken?:string
       
 }

@@ -6,19 +6,9 @@ import { HTTP_STATUS } from "../../shared/constants.js";
 import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js";
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
+import { NotificationType } from "../../shared/dtos/notification.js";
 
 @injectable()
 export default class CancelTicketUseCase implements ICancelTicketUseCase {
@@ -30,26 +20,42 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
         private _transactionRepository: ITransactionRepository,
         @inject("IWalletRepository")
         private _walletRepository: IWalletRepository,
+        @inject("IEventRepository")
+        private _eventRepository: IEventRepository,
+        @inject("IPushNotificationService")
+        private _pushNotificationService: IPushNotificationService
     ){}
 
-    async execute(ticketId: string): Promise<void> {
+    async execute(ticketId: string,cancelCount:number): Promise<void> {
       const ticket = await this._ticketRepository.findOneWithPopulate({ ticketId });
       console.log('ticket',ticket)
+      console.log('cancelCount',cancelCount)
   
       if (!ticket) {
         throw new CustomError("Ticket not found", HTTP_STATUS.NOT_FOUND);
       }
+
+      if(ticket.ticketStatus === "refunded"){
+        throw new CustomError("Ticket already refunded", HTTP_STATUS.BAD_REQUEST);
+      }
+
+      const totalCount = ticket.ticketCount
+      if(cancelCount > totalCount){
+        throw new CustomError("Cancel count exceeds total ticket count", HTTP_STATUS.BAD_REQUEST);
+      }
+
+      const singleTicketAmount = ticket.totalAmount / totalCount
+      const cancelAmount = singleTicketAmount * cancelCount
   
-      const totalAmount = ticket.totalAmount;
-  
+      
       // Platform keeps 10%
-      const platformFee = totalAmount * 0.1;
+      const platformFee = cancelAmount * 0.1;
   
       // Vendor's share (to be deducted)
-      const vendorShare = totalAmount * 0.29;
+      const vendorShare = cancelAmount * 0.29;
   
       // Refundable to client
-      const clientRefund = totalAmount - platformFee - vendorShare;
+      const clientRefund = cancelAmount - platformFee - vendorShare;
       console.log('clientRefund',clientRefund)
   
       /** Step 1: Refund to client */
@@ -92,9 +98,59 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
       if (!savedVendorTx) {
         throw new CustomError("Failed to log vendor transaction", HTTP_STATUS.INTERNAL_SERVER_ERROR);
       }
+      
+      ticket.totalAmount = ticket.totalAmount - cancelAmount;  
+
+      ticket.ticketCount = totalCount - cancelCount;
+
+
+      if(ticket.ticketCount === 0){
+        ticket.ticketStatus = "refunded";
+        ticket.checkedIn = "cancelled"
+      }else{
+        ticket.ticketStatus = "partially_refunded";
+      }
+
+      if (!ticket.cancellationHistory) {
+        ticket.cancellationHistory = [];
+      }      
   
+      ticket.cancellationHistory.push({
+        count: cancelCount,
+        amount: cancelAmount,
+        date: new Date()
+      })
+
+      const eventDetails = await this._eventRepository.findOne({eventId:ticket.eventId})
+      if(!eventDetails){
+        throw new CustomError("Event not found", HTTP_STATUS.NOT_FOUND);
+      }
+
+      eventDetails.ticketPurchased = Math.max(0, eventDetails.ticketPurchased! - cancelCount); 
+      eventDetails.attendeesCount = Math.max(0, eventDetails.attendeesCount - cancelCount); 
+
+      eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount! - cancelCount); 
+
+      await this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
+
+      await this._pushNotificationService.sendNotification(
+        ticket.clientId,
+        "Ticket Cancelled",
+        `Your booking for ${eventDetails?.title || "an event"} has been cancelled.`,
+        NotificationType.TICKET_BOOKING,
+        "client"
+      );
+
+      await this._pushNotificationService.sendNotification(
+        vendorId,
+        "A ticket has been cancelled for your event",
+        `${ticket.ticketCount} tickets were cancelled for ${eventDetails?.title}.`,
+        NotificationType.TICKET_BOOKING,
+        "vendor"
+      );
+
       /** Step 3: Update ticket status */
-      ticket.ticketStatus = "refunded";
       await this._ticketRepository.update({ ticketId }, ticket);
+      console.log('updated ticket',ticket)
     }
 }

@@ -1,5 +1,50 @@
 import dotenv from "dotenv"
+import firebaseAdmin from "firebase-admin";
+import path from 'path';
+import { fileURLToPath } from "url";
+import fs from "fs/promises";
+
+
+
 dotenv.config()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ✅ Load env
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+// ✅ Service account path from env
+const serviceAccountPath = path.resolve(__dirname, "../../", process.env.FIREBASE_SERVICE_ACCOUNT || "");
+
+console.log("serviceAccountPath////////////////////////s", serviceAccountPath);
+
+let serviceAccount: firebaseAdmin.ServiceAccount;
+
+
+try {
+	const fileContent = await fs.readFile(serviceAccountPath, "utf-8");
+	
+  serviceAccount = JSON.parse(fileContent);
+	console.log("fileContent////////////////////////s",serviceAccount)
+} catch (error) {
+  console.error("❌ Failed to load Firebase service account:", error);
+  throw new Error("Firebase Admin SDK initialization failed due to missing or invalid service account file");
+}
+
+
+console.log("firebaseAdmin.initializeApp",firebaseAdmin.apps)
+if (!firebaseAdmin?.apps?.length) {
+	firebaseAdmin.initializeApp({
+			credential: firebaseAdmin.credential.cert(serviceAccount),
+	});
+}
+
+console.log("firebaseAdmin.initializeApp",firebaseAdmin.messaging())
+
+export const messaging = firebaseAdmin.messaging();
+
+
 
 export const config = {
 

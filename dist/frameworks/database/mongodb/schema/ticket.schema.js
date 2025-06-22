@@ -41,7 +41,7 @@ export const ticketSchema = new Schema({
     },
     ticketStatus: {
         type: String,
-        enum: ['used', 'refunded', 'unused']
+        enum: ['used', 'refunded', 'unused', 'partially_refunded']
     },
     paymentTransactionId: {
         type: String,
@@ -52,8 +52,23 @@ export const ticketSchema = new Schema({
         type: Number,
         required: true
     },
+    checkedIn: {
+        type: String,
+        enum: ['checked_in', 'pending', 'cancelled'],
+        default: 'pending'
+    },
     checkInHistory: {
         type: [Date],
+        default: []
+    },
+    cancellationHistory: {
+        type: [
+            {
+                count: Number,
+                amount: Number,
+                date: Date
+            }
+        ],
         default: []
     }
 }, {

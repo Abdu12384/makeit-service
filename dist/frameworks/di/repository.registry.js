@@ -17,6 +17,7 @@ import { WalletRepository } from '../../interfaceAdapters/repository/wallet/wall
 import { WorkSampleRepository } from '../../interfaceAdapters/repository/work-sample/work-sample.repository.js';
 import { ReviewRepository } from '../../interfaceAdapters/repository/review/review.repository.js';
 import { ChatRepository } from '../../interfaceAdapters/repository/chat/chat.repository.js';
+import { NotificationRepository } from '../../interfaceAdapters/repository/notification/notification.repository.js';
 export class RepositoryRegistry {
     static registerRepositories() {
         container.register('IClientRepository', {
@@ -69,6 +70,9 @@ export class RepositoryRegistry {
         });
         container.register("IChatRepository", {
             useClass: ChatRepository
+        });
+        container.register("INotificationRepository", {
+            useClass: NotificationRepository
         });
     }
 }

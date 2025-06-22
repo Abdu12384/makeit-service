@@ -64,6 +64,11 @@ export const VendorSchema = new Schema({
     aboutVendor: {
         type: String,
         required: false
+    },
+    fcmToken: {
+        type: String,
+        default: null,
+        required: false
     }
 }, {
     timestamps: true

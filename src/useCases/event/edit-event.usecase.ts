@@ -26,8 +26,9 @@ export class EditEventUseCase implements IEditEventUseCase{
             )
         }
         await this._eventRepository.update(
-            {event: event.eventId},
+            {eventId: event.eventId},
             data
         )
     }
 }
+

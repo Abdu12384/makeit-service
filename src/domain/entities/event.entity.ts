@@ -22,5 +22,6 @@ export interface IEventEntity {
     category: string
     status: "upcoming" | "completed" | "cancelled"
     attendeesCount: number
+    checkedInCount?: number
     isActive:boolean
 }

@@ -14,6 +14,7 @@ import { WalletController } from "../../interfaceAdapters/controllers/wallet.con
 import { WorkSampleController } from "../../interfaceAdapters/controllers/work-sample.controller.js";
 import { ReviewController } from "../../interfaceAdapters/controllers/review.controller.js";
 import DashboardController from "../../interfaceAdapters/controllers/dashboard.controller.js";
+import { NotificationController } from "../../interfaceAdapters/controllers/notification.controller.js";
 DependencyInjection.registerAll();
 //=================== Middleware Resolving =====================
 export const blockStatusMiddleware = container.resolve(BlockStatusMiddleware);
@@ -31,4 +32,5 @@ export const walletController = container.resolve(WalletController);
 export const workSampleController = container.resolve(WorkSampleController);
 export const reviewController = container.resolve(ReviewController);
 export const dashboardController = container.resolve(DashboardController);
+export const notificationController = container.resolve(NotificationController);
 //# sourceMappingURL=resolver.js.map

@@ -103,8 +103,9 @@ let TicketController = class TicketController {
     // ══════════════════════════════════════════════════════════
     async cancelTicket(req, res) {
         const { ticketId } = req.params;
+        const { cancelCount } = req.body;
         try {
-            const cancelTicket = await this._cancelTicketUseCase.execute(ticketId);
+            const cancelTicket = await this._cancelTicketUseCase.execute(ticketId, cancelCount);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: SUCCESS_MESSAGES.UPDATE_SUCCESS,

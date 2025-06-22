@@ -59,6 +59,11 @@ import { GetAllDashboardDataUseCase } from "../../useCases/dashboard/get-all-das
 import CancelTicketUseCase from "../../useCases/ticket/cancel-ticket.usecase.js";
 import { ChatUseCase } from "../../useCases/chat/chat.usecase.js";
 import { CancelBookingUseCase } from "../../useCases/booking/cancel-booking-usecase.js";
+import { SaveFCMTokenUseCase } from "../../useCases/users/save-fcm-tocken.usecase.js";
+import { ClearFCMTokenUseCase } from "../../useCases/auth/clear-fcm-token.usecase.js";
+import { pushNotificationService } from "../../useCases/services/firebase-push-notification.js";
+import { GetNotificationByIdUseCase } from "../../useCases/notification/get-notification-by-id-usecase.js";
+import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase.js";
 export class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -218,6 +223,12 @@ export class UseCaseRegistry {
         container.register("ICancelBookingUseCase", {
             useClass: CancelBookingUseCase
         });
+        container.register("ISaveFCMTokenUseCase", {
+            useClass: SaveFCMTokenUseCase
+        });
+        container.register("IClearFCMTokenUseCase", {
+            useClass: ClearFCMTokenUseCase
+        });
         //======================= Register Bycripts =======================//
         container.register("IPasswordHasher", {
             useClass: HashPassword
@@ -243,6 +254,15 @@ export class UseCaseRegistry {
         });
         container.register("IQRService", {
             useClass: QRService
+        });
+        container.register("IPushNotificationService", {
+            useClass: pushNotificationService
+        });
+        container.register("IGetNotificationByIdUseCase", {
+            useClass: GetNotificationByIdUseCase
+        });
+        container.register("IUpdateNotificationReadUseCase", {
+            useClass: UpdateNotificationReadUseCase
         });
     }
 }

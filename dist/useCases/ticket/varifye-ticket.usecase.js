@@ -15,12 +15,17 @@ import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
 let VerifyTicketUseCase = class VerifyTicketUseCase {
     _ticketRepository;
-    constructor(_ticketRepository) {
+    _eventRepository;
+    constructor(_ticketRepository, _eventRepository) {
         this._ticketRepository = _ticketRepository;
+        this._eventRepository = _eventRepository;
     }
     async execute(ticketId, eventId) {
         const ticket = await this._ticketRepository.findOne({ ticketId });
+        const event = await this._eventRepository.findOne({ eventId });
         console.log('ticket', ticket);
+        if (!event)
+            throw new CustomError("Event not found", HTTP_STATUS.NOT_FOUND);
         if (!ticket)
             throw new CustomError("Ticket not found", HTTP_STATUS.NOT_FOUND);
         console.log('ticket.eventId', ticket.eventId);
@@ -29,14 +34,18 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
         if (ticket.ticketStatus === "used")
             throw new CustomError("Ticket already used", HTTP_STATUS.FORBIDDEN);
         ticket.ticketStatus = "used";
+        ticket.checkedIn = "checked_in";
+        event.checkedInCount += ticket.ticketCount;
         const updatedTicket = await this._ticketRepository.update({ ticketId }, ticket);
+        const updatedEvent = await this._eventRepository.update({ eventId }, event);
         return updatedTicket;
     }
 };
 VerifyTicketUseCase = __decorate([
     injectable(),
     __param(0, inject("ITicketRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, inject("IEventRepository")),
+    __metadata("design:paramtypes", [Object, Object])
 ], VerifyTicketUseCase);
 export { VerifyTicketUseCase };
 //# sourceMappingURL=varifye-ticket.usecase.js.map

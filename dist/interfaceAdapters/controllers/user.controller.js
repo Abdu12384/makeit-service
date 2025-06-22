@@ -17,17 +17,17 @@ import { CustomError } from "../../domain/utils/custom.error.js";
 let UserController = class UserController {
     _getAllUserUserCase;
     _updateUserStatusUseCase;
-    _getAllVendorUseCase;
     _getUserDetailsUseCase;
     _updateUserDetailsUseCase;
     _changePasswordUseCase;
-    constructor(_getAllUserUserCase, _updateUserStatusUseCase, _getAllVendorUseCase, _getUserDetailsUseCase, _updateUserDetailsUseCase, _changePasswordUseCase) {
+    _saveFCMTokenUseCase;
+    constructor(_getAllUserUserCase, _updateUserStatusUseCase, _getUserDetailsUseCase, _updateUserDetailsUseCase, _changePasswordUseCase, _saveFCMTokenUseCase) {
         this._getAllUserUserCase = _getAllUserUserCase;
         this._updateUserStatusUseCase = _updateUserStatusUseCase;
-        this._getAllVendorUseCase = _getAllVendorUseCase;
         this._getUserDetailsUseCase = _getUserDetailsUseCase;
         this._updateUserDetailsUseCase = _updateUserDetailsUseCase;
         this._changePasswordUseCase = _changePasswordUseCase;
+        this._saveFCMTokenUseCase = _saveFCMTokenUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Get All Users (Role Based)
@@ -140,15 +140,32 @@ let UserController = class UserController {
             handleErrorResponse(res, error);
         }
     }
+    // ══════════════════════════════════════════════════════════
+    //   Save FCM Token
+    // ══════════════════════════════════════════════════════════
+    async saveFCMToken(req, res) {
+        try {
+            const { token } = req.body;
+            const { userId, role } = req.user;
+            const updatedUser = await this._saveFCMTokenUseCase.execute(userId, token, role);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+            });
+        }
+        catch (error) {
+            handleErrorResponse(res, error);
+        }
+    }
 };
 UserController = __decorate([
     injectable(),
     __param(0, inject("IGetAllUsersUseCase")),
     __param(1, inject("IUpdateUserStatusUseCase")),
-    __param(2, inject("IGetAllVendorUseCase")),
-    __param(3, inject("IGetUserDetailsUseCase")),
-    __param(4, inject("IUpdateUserDetailsUseCase")),
-    __param(5, inject("IChangePasswordUseCase")),
+    __param(2, inject("IGetUserDetailsUseCase")),
+    __param(3, inject("IUpdateUserDetailsUseCase")),
+    __param(4, inject("IChangePasswordUseCase")),
+    __param(5, inject("ISaveFCMTokenUseCase")),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], UserController);
 export { UserController };

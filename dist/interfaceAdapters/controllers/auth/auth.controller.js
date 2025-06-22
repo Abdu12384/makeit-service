@@ -27,7 +27,8 @@ let AuthController = class AuthController {
     _revokeRefreshTokenUseCase;
     _forgotPasswordUseCase;
     _resetPasswordUseCase;
-    constructor(_registerUseCase, _sendOtpEmailUseCase, _varifyOtpUseCase, _loginUseCase, _generateTokenUseCase, _googleUseCase, _refreshTokenUseCase, _blackListTokenUseCase, _revokeRefreshTokenUseCase, _forgotPasswordUseCase, _resetPasswordUseCase) {
+    _clearFCMTokenUseCase;
+    constructor(_registerUseCase, _sendOtpEmailUseCase, _varifyOtpUseCase, _loginUseCase, _generateTokenUseCase, _googleUseCase, _refreshTokenUseCase, _blackListTokenUseCase, _revokeRefreshTokenUseCase, _forgotPasswordUseCase, _resetPasswordUseCase, _clearFCMTokenUseCase) {
         this._registerUseCase = _registerUseCase;
         this._sendOtpEmailUseCase = _sendOtpEmailUseCase;
         this._varifyOtpUseCase = _varifyOtpUseCase;
@@ -39,6 +40,7 @@ let AuthController = class AuthController {
         this._revokeRefreshTokenUseCase = _revokeRefreshTokenUseCase;
         this._forgotPasswordUseCase = _forgotPasswordUseCase;
         this._resetPasswordUseCase = _resetPasswordUseCase;
+        this._clearFCMTokenUseCase = _clearFCMTokenUseCase;
     }
     // ══════════════════════════════════════════════════════════
     // 📧 Sending OTP to User Email
@@ -148,6 +150,7 @@ let AuthController = class AuthController {
         try {
             await this._blackListTokenUseCase.execute(req.user.access_token);
             await this._revokeRefreshTokenUseCase.execute(req.user.refresh_token);
+            await this._clearFCMTokenUseCase.execute(req.user.userId, req.user.role);
             const user = req.user;
             console.log(user, 'logout user');
             const accessTokenName = `${user.role}_access_token`;
@@ -224,7 +227,8 @@ AuthController = __decorate([
     __param(8, inject("IRevokeRefreshTokenUseCase")),
     __param(9, inject("IForgotPasswordUseCase")),
     __param(10, inject("IResetPasswordUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
+    __param(11, inject("IClearFCMTokenUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], AuthController);
 export { AuthController };
 //# sourceMappingURL=auth.controller.js.map

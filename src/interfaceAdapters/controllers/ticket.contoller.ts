@@ -158,10 +158,12 @@ export class TicketController implements ITicketController {
 
     async cancelTicket(req: Request, res: Response): Promise<void> {
         const {ticketId} = req.params
+        const {cancelCount} = req.body
         try {
 
             const cancelTicket = await this._cancelTicketUseCase.execute(
                 ticketId,
+                cancelCount,
             )
             res.status(HTTP_STATUS.OK).json({
                 success:true,

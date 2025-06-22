@@ -11,10 +11,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { inject, injectable } from "tsyringe";
+import { NotificationType } from "../../shared/dtos/notification.js";
 let CancelBookingUseCase = class CancelBookingUseCase {
     _bookingRepository;
-    constructor(_bookingRepository) {
+    _pushNotificationService;
+    constructor(_bookingRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
+        this._pushNotificationService = _pushNotificationService;
     }
     async execute(bookingId) {
         const booking = await this._bookingRepository.findOne({ bookingId });
@@ -23,12 +26,15 @@ let CancelBookingUseCase = class CancelBookingUseCase {
         }
         booking.status = "Cancelled";
         await this._bookingRepository.update({ bookingId }, booking);
+        await this._pushNotificationService.sendNotification(booking.clientId, NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "client");
+        await this._pushNotificationService.sendNotification(booking.vendorId, NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "vendor");
     }
 };
 CancelBookingUseCase = __decorate([
     injectable(),
     __param(0, inject("IBookingRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, inject("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object])
 ], CancelBookingUseCase);
 export { CancelBookingUseCase };
 //# sourceMappingURL=cancel-booking-usecase.js.map

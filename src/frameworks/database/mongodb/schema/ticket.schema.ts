@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import { ITicketModel } from "../model/ticket.model";
+import { date } from "zod";
 
 
 export const ticketSchema = new Schema<ITicketModel>({
@@ -44,7 +45,7 @@ export const ticketSchema = new Schema<ITicketModel>({
     },
     ticketStatus: {
         type: String,
-        enum: ['used', 'refunded', 'unused']
+        enum: ['used', 'refunded', 'unused','partially_refunded']
     },
     paymentTransactionId: {
         type: String,
@@ -55,10 +56,25 @@ export const ticketSchema = new Schema<ITicketModel>({
         type: Number,
         required: true
     },
+    checkedIn: {
+        type: String,
+        enum: ['checked_in', 'pending', 'cancelled'],
+        default: 'pending'
+    },
     checkInHistory: {
         type: [Date],
         default: []
-      }
+      },
+    cancellationHistory: {
+        type:[
+           {
+            count: Number,
+            amount: Number,
+            date: Date
+           }
+        ],
+        default: []
+    }
 
 }, {
     timestamps: true

@@ -1,6 +1,8 @@
 import { inject, injectable } from "tsyringe"
 import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js"
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface.js"
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js"
+import { NotificationType } from "../../shared/dtos/notification.js"
 
 
 
@@ -17,7 +19,9 @@ import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/b
 export class CancelBookingUseCase implements ICancelBookingUseCase{
     constructor(
         @inject("IBookingRepository")
-        private _bookingRepository: IBookingRepository
+        private _bookingRepository: IBookingRepository,
+        @inject("IPushNotificationService")
+        private _pushNotificationService: IPushNotificationService
     ){}
 
     async execute(bookingId:string): Promise<void>{
@@ -27,5 +31,20 @@ export class CancelBookingUseCase implements ICancelBookingUseCase{
         }
         booking.status = "Cancelled"
         await this._bookingRepository.update({bookingId},booking)
+
+        await this._pushNotificationService.sendNotification(
+            booking.clientId,
+            NotificationType.CANCEL_SERVICE_BOOKING,
+            `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`,
+            "booking",
+            "client"
+          );
+          await this._pushNotificationService.sendNotification(
+            booking.vendorId,
+            NotificationType.CANCEL_SERVICE_BOOKING,
+            `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`,
+            "booking",
+            "vendor"
+          );
     }
 }

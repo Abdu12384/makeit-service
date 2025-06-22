@@ -14,6 +14,12 @@ let VendorRepository = class VendorRepository extends BaseRepository {
     constructor() {
         super(VendorModel);
     }
+    async updateFcmToken(userId, token) {
+        await VendorModel.updateOne({ userId }, { $set: { fcmToken: token } });
+    }
+    async clearFcmToken(userId) {
+        await VendorModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
+    }
 };
 VendorRepository = __decorate([
     injectable(),

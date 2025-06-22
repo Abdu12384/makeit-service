@@ -1,5 +1,5 @@
 import { Request,RequestHandler,Response,Router } from "express";
-import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController } from "../../di/resolver.js";
+import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController, notificationController } from "../../di/resolver.js";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
 
 
@@ -30,7 +30,38 @@ export class ClientRoute {
           (req: Request, res:Response) =>{
             userController.changePassword(req,res)
           })
+
+
+
+      /** ==========================
+       *  saveFCMToken
+      * ========================== */
          
+         this.clientRoute.post("/client/save-fcm-token",
+         verifyAuth,
+         blockStatusMiddleware.checkStatus as RequestHandler,
+         (req: Request, res:Response) =>{
+           userController.saveFCMToken(req,res)
+         })
+
+
+      /** ==========================
+       *  getClientNotifications
+      * ========================== */
+         this.clientRoute.get("/client/notifications",
+         verifyAuth,
+         blockStatusMiddleware.checkStatus as RequestHandler,
+         (req: Request, res:Response) =>{
+           notificationController.getNotifications(req,res)
+         })
+
+         this.clientRoute.put("/client/notifications/read",
+         verifyAuth,
+         blockStatusMiddleware.checkStatus as RequestHandler,
+         (req: Request, res:Response) =>{
+           notificationController.markNotificationAsRead(req,res)
+         })
+
 
         /** ==========================
          *  Client Service Management Routes
@@ -61,8 +92,6 @@ export class ClientRoute {
             userController.updateUserDetails(req,res)
           }   
         )
-
-
 
 
 
@@ -110,6 +139,7 @@ export class ClientRoute {
                 bookingController.cancelBooking(req,res)
               })
 
+            
 
 
 

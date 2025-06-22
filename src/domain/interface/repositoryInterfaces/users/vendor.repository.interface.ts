@@ -4,4 +4,7 @@ import { IVendorEntity } from "../../../entities/vendor.entity";
 
 
 
-export interface IVendorRepository extends IBaseRepository<IVendorEntity>{}
+export interface IVendorRepository extends IBaseRepository<IVendorEntity>{
+   updateFcmToken(userId: string, token: string): Promise<void>;
+   clearFcmToken(userId: string): Promise<void>;
+   }

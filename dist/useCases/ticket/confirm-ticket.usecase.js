@@ -14,6 +14,7 @@ import { inject, injectable } from "tsyringe";
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+import { NotificationType } from "../../shared/dtos/notification.js";
 let ConfirmTicketUseCase = class ConfirmTicketUseCase {
     _stripeService;
     _eventRepository;
@@ -21,13 +22,15 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
     _transactionRepository;
     _paymentRepository;
     _walletRepository;
-    constructor(_stripeService, _eventRepository, _ticketRepository, _transactionRepository, _paymentRepository, _walletRepository) {
+    _pushNotificationService;
+    constructor(_stripeService, _eventRepository, _ticketRepository, _transactionRepository, _paymentRepository, _walletRepository, _pushNotificationService) {
         this._stripeService = _stripeService;
         this._eventRepository = _eventRepository;
         this._ticketRepository = _ticketRepository;
         this._transactionRepository = _transactionRepository;
         this._paymentRepository = _paymentRepository;
         this._walletRepository = _walletRepository;
+        this._pushNotificationService = _pushNotificationService;
     }
     async execute(ticket, paymentIntentId, vendorId) {
         const confirmPayment = await this._stripeService.confirmPayment(paymentIntentId);
@@ -95,6 +98,8 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
         const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails);
         const addMoneyToVendorWallet = await this._walletRepository.updateWallet(vendorId, vendorPrice);
         console.log('transaction', transaction);
+        await this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${eventDetails?.title || "an event"} has been confirmed.`, NotificationType.TICKET_BOOKING, "client");
+        await this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails?.title}.`, NotificationType.TICKET_BOOKING, "vendor");
         return updatedTicket;
     }
 };
@@ -106,7 +111,8 @@ ConfirmTicketUseCase = __decorate([
     __param(3, inject("ITransactionRepository")),
     __param(4, inject("IPaymentRepository")),
     __param(5, inject("IWalletRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
+    __param(6, inject("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object])
 ], ConfirmTicketUseCase);
 export { ConfirmTicketUseCase };
 //# sourceMappingURL=confirm-ticket.usecase.js.map

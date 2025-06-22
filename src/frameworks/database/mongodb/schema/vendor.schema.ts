@@ -67,6 +67,11 @@ export const VendorSchema =new Schema <IVendorModel>({
     aboutVendor:{
         type: String,
         required:false
+    },
+    fcmToken:{
+        type:String,
+        default:null,
+        required:false
     }
 },{
     timestamps:true

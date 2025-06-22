@@ -103,6 +103,9 @@ export class BookingController implements IBookingController{
         try {
             const {bookingId} = req.params
             const {status,reason} = req.body
+            console.log('bookingId',bookingId)
+            console.log('status',status)
+            console.log('reason',reason)
             const booking = await this._updateBookingStatusUseCase.execute(
                 bookingId,
                 status,
@@ -117,7 +120,6 @@ export class BookingController implements IBookingController{
             handleErrorResponse(res, error)
         }
     }
-
 
 
     // ══════════════════════════════════════════════════════════

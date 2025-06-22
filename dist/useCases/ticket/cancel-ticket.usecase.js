@@ -13,28 +13,42 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { inject, injectable } from "tsyringe";
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
+import { NotificationType } from "../../shared/dtos/notification.js";
 let CancelTicketUseCase = class CancelTicketUseCase {
     _ticketRepository;
     _transactionRepository;
     _walletRepository;
-    constructor(_ticketRepository, _transactionRepository, _walletRepository) {
+    _eventRepository;
+    _pushNotificationService;
+    constructor(_ticketRepository, _transactionRepository, _walletRepository, _eventRepository, _pushNotificationService) {
         this._ticketRepository = _ticketRepository;
         this._transactionRepository = _transactionRepository;
         this._walletRepository = _walletRepository;
+        this._eventRepository = _eventRepository;
+        this._pushNotificationService = _pushNotificationService;
     }
-    async execute(ticketId) {
+    async execute(ticketId, cancelCount) {
         const ticket = await this._ticketRepository.findOneWithPopulate({ ticketId });
         console.log('ticket', ticket);
+        console.log('cancelCount', cancelCount);
         if (!ticket) {
             throw new CustomError("Ticket not found", HTTP_STATUS.NOT_FOUND);
         }
-        const totalAmount = ticket.totalAmount;
+        if (ticket.ticketStatus === "refunded") {
+            throw new CustomError("Ticket already refunded", HTTP_STATUS.BAD_REQUEST);
+        }
+        const totalCount = ticket.ticketCount;
+        if (cancelCount > totalCount) {
+            throw new CustomError("Cancel count exceeds total ticket count", HTTP_STATUS.BAD_REQUEST);
+        }
+        const singleTicketAmount = ticket.totalAmount / totalCount;
+        const cancelAmount = singleTicketAmount * cancelCount;
         // Platform keeps 10%
-        const platformFee = totalAmount * 0.1;
+        const platformFee = cancelAmount * 0.1;
         // Vendor's share (to be deducted)
-        const vendorShare = totalAmount * 0.29;
+        const vendorShare = cancelAmount * 0.29;
         // Refundable to client
-        const clientRefund = totalAmount - platformFee - vendorShare;
+        const clientRefund = cancelAmount - platformFee - vendorShare;
         console.log('clientRefund', clientRefund);
         /** Step 1: Refund to client */
         const clientWallet = await this._walletRepository.updateWallet(ticket.clientId, clientRefund);
@@ -71,9 +85,36 @@ let CancelTicketUseCase = class CancelTicketUseCase {
         if (!savedVendorTx) {
             throw new CustomError("Failed to log vendor transaction", HTTP_STATUS.INTERNAL_SERVER_ERROR);
         }
+        ticket.totalAmount = ticket.totalAmount - cancelAmount;
+        ticket.ticketCount = totalCount - cancelCount;
+        if (ticket.ticketCount === 0) {
+            ticket.ticketStatus = "refunded";
+            ticket.checkedIn = "cancelled";
+        }
+        else {
+            ticket.ticketStatus = "partially_refunded";
+        }
+        if (!ticket.cancellationHistory) {
+            ticket.cancellationHistory = [];
+        }
+        ticket.cancellationHistory.push({
+            count: cancelCount,
+            amount: cancelAmount,
+            date: new Date()
+        });
+        const eventDetails = await this._eventRepository.findOne({ eventId: ticket.eventId });
+        if (!eventDetails) {
+            throw new CustomError("Event not found", HTTP_STATUS.NOT_FOUND);
+        }
+        eventDetails.ticketPurchased = Math.max(0, eventDetails.ticketPurchased - cancelCount);
+        eventDetails.attendeesCount = Math.max(0, eventDetails.attendeesCount - cancelCount);
+        eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount - cancelCount);
+        await this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
+        await this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Cancelled", `Your booking for ${eventDetails?.title || "an event"} has been cancelled.`, NotificationType.TICKET_BOOKING, "client");
+        await this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails?.title}.`, NotificationType.TICKET_BOOKING, "vendor");
         /** Step 3: Update ticket status */
-        ticket.ticketStatus = "refunded";
         await this._ticketRepository.update({ ticketId }, ticket);
+        console.log('updated ticket', ticket);
     }
 };
 CancelTicketUseCase = __decorate([
@@ -81,7 +122,9 @@ CancelTicketUseCase = __decorate([
     __param(0, inject("ITicketRepository")),
     __param(1, inject("ITransactionRepository")),
     __param(2, inject("IWalletRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, inject("IEventRepository")),
+    __param(4, inject("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
 ], CancelTicketUseCase);
 export default CancelTicketUseCase;
 //# sourceMappingURL=cancel-ticket.usecase.js.map

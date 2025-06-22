@@ -14,10 +14,13 @@ import { inject, injectable } from "tsyringe";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { CustomError } from "../../domain/utils/custom.error.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
+import { NotificationType } from "../../shared/dtos/notification.js";
 let CreateBookingUseCase = class CreateBookingUseCase {
     _bookingRepository;
-    constructor(_bookingRepository) {
+    _pushNotificationService;
+    constructor(_bookingRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
+        this._pushNotificationService = _pushNotificationService;
     }
     async execute(serviceId, date, email, phone, vendorId, userId) {
         const bookingId = generateUniqueId("booking");
@@ -36,14 +39,16 @@ let CreateBookingUseCase = class CreateBookingUseCase {
             email,
             phone,
             vendorId,
-            date,
+            date: [date],
         });
+        await this._pushNotificationService.sendNotification(vendorId, NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
     }
 };
 CreateBookingUseCase = __decorate([
     injectable(),
     __param(0, inject("IBookingRepository")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, inject("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object])
 ], CreateBookingUseCase);
 export { CreateBookingUseCase };
 //# sourceMappingURL=create-booking.usecase.js.map

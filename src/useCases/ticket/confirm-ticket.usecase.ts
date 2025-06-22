@@ -11,6 +11,8 @@ import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/w
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
 import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
+import { NotificationType } from "../../shared/dtos/notification.js";
 
 
 
@@ -36,7 +38,9 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
         @inject("IPaymentRepository")
         private _paymentRepository: IPaymentRepository,
         @inject("IWalletRepository")
-        private _walletRepository: IWalletRepository
+        private _walletRepository: IWalletRepository,
+        @inject("IPushNotificationService")
+        private _pushNotificationService: IPushNotificationService
     ){}
 
     async execute(ticket:ITicketEntity, paymentIntentId: string, vendorId: string): Promise<any> {
@@ -110,6 +114,22 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
        
        console.log('transaction',transaction)
 
+       await this._pushNotificationService.sendNotification(
+        ticket.clientId,
+        "Ticket Booking Confirmed",
+        `Your booking for ${eventDetails?.title || "an event"} has been confirmed.`,
+        NotificationType.TICKET_BOOKING,
+        "client"
+      );
+
+      await this._pushNotificationService.sendNotification(
+        vendorId,
+        "A ticket has been booked for your event",
+        `${ticket.ticketCount} tickets were booked for ${eventDetails?.title}.`,
+        NotificationType.TICKET_BOOKING,
+        "vendor"
+      );
+      
 
       return  updatedTicket
     }

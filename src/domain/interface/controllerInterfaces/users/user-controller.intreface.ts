@@ -6,4 +6,5 @@ export interface IUserController {
 	refreshSession(req: Request, res: Response): Promise<void>;
 	updateUserDetails(req: Request, res: Response): Promise<void>;
 	changePassword(req: Request, res: Response): Promise<void>;
+	saveFCMToken(req: Request, res: Response): Promise<void>;
 }
