@@ -39,6 +39,9 @@ export class VendorRoute {
         this.vendorRoute.patch("/vendor/service/:serviceId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             serviceController.updateServiceStatus(req, res);
         });
+        this.vendorRoute.patch("/vendor/service/block/:serviceId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            serviceController.blockService(req, res);
+        });
         this.vendorRoute.get("/vendor/categories", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             categoryController.getAllCategories(req, res);
         });
@@ -71,6 +74,9 @@ export class VendorRoute {
         });
         this.vendorRoute.put("/vendor/event/:eventId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             eventController.editEvent(req, res);
+        });
+        this.vendorRoute.patch("/vendor/event/block/:eventId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            eventController.blockEvent(req, res);
         });
         this.vendorRoute.get("/vendor/events/attendees/:eventId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             eventController.getAttendeesById(req, res);

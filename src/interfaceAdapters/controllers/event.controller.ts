@@ -10,6 +10,8 @@ import { IEditEventUseCase } from "../../domain/interface/useCaseInterface/event
 import { IGetAllEventsUseCase } from "../../domain/interface/useCaseInterface/event/get-all-events-usecase.interface.js";
 import { IGetEventByIdUseCase } from "../../domain/interface/useCaseInterface/event/get-event-by-id-usecase.interface.js";
 import { IGetEventsAttendeesByIdUseCase } from "../../domain/interface/useCaseInterface/event/get-events-attendees-by-id-usecase.interface.js";
+import { ICheckEventBookingAvliblityUseCase } from "../../domain/interface/useCaseInterface/event/check-event-booking-avliblity-usecase.interface.js";
+import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface.js";
 
 
 
@@ -29,7 +31,11 @@ export class EventController implements IEventController{
       @inject("IGetEventByIdUseCase")
       private _getEventByIdUseCase: IGetEventByIdUseCase,
       @inject("IGetEventsAttendeesByIdUseCase")
-      private _getEventsAttendeesByIdUseCase: IGetEventsAttendeesByIdUseCase
+      private _getEventsAttendeesByIdUseCase: IGetEventsAttendeesByIdUseCase,
+      @inject("ICheckEventBookingAvliblityUseCase")
+      private _checkEventBookingAvliblityUseCase: ICheckEventBookingAvliblityUseCase,
+      @inject("IBlockEventUseCase")
+      private _blockEventUseCase: IBlockEventUseCase
     ){}
       
 
@@ -142,6 +148,53 @@ export class EventController implements IEventController{
       }
     }
 
+
+
+
+// ══════════════════════════════════════════════════════════
+//  Block Event 
+// ══════════════════════════════════════════════════════════
+
+    async blockEvent(req:Request,res:Response):Promise<void>{
+      try {
+        const {eventId} = req.params
+        const event = await this._blockEventUseCase.blockEvent(
+          eventId
+        )
+        res.status(HTTP_STATUS.OK).json({
+          success:true,
+          message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
+          event
+        })
+      } catch (error) {
+        handleErrorResponse(res,error)
+      }
+    }
+
+
+// ══════════════════════════════════════════════════════════
+//  Check Event Booking Availability 
+// ══════════════════════════════════════════════════════════
+
+    async checkEventBookingAvailability(req:Request,res:Response):Promise<void>{
+      try {
+        const {eventId} = req.params
+        const {ticketCount} = req.query
+        console.log('ticketCount',ticketCount)
+        const {userId} = (req as CustomRequest).user
+        const event = await this._checkEventBookingAvliblityUseCase.execute(
+          eventId,
+          userId,
+          Number(ticketCount)
+        )
+        res.status(HTTP_STATUS.OK).json({
+          success:true,
+          event
+        })
+      } catch (error) {
+        handleErrorResponse(res,error)
+      }
+    }
 
 
 // ══════════════════════════════════════════════════════════

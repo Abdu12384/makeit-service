@@ -135,7 +135,7 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
       bookingId: { $ne: currentBookingId }  
     });
   
-    return !!conflict;
+    return !!conflict;  
   }
   
 

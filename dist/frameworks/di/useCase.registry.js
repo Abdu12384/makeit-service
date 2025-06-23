@@ -64,6 +64,8 @@ import { ClearFCMTokenUseCase } from "../../useCases/auth/clear-fcm-token.usecas
 import { pushNotificationService } from "../../useCases/services/firebase-push-notification.js";
 import { GetNotificationByIdUseCase } from "../../useCases/notification/get-notification-by-id-usecase.js";
 import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase.js";
+import { CheckEventBookingAvliblityUseCase } from "../../useCases/event/check-event-booking-avliblity.usecase.js";
+import { BlockEventUseCase } from "../../useCases/event/block-event-usecase.js";
 export class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -263,6 +265,12 @@ export class UseCaseRegistry {
         });
         container.register("IUpdateNotificationReadUseCase", {
             useClass: UpdateNotificationReadUseCase
+        });
+        container.register("ICheckEventBookingAvliblityUseCase", {
+            useClass: CheckEventBookingAvliblityUseCase
+        });
+        container.register("IBlockEventUseCase", {
+            useClass: BlockEventUseCase
         });
     }
 }

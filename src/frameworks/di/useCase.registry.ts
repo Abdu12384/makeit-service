@@ -131,6 +131,10 @@ import { GetNotificationByIdUseCase } from "../../useCases/notification/get-noti
 import { IUpdateNotificationReadUseCase } from "../../domain/interface/useCaseInterface/notification/update-notificaton-read-usecase.interface.js";
 import { register } from "module";
 import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase.js";
+import { ICheckEventBookingAvliblityUseCase } from "../../domain/interface/useCaseInterface/event/check-event-booking-avliblity-usecase.interface.js";
+import { CheckEventBookingAvliblityUseCase } from "../../useCases/event/check-event-booking-avliblity.usecase.js";
+import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface.js";
+import { BlockEventUseCase } from "../../useCases/event/block-event-usecase.js";
 
 
 
@@ -414,6 +418,14 @@ export class UseCaseRegistry {
 
     container.register<IUpdateNotificationReadUseCase>("IUpdateNotificationReadUseCase",{
       useClass: UpdateNotificationReadUseCase
+    })
+
+    container.register<ICheckEventBookingAvliblityUseCase>("ICheckEventBookingAvliblityUseCase",{
+      useClass: CheckEventBookingAvliblityUseCase
+    })
+
+    container.register<IBlockEventUseCase>("IBlockEventUseCase",{
+      useClass: BlockEventUseCase
     })
 
   

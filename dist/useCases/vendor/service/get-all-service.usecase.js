@@ -16,11 +16,15 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
     constructor(_serviceRepository) {
         this._serviceRepository = _serviceRepository;
     }
-    async execute(pageNumber, pageSize, search, sortBy, sortOrder, vendorId) {
+    async execute(pageNumber, pageSize, search, role, vendorId) {
         const validPageNumber = Math.max(1, pageNumber || 1);
         const validPageSize = Math.max(1, pageSize || 10);
         const skip = (validPageNumber - 1) * validPageSize;
-        const filter = {};
+        console.log('role', role);
+        let filter = {};
+        if (role !== "vendor") {
+            filter.status = "active";
+        }
         if (search) {
             filter.title = { $regex: search, $options: "i" };
         }

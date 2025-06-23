@@ -85,6 +85,14 @@ export class VendorRoute {
             }
           )
 
+          this.vendorRoute.patch("/vendor/service/block/:serviceId",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              serviceController.blockService(req,res)
+            }
+          )
+
           
           this.vendorRoute.get("/vendor/categories",
             verifyAuth,
@@ -164,6 +172,13 @@ export class VendorRoute {
           (req: Request, res: Response) => {
             eventController.editEvent(req,res)
           })
+
+          this.vendorRoute.patch("/vendor/event/block/:eventId",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              eventController.blockEvent(req,res)
+            })
             
 
          this.vendorRoute.get("/vendor/events/attendees/:eventId",

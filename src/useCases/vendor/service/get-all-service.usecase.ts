@@ -14,12 +14,20 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
         private _serviceRepository: IServiceRepository
     ) {}
 
-    async execute(pageNumber: number, pageSize: number, search: string, sortBy: string, sortOrder: string, vendorId: string): Promise<IPaginatedService | null> {
+    async execute(pageNumber: number, pageSize: number, search: string, role: string, vendorId: string): Promise<IPaginatedService | null> {
 
       const validPageNumber = Math.max(1, pageNumber || 1);
       const validPageSize = Math.max(1, pageSize || 10);
       const skip = (validPageNumber - 1) * validPageSize; 
-      const filter: any = {};
+
+      console.log('role',role)
+
+      let filter: any = {};
+
+      if (role !== "vendor") {
+      filter.status = "active";
+     }
+
       if (search) {
         filter.title = { $regex: search, $options: "i" };
       }

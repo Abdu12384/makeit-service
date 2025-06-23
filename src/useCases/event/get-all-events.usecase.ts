@@ -29,7 +29,8 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
 
 
         let filter: any = {
-          status: "upcoming"
+          status: "upcoming",
+          isActive: true
         }
         if(searchTermString){
           filter.$or = [

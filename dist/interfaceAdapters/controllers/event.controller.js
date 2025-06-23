@@ -20,13 +20,17 @@ let EventController = class EventController {
     _getAllEventsUseCase;
     _getEventByIdUseCase;
     _getEventsAttendeesByIdUseCase;
-    constructor(_createEventUseCase, _getEventsByVendorIdUseCase, _editEventUseCase, _getAllEventsUseCase, _getEventByIdUseCase, _getEventsAttendeesByIdUseCase) {
+    _checkEventBookingAvliblityUseCase;
+    _blockEventUseCase;
+    constructor(_createEventUseCase, _getEventsByVendorIdUseCase, _editEventUseCase, _getAllEventsUseCase, _getEventByIdUseCase, _getEventsAttendeesByIdUseCase, _checkEventBookingAvliblityUseCase, _blockEventUseCase) {
         this._createEventUseCase = _createEventUseCase;
         this._getEventsByVendorIdUseCase = _getEventsByVendorIdUseCase;
         this._editEventUseCase = _editEventUseCase;
         this._getAllEventsUseCase = _getAllEventsUseCase;
         this._getEventByIdUseCase = _getEventByIdUseCase;
         this._getEventsAttendeesByIdUseCase = _getEventsAttendeesByIdUseCase;
+        this._checkEventBookingAvliblityUseCase = _checkEventBookingAvliblityUseCase;
+        this._blockEventUseCase = _blockEventUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Create Event 
@@ -103,6 +107,42 @@ let EventController = class EventController {
         }
     }
     // ══════════════════════════════════════════════════════════
+    //  Block Event 
+    // ══════════════════════════════════════════════════════════
+    async blockEvent(req, res) {
+        try {
+            const { eventId } = req.params;
+            const event = await this._blockEventUseCase.blockEvent(eventId);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                event
+            });
+        }
+        catch (error) {
+            handleErrorResponse(res, error);
+        }
+    }
+    // ══════════════════════════════════════════════════════════
+    //  Check Event Booking Availability 
+    // ══════════════════════════════════════════════════════════
+    async checkEventBookingAvailability(req, res) {
+        try {
+            const { eventId } = req.params;
+            const { ticketCount } = req.query;
+            console.log('ticketCount', ticketCount);
+            const { userId } = req.user;
+            const event = await this._checkEventBookingAvliblityUseCase.execute(eventId, userId, Number(ticketCount));
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                event
+            });
+        }
+        catch (error) {
+            handleErrorResponse(res, error);
+        }
+    }
+    // ══════════════════════════════════════════════════════════
     //  Get Event By Id 
     // ══════════════════════════════════════════════════════════
     async getEventById(req, res) {
@@ -143,7 +183,9 @@ EventController = __decorate([
     __param(3, inject("IGetAllEventsUseCase")),
     __param(4, inject("IGetEventByIdUseCase")),
     __param(5, inject("IGetEventsAttendeesByIdUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
+    __param(6, inject("ICheckEventBookingAvliblityUseCase")),
+    __param(7, inject("IBlockEventUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
 ], EventController);
 export { EventController };
 //# sourceMappingURL=event.controller.js.map

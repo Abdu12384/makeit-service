@@ -10,38 +10,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+import { CustomError } from "../../domain/utils/custom.error.js";
+import { HTTP_STATUS } from "../../shared/constants.js";
 import { inject, injectable } from "tsyringe";
-let GetAllEventsUseCase = class GetAllEventsUseCase {
+let BlockEventUseCase = class BlockEventUseCase {
     _eventRepository;
     constructor(_eventRepository) {
         this._eventRepository = _eventRepository;
     }
-    async execute(pageNumber, pageSize, searchTermString) {
-        const validPageNumber = Math.max(1, pageNumber || 1);
-        const validPageSize = Math.max(1, pageSize || 10);
-        const skip = (validPageNumber - 1) * validPageSize;
-        let filter = {
-            status: "upcoming",
-            isActive: true
-        };
-        if (searchTermString) {
-            filter.$or = [
-                { name: { $regex: searchTermString, $options: "i" } },
-                { description: { $regex: searchTermString, $options: "i" } }
-            ];
+    async blockEvent(eventId) {
+        const event = await this._eventRepository.findOne({ eventId });
+        if (!event) {
+            throw new CustomError("Event not found", HTTP_STATUS.NOT_FOUND);
         }
-        const { items, total } = await this._eventRepository.findAll(filter, skip, validPageSize, { createdAt: -1 });
-        const response = {
-            events: items,
-            total: Math.ceil(total / validPageSize)
-        };
-        return response;
+        const isActive = event.isActive ? false : true;
+        await this._eventRepository.update({ eventId }, { isActive });
     }
 };
-GetAllEventsUseCase = __decorate([
+BlockEventUseCase = __decorate([
     injectable(),
     __param(0, inject("IEventRepository")),
     __metadata("design:paramtypes", [Object])
-], GetAllEventsUseCase);
-export { GetAllEventsUseCase };
-//# sourceMappingURL=get-all-events.usecase.js.map
+], BlockEventUseCase);
+export { BlockEventUseCase };
+//# sourceMappingURL=block-event-usecase.js.map

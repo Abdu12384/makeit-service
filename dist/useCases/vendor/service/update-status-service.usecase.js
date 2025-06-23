@@ -26,6 +26,14 @@ let UpdateServiceStatusUseCase = class UpdateServiceStatusUseCase {
         service.status = status;
         await this._serviceRepository.update({ serviceId }, service);
     }
+    async blockService(serviceId) {
+        const service = await this._serviceRepository.findOne({ serviceId });
+        if (!service) {
+            throw new CustomError("Service not found", HTTP_STATUS.NOT_FOUND);
+        }
+        const newStatus = service.status === "blocked" ? "active" : "blocked";
+        await this._serviceRepository.update({ serviceId }, { status: newStatus });
+    }
 };
 UpdateServiceStatusUseCase = __decorate([
     injectable(),

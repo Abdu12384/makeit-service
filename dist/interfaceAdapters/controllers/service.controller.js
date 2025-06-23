@@ -66,8 +66,7 @@ let ServiceController = class ServiceController {
             const user = customReq.user || null;
             const userId = user?.userId;
             const role = user?.role;
-            const isVendor = role === "vendor";
-            const services = await this._getAllServiceUseCase.execute(pageNumber, pageSize, search, sortBy, sortOrder, isVendor ? userId : undefined);
+            const services = await this._getAllServiceUseCase.execute(pageNumber, pageSize, search, role, userId);
             console.log('services', services);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
@@ -120,6 +119,31 @@ let ServiceController = class ServiceController {
                 return;
             }
             const service = await this._updateServiceStatusUseCase.execute(serviceId, data);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                service,
+            });
+        }
+        catch (error) {
+            handleErrorResponse(res, error);
+        }
+    }
+    // ══════════════════════════════════════════════════════════
+    //  Block Service
+    // ══════════════════════════════════════════════════════════
+    async blockService(req, res) {
+        try {
+            const { serviceId } = req.params;
+            const { userId, role } = req.user;
+            if (!userId || role !== "vendor") {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({
+                    success: false,
+                    message: ERROR_MESSAGES.MISSING_PARAMETERS,
+                });
+                return;
+            }
+            const service = await this._updateServiceStatusUseCase.blockService(serviceId);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: SUCCESS_MESSAGES.UPDATE_SUCCESS,

@@ -164,6 +164,12 @@ export class ClientRoute {
        })
 
 
+       this.clientRoute.get("/client/events/:eventId/check-booking",
+       verifyAuth,
+       blockStatusMiddleware.checkStatus as RequestHandler,
+       (req: Request, res:Response) =>{
+         eventController.checkEventBookingAvailability(req,res)
+       })
 
 
 

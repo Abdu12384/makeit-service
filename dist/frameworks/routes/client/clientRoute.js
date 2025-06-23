@@ -90,6 +90,9 @@ export class ClientRoute {
         (req, res) => {
             eventController.getEventById(req, res);
         });
+        this.clientRoute.get("/client/events/:eventId/check-booking", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            eventController.checkEventBookingAvailability(req, res);
+        });
         /** ==========================
          *  Client Ticket  Routes
         * ========================== */

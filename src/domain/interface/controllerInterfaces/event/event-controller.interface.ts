@@ -6,4 +6,6 @@ export interface IEventController{
   editEvent(req:Request,res:Response):Promise<void>
   getEventById(req:Request,res:Response):Promise<void>
   getAttendeesById(req:Request,res:Response):Promise<void>
+  checkEventBookingAvailability(req:Request,res:Response):Promise<void>
+  blockEvent(req:Request,res:Response):Promise<void>
 }

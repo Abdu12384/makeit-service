@@ -84,15 +84,14 @@ async getAllServices(req: Request, res: Response): Promise<void> {
         const role = user?.role;
 
         
-        const isVendor = role === "vendor";
+       
 
         const services = await this._getAllServiceUseCase.execute(
           pageNumber,
           pageSize,
           search as string,
-          sortBy as string,
-          sortOrder as string,
-          isVendor ? userId : undefined,
+          role,
+          userId
         )
         console.log('services',services)
         res.status(HTTP_STATUS.OK).json({
@@ -176,6 +175,35 @@ async editService(req: Request, res: Response): Promise<void> {
 
 
 
+
+// ══════════════════════════════════════════════════════════
+//  Block Service
+// ══════════════════════════════════════════════════════════
+
+async blockService(req: Request, res: Response): Promise<void> {
+      try {
+        const {serviceId} = req.params
+        const {userId, role} = (req as CustomRequest).user 
+        if(!userId || role !== "vendor"){
+          res.status(HTTP_STATUS.BAD_REQUEST).json({
+             success: false,
+             message: ERROR_MESSAGES.MISSING_PARAMETERS,
+          })
+          return  
+        }
+        
+        const service = await this._updateServiceStatusUseCase.blockService(
+          serviceId,
+        )
+        res.status(HTTP_STATUS.OK).json({
+           success: true,
+           message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
+           service,
+        })
+      } catch (error) {
+        handleErrorResponse(res, error)
+      }
+   }
 
 
 // ══════════════════════════════════════════════════════════

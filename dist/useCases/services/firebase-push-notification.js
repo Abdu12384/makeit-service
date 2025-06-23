@@ -39,7 +39,6 @@ let pushNotificationService = class pushNotificationService {
         if (user?.userId) {
             await this._notificationRepo.createNotification(user.userId, notificationType, title, body);
         }
-        console.log("8989898989---------------------------------------------------", user);
         if (user?.fcmToken) {
             await messaging.send({
                 notification: {

@@ -36,7 +36,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
           )
         }
         
-        if (status === "Approved") {
+        if (status === "Approved" ) {
 
           const conflict = await this._bookingRepository.checkVendorBookingConflict(
             booking.vendorId,

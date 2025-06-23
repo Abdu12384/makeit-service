@@ -54,7 +54,7 @@ export class pushNotificationService implements IPushNotificationService{
         body
       );
     }
-    console.log("8989898989---------------------------------------------------", user);
+
     if(user?.fcmToken) {
         await messaging.send({
             notification: {

@@ -2,5 +2,5 @@ import { IPaginatedService } from "../../../../entities/paginated/paginated-serv
 
 
 export interface IGetAllServicesUseCase {
-	execute(pageNumber: number, pageSize: number, search: string, sortBy?: string, sortOrder?: string, vendorId?: string): Promise<IPaginatedService | null>;
+	execute(pageNumber: number, pageSize: number, search: string, role: string, vendorId?: string): Promise<IPaginatedService | null>;
 }
