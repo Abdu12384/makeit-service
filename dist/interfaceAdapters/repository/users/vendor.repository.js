@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,23 +8,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { injectable } from "tsyringe";
-import { VendorModel } from "../../../frameworks/database/mongodb/model/vendor.model.js";
-import { BaseRepository } from "../base.repository.js";
-let VendorRepository = class VendorRepository extends BaseRepository {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VendorRepository = void 0;
+const tsyringe_1 = require("tsyringe");
+const vendor_model_1 = require("../../../frameworks/database/mongodb/model/vendor.model");
+const base_repository_1 = require("../base.repository");
+let VendorRepository = class VendorRepository extends base_repository_1.BaseRepository {
     constructor() {
-        super(VendorModel);
+        super(vendor_model_1.VendorModel);
     }
-    async updateFcmToken(userId, token) {
-        await VendorModel.updateOne({ userId }, { $set: { fcmToken: token } });
+    updateFcmToken(userId, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield vendor_model_1.VendorModel.updateOne({ userId }, { $set: { fcmToken: token } });
+        });
     }
-    async clearFcmToken(userId) {
-        await VendorModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
+    clearFcmToken(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield vendor_model_1.VendorModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
+        });
     }
 };
-VendorRepository = __decorate([
-    injectable(),
+exports.VendorRepository = VendorRepository;
+exports.VendorRepository = VendorRepository = __decorate([
+    (0, tsyringe_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], VendorRepository);
-export { VendorRepository };
 //# sourceMappingURL=vendor.repository.js.map

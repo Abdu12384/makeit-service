@@ -1,8 +1,8 @@
 import {z} from 'zod'
-import { strongEmailRegex } from '../../../shared/validation/email.validation.js'
-import { nameSchema } from '../../../shared/validation/name.validation.js'
-import { passwordSchema } from '../../../shared/validation/password.validation.js'
-import { phoneNumberSchema } from '../../../shared/validation/phone.validaton.js'
+import { strongEmailRegex } from '../../../shared/validation/email.validation'
+import { nameSchema } from '../../../shared/validation/name.validation'
+import { passwordSchema } from '../../../shared/validation/password.validation'
+import { phoneNumberSchema } from '../../../shared/validation/phone.validaton'
 
 
 

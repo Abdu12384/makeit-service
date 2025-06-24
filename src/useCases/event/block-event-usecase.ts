@@ -1,8 +1,8 @@
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
 import { inject, injectable } from "tsyringe";
-import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface.js";
+import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface";
 
 
 

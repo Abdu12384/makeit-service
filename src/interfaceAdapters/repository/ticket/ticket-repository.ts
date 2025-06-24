@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import { ticketModel } from "../../../frameworks/database/mongodb/model/ticket.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { ITicketModel } from "../../../frameworks/database/mongodb/model/ticket.model.js";
-import { ITicketRepository } from "../../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
-import { FilterType, SortType } from "../../../shared/constants.js";
+import { ticketModel } from "../../../frameworks/database/mongodb/model/ticket.model";
+import { BaseRepository } from "../base.repository";
+import { ITicketModel } from "../../../frameworks/database/mongodb/model/ticket.model";
+import { ITicketRepository } from "../../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { FilterType, SortType } from "../../../shared/constants";
 
 
 

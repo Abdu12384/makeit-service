@@ -1,4 +1,7 @@
-export const HTTP_STATUS = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VENDOR_APPLICATION_MAIL_CONTENT = exports.RESET_PASSWORD_MAIL_CONTENT = exports.VERIFICATION_MAIL_CONTENT = exports.ERROR_MESSAGES = exports.SUCCESS_MESSAGES = exports.HTTP_STATUS = void 0;
+exports.HTTP_STATUS = {
     // ✅ Success responses
     OK: 200, // Request was successful (e.g., fetching data, updating without response body)
     CREATED: 201, // Resource successfully created (e.g., user registration, new booking)
@@ -21,7 +24,7 @@ export const HTTP_STATUS = {
     SERVICE_UNAVAILABLE: 503, // Server is down or overloaded (e.g., maintenance mode)
     GATEWAY_TIMEOUT: 504, // Upstream server timed out (e.g., long API response time)
 };
-export const SUCCESS_MESSAGES = {
+exports.SUCCESS_MESSAGES = {
     BOOKING_SUCCESS: "Booking completed",
     CREATED: "Successfully created",
     ADDED: "Successfully Added",
@@ -54,7 +57,7 @@ export const SUCCESS_MESSAGES = {
     SESSION_EXTENDED: "Session extended",
     TICKET_CONFIRMED: "Ticket confirmed",
 };
-export const ERROR_MESSAGES = {
+exports.ERROR_MESSAGES = {
     WRONG_ID: "Invalid ID",
     TOKEN_EXPIRED: "Session expired login again",
     TOKEN_BLACKLISTED: "Session is no longer valid",
@@ -97,7 +100,7 @@ export const ERROR_MESSAGES = {
     RATE_LIMIT_EXCEEDED: "Too many requests try again later",
     PASSWORD_SAME: "New password must be different from current password",
 };
-export const VERIFICATION_MAIL_CONTENT = (otp) => `
+const VERIFICATION_MAIL_CONTENT = (otp) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -249,7 +252,8 @@ export const VERIFICATION_MAIL_CONTENT = (otp) => `
   </table>
 </body>
 </html>`;
-export const RESET_PASSWORD_MAIL_CONTENT = (resetLink) => `
+exports.VERIFICATION_MAIL_CONTENT = VERIFICATION_MAIL_CONTENT;
+const RESET_PASSWORD_MAIL_CONTENT = (resetLink) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -475,7 +479,8 @@ export const RESET_PASSWORD_MAIL_CONTENT = (resetLink) => `
 </body>
 </html>
 `;
-export const VENDOR_APPLICATION_MAIL_CONTENT = (message, name, status) => `
+exports.RESET_PASSWORD_MAIL_CONTENT = RESET_PASSWORD_MAIL_CONTENT;
+const VENDOR_APPLICATION_MAIL_CONTENT = (message, name, status) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -821,4 +826,5 @@ export const VENDOR_APPLICATION_MAIL_CONTENT = (message, name, status) => `
 </body>
 </html>
 `;
+exports.VENDOR_APPLICATION_MAIL_CONTENT = VENDOR_APPLICATION_MAIL_CONTENT;
 //# sourceMappingURL=constants.js.map

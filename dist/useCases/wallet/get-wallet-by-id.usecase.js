@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,50 +11,61 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GetWalletByIdUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 let GetWalletByIdUseCase = class GetWalletByIdUseCase {
-    walletRepository;
-    transactionRepository;
     constructor(walletRepository, transactionRepository) {
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
     }
-    async execute(userId, pageNumber, pageSize) {
-        const validPageNumber = Math.max(1, pageNumber || 1);
-        const validPageSize = Math.max(1, pageSize || 10);
-        const skip = (validPageNumber - 1) * validPageSize;
-        const limit = validPageSize;
-        const sort = { createdAt: -1 };
-        let wallet = await this.walletRepository.findOne({ userId });
-        if (!wallet) {
-            const walletId = generateUniqueId("wallet");
-            const newWallet = {
-                walletId,
-                userId,
-                balance: 0,
-                userModel: "client",
-                createdAt: new Date(),
-                updatedAt: new Date(),
+    execute(userId, pageNumber, pageSize) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const validPageNumber = Math.max(1, pageNumber || 1);
+            const validPageSize = Math.max(1, pageSize || 10);
+            const skip = (validPageNumber - 1) * validPageSize;
+            const limit = validPageSize;
+            const sort = { createdAt: -1 };
+            let wallet = yield this.walletRepository.findOne({ userId });
+            if (!wallet) {
+                const walletId = (0, unique_uuid_helper_1.generateUniqueId)("wallet");
+                const newWallet = {
+                    walletId,
+                    userId,
+                    balance: 0,
+                    userModel: "client",
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                };
+                wallet = yield this.walletRepository.save(newWallet);
+            }
+            console.log('wallet', wallet);
+            const { items, total } = yield this.transactionRepository.findAll({ walletId: wallet.walletId }, skip, limit, sort);
+            console.log('transaction', items);
+            const response = {
+                wallet,
+                transaction: items,
+                total: Math.ceil(total / validPageSize)
             };
-            wallet = await this.walletRepository.save(newWallet);
-        }
-        console.log('wallet', wallet);
-        const { items, total } = await this.transactionRepository.findAll({ walletId: wallet.walletId }, skip, limit, sort);
-        console.log('transaction', items);
-        const response = {
-            wallet,
-            transaction: items,
-            total: Math.ceil(total / validPageSize)
-        };
-        return response;
+            return response;
+        });
     }
 };
-GetWalletByIdUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IWalletRepository")),
-    __param(1, inject("ITransactionRepository")),
+exports.GetWalletByIdUseCase = GetWalletByIdUseCase;
+exports.GetWalletByIdUseCase = GetWalletByIdUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IWalletRepository")),
+    __param(1, (0, tsyringe_1.inject)("ITransactionRepository")),
     __metadata("design:paramtypes", [Object, Object])
 ], GetWalletByIdUseCase);
-export { GetWalletByIdUseCase };
 //# sourceMappingURL=get-wallet-by-id.usecase.js.map

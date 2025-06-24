@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { IBookingRepository } from "../../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js";
-import { BookingModel, IBookingModel } from "../../../frameworks/database/mongodb/model/booking.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { FilterType, SortType } from "../../../shared/constants.js";
+import { IBookingRepository } from "../../../domain/interface/repositoryInterfaces/booking/booking-repository.interface";
+import { BookingModel, IBookingModel } from "../../../frameworks/database/mongodb/model/booking.model";
+import { BaseRepository } from "../base.repository";
+import { FilterType, SortType } from "../../../shared/constants";
 
 
 @injectable()

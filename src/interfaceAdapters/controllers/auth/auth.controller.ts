@@ -1,25 +1,25 @@
 import { injectable, inject } from "tsyringe";
 import { Request, Response } from "express";
-import { IClientAuthController } from "../../../domain/interface/controllerInterfaces/auth/auth-controller.interface.js";
-import { IRegisterUseCase } from "../../../domain/interface/useCaseInterface/auth/register.usecase.js";
-import { IOtpService } from "../../../domain/interface/servicesInterface/otp-service.interface.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants.js";
-import { ISendOtpEmailUseCase } from "../../../domain/interface/useCaseInterface/auth/sent-otp-usecase.interface.js";
-import { IVerifyOtpEmailUseCase } from "../../../domain/interface/useCaseInterface/auth/verify-otp-usercase.interface.js";
-import { handleErrorResponse } from "../../../shared/utils/error.handler.js";
-import { userSchemas } from "../../../useCases/auth/validation/user-signup.validation.schema.js";
-import { LoginUserDTO } from "../../../shared/dtos/user.dto.js";
-import { loginSchema } from "../../../useCases/auth/validation/user-login.validation.schema.js";
-import { ILoginUserUseCase } from "../../../domain/interface/useCaseInterface/auth/login.usecase.interface.js";
-import { IGenerateTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/genarate-token-usecase.interface.js";
-import { clearAuthCookies, setAuthCookies, updateCookieWithAccessToken } from "../../../shared/utils/cookie.helper.js";
-import { IGoogleUseCase } from "../../../domain/interface/useCaseInterface/auth/google-usecase.interface.js";
-import { CustomRequest } from "../../middlewares/auth.middleware.js";
-import { IRefreshTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface.js";
-import { IBlackListTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/blacklist-token-usecase.interface.js";
-import { IForgotPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface.js";
-import { IResetPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface.js";
-import { IClearFCMTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/clear-fcm-token-usecase.interface.js";
+import { IClientAuthController } from "../../../domain/interface/controllerInterfaces/auth/auth-controller.interface";
+import { IRegisterUseCase } from "../../../domain/interface/useCaseInterface/auth/register.usecase";
+import { IOtpService } from "../../../domain/interface/servicesInterface/otp-service.interface";
+import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import { ISendOtpEmailUseCase } from "../../../domain/interface/useCaseInterface/auth/sent-otp-usecase.interface";
+import { IVerifyOtpEmailUseCase } from "../../../domain/interface/useCaseInterface/auth/verify-otp-usercase.interface";
+import { handleErrorResponse } from "../../../shared/utils/error.handler";
+import { userSchemas } from "../../../useCases/auth/validation/user-signup.validation.schema";
+import { LoginUserDTO } from "../../../shared/dtos/user.dto";
+import { loginSchema } from "../../../useCases/auth/validation/user-login.validation.schema";
+import { ILoginUserUseCase } from "../../../domain/interface/useCaseInterface/auth/login.usecase.interface";
+import { IGenerateTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/genarate-token-usecase.interface";
+import { clearAuthCookies, setAuthCookies, updateCookieWithAccessToken } from "../../../shared/utils/cookie.helper";
+import { IGoogleUseCase } from "../../../domain/interface/useCaseInterface/auth/google-usecase.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IRefreshTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface";
+import { IBlackListTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/blacklist-token-usecase.interface";
+import { IForgotPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface";
+import { IResetPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface";
+import { IClearFCMTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/clear-fcm-token-usecase.interface";
 
 
 @injectable()

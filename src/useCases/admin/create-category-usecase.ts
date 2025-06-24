@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { ICategoryUseCase } from "../../domain/interface/useCaseInterface/admin/create-category-usecase.interface.js";
-import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { ICategoryEntity } from "../../domain/entities/category.entity.js";
-import { CreateCategoryDTO } from "../../shared/constants.js";
+import { ICategoryUseCase } from "../../domain/interface/useCaseInterface/admin/create-category-usecase.interface";
+import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { ICategoryEntity } from "../../domain/entities/category.entity";
+import { CreateCategoryDTO } from "../../shared/constants";
 
 
 

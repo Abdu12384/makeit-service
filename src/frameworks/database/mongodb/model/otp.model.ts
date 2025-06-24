@@ -1,6 +1,6 @@
 import { model, ObjectId, Document } from "mongoose";
-import { IOtpEntity } from "../../../../domain/entities/otp.entity.js";
-import { otpSchema } from "../schema/otp.schema.js";
+import { IOtpEntity } from "../../../../domain/entities/otp.entity";
+import { otpSchema } from "../schema/otp.schema";
 
 
 

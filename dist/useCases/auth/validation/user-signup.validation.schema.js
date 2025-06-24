@@ -1,29 +1,32 @@
-import { z } from 'zod';
-import { strongEmailRegex } from '../../../shared/validation/email.validation.js';
-import { nameSchema } from '../../../shared/validation/name.validation.js';
-import { passwordSchema } from '../../../shared/validation/password.validation.js';
-import { phoneNumberSchema } from '../../../shared/validation/phone.validaton.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userSchemas = void 0;
+const zod_1 = require("zod");
+const email_validation_1 = require("../../../shared/validation/email.validation");
+const name_validation_1 = require("../../../shared/validation/name.validation");
+const password_validation_1 = require("../../../shared/validation/password.validation");
+const phone_validaton_1 = require("../../../shared/validation/phone.validaton");
 // const adminSchema = z.object({
 // 	email: strongEmailRegex,
 // 	password: passwordSchema,
 // 	role: z.literal("admin"),
 // });
-const clientSchema = z.object({
-    name: nameSchema,
-    email: strongEmailRegex,
-    phone: phoneNumberSchema,
-    password: passwordSchema,
-    role: z.literal("client"),
+const clientSchema = zod_1.z.object({
+    name: name_validation_1.nameSchema,
+    email: email_validation_1.strongEmailRegex,
+    phone: phone_validaton_1.phoneNumberSchema,
+    password: password_validation_1.passwordSchema,
+    role: zod_1.z.literal("client"),
 });
-const vendorSchema = z.object({
-    name: nameSchema,
-    email: strongEmailRegex,
-    phone: phoneNumberSchema,
-    password: passwordSchema,
-    idProof: z.string().min(1, "ID proof is required"),
-    role: z.literal("vendor")
+const vendorSchema = zod_1.z.object({
+    name: name_validation_1.nameSchema,
+    email: email_validation_1.strongEmailRegex,
+    phone: phone_validaton_1.phoneNumberSchema,
+    password: password_validation_1.passwordSchema,
+    idProof: zod_1.z.string().min(1, "ID proof is required"),
+    role: zod_1.z.literal("vendor")
 });
-export const userSchemas = {
+exports.userSchemas = {
     // admin: adminSchema,
     client: clientSchema,
     vendor: vendorSchema,

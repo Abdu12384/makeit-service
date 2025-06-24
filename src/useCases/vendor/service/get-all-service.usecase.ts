@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface.js";
-import { IGetAllServicesUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/get-all-service-usecase.interface.js";
-import { IPaginatedService } from "../../../domain/entities/paginated/paginated-service.entity.js";
+import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface";
+import { IGetAllServicesUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/get-all-service-usecase.interface";
+import { IPaginatedService } from "../../../domain/entities/paginated/paginated-service.entity";
 
 
 

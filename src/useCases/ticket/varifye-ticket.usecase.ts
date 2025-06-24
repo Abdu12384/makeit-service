@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface.js";
-import { TicketRepository } from "../../interfaceAdapters/repository/ticket/ticket-repository.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
-import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
-import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
+import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface";
+import { TicketRepository } from "../../interfaceAdapters/repository/ticket/ticket-repository";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { ITicketEntity } from "../../domain/entities/ticket.entity";
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
 
 
 

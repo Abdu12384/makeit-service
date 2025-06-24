@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe"
-import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js"
-import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface.js"
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js"
-import { NotificationType } from "../../shared/dtos/notification.js"
+import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface"
+import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface"
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
+import { NotificationType } from "../../shared/dtos/notification"
 
 
 

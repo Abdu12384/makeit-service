@@ -1,6 +1,6 @@
 import { FilterType, PopulatedItem, SortType } from "../../../../shared/constants";
 import { IServiceEntity } from "../../../entities/service.entity";
-import { IBaseRepository } from "../base-repository.interface.js";
+import { IBaseRepository } from "../base-repository.interface";
 
 
 

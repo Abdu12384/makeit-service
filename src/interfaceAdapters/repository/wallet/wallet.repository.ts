@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../base.repository.js";
-import { IWalletModel } from "../../../frameworks/database/mongodb/model/wallet.model.js";
-import { IWalletRepository } from "../../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
-import { walletModel } from "../../../frameworks/database/mongodb/model/wallet.model.js";
+import { BaseRepository } from "../base.repository";
+import { IWalletModel } from "../../../frameworks/database/mongodb/model/wallet.model";
+import { IWalletRepository } from "../../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
+import { walletModel } from "../../../frameworks/database/mongodb/model/wallet.model";
 
 
 

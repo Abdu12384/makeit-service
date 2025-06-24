@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IRefreshTokenUseCase } from "../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface.js";
-import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+import { IRefreshTokenUseCase } from "../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface";
+import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { JwtPayload } from "jsonwebtoken";
 
 

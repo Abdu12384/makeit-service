@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,15 +11,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Server as SocketIOServer } from "socket.io";
-import { Server as HttpServer } from "http";
-import { inject } from "tsyringe";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SocketConfig = void 0;
+const socket_io_1 = require("socket.io");
+const http_1 = require("http");
+const tsyringe_1 = require("tsyringe");
 let SocketConfig = class SocketConfig {
-    _chatUseCase;
-    io;
     constructor(server, _chatUseCase) {
         this._chatUseCase = _chatUseCase;
-        this.io = new SocketIOServer(server, {
+        this.io = new socket_io_1.Server(server, {
             cors: {
                 origin: process.env.ORIGIN,
                 methods: ["GET", "POST"],
@@ -49,9 +59,9 @@ let SocketConfig = class SocketConfig {
             //   }
             // });
             //==========================================================
-            socket.on("start-chat", async (data, response) => {
+            socket.on("start-chat", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const chatId = await this._chatUseCase.startChat(data);
+                    const chatId = yield this._chatUseCase.startChat(data);
                     socket.join(chatId);
                     socket.join(data.senderId); // For notifications
                     response({ status: "success", chatId });
@@ -60,23 +70,23 @@ let SocketConfig = class SocketConfig {
                     console.error("Error starting chat:", error);
                     response({ status: "error", message: error.message });
                 }
-            });
+            }));
             //==========================================================
-            socket.on("get-chats", async (data, response) => {
+            socket.on("get-chats", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const chats = await this._chatUseCase.getUserChats(data.userId);
+                    const chats = yield this._chatUseCase.getUserChats(data.userId);
                     response({ status: "success", data: chats });
                 }
                 catch (error) {
                     console.error("Error fetching chats:", error);
                     response({ status: "error", message: error.message });
                 }
-            });
+            }));
             //==========================================================
-            socket.on("join-room", async (data, response) => {
+            socket.on("join-room", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     console.log("join-room", data);
-                    await this._chatUseCase.markMessagesAsSeen(data.roomId, data.userId);
+                    yield this._chatUseCase.markMessagesAsSeen(data.roomId, data.userId);
                     socket.join(data.roomId);
                     socket.join(data.userId);
                     console.log(`user ${socket.id} joined room: ${data.roomId}`);
@@ -87,11 +97,11 @@ let SocketConfig = class SocketConfig {
                     console.error("Error joining room:", error);
                     response({ status: "error", message: error.message });
                 }
-            });
+            }));
             //==========================================================
-            socket.on("send-message", async (data, response) => {
+            socket.on("send-message", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const message = await this._chatUseCase.sendMessage({
+                    const message = yield this._chatUseCase.sendMessage({
                         chatId: data.chatId,
                         senderId: data.senderId,
                         senderModel: data.senderModel,
@@ -99,7 +109,7 @@ let SocketConfig = class SocketConfig {
                     });
                     console.log("chatId -------------------------------------------", data.chatId);
                     this.io.to(data.chatId).emit("receive-message", message);
-                    const chat = await this._chatUseCase.getChatById(data.chatId);
+                    const chat = yield this._chatUseCase.getChatById(data.chatId);
                     if (chat) {
                         const receiverId = chat.senderId === data.senderId ? chat.receiverId : chat.senderId;
                         const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
@@ -115,18 +125,18 @@ let SocketConfig = class SocketConfig {
                     console.error("Error sending message:", error);
                     response({ status: "error", message: error.message });
                 }
-            });
+            }));
             //==========================================================
-            socket.on("get-messages", async (data, response) => {
+            socket.on("get-messages", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const messages = await this._chatUseCase.getMessages(data.chatId, data.skip || 0, data.limit || 20);
+                    const messages = yield this._chatUseCase.getMessages(data.chatId, data.skip || 0, data.limit || 20);
                     response({ status: "success", data: messages });
                 }
                 catch (error) {
                     console.error("Error fetching messages:", error);
                     response({ status: "error", message: error.message });
                 }
-            });
+            }));
             //==========================================================    
             socket.on("typing", (data) => {
                 const { chatId, senderId, isTyping } = data;
@@ -142,9 +152,9 @@ let SocketConfig = class SocketConfig {
         return this.io;
     }
 };
-SocketConfig = __decorate([
-    __param(1, inject("IChatUseCase")),
-    __metadata("design:paramtypes", [HttpServer, Object])
+exports.SocketConfig = SocketConfig;
+exports.SocketConfig = SocketConfig = __decorate([
+    __param(1, (0, tsyringe_1.inject)("IChatUseCase")),
+    __metadata("design:paramtypes", [http_1.Server, Object])
 ], SocketConfig);
-export { SocketConfig };
 //# sourceMappingURL=socket.server.js.map

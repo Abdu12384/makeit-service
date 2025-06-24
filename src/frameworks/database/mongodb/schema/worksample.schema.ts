@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IWorkSampleModel } from "../model/worksample.model.js";
+import { IWorkSampleModel } from "../model/worksample.model";
 
 export const workSampleSchema = new Schema<IWorkSampleModel>({
     workSampleId: {

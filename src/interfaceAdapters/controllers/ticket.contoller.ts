@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { ITicketController } from "../../domain/interface/controllerInterfaces/ticket/ticket-controller.js";
-import { ICreateTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/create-ticket-usecase.interface.js";
-import { IConfirmTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/confirm-ticket-usecase.interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { IGetAllTicketsByIdUseCase } from "../../domain/interface/useCaseInterface/ticket/get-all-tickets-by-id-usecase.interface.js";
-import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface.js";
-import { ICancelTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/cancel-ticket-usecase.interface.js";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { HTTP_STATUS } from "../../shared/constants";
+import { SUCCESS_MESSAGES } from "../../shared/constants";
+import { ITicketController } from "../../domain/interface/controllerInterfaces/ticket/ticket-controller";
+import { ICreateTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/create-ticket-usecase.interface";
+import { IConfirmTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/confirm-ticket-usecase.interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { IGetAllTicketsByIdUseCase } from "../../domain/interface/useCaseInterface/ticket/get-all-tickets-by-id-usecase.interface";
+import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface";
+import { ICancelTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/cancel-ticket-usecase.interface";
 
 
 

@@ -1,5 +1,8 @@
-import { Schema } from "mongoose";
-export const eventSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.eventSchema = void 0;
+const mongoose_1 = require("mongoose");
+exports.eventSchema = new mongoose_1.Schema({
     eventId: {
         type: String,
         required: false
@@ -95,5 +98,5 @@ export const eventSchema = new Schema({
         default: true
     }
 });
-eventSchema.index({ location: '2dsphere' });
+exports.eventSchema.index({ location: '2dsphere' });
 //# sourceMappingURL=event.schema.js.map

@@ -1,6 +1,6 @@
 import { model, ObjectId } from "mongoose";
 import { IServiceEntity } from "../../../../domain/entities/service.entity";
-import { serviceSchema } from "../schema/service.schema.js";
+import { serviceSchema } from "../schema/service.schema";
 
 
 

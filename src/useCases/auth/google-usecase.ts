@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
 import { IGoogleUseCase } from "../../domain/interface/useCaseInterface/auth/google-usecase.interface";
 import { OAuth2Client } from "google-auth-library";
-import { IRegisterUseCase } from "../../domain/interface/useCaseInterface/auth/register.usecase.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IClientEntity } from "../../domain/entities/client.entity.js";
-import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
-import { ERROR_MESSAGES, HTTP_STATUS, TRole } from "../../shared/constants.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ClientDTO } from "../../shared/dtos/user.dto.js";
-import { SendEmailUseCase } from "../common/send-email.usecase.js";
+import { IRegisterUseCase } from "../../domain/interface/useCaseInterface/auth/register.usecase";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
+import { ERROR_MESSAGES, HTTP_STATUS, TRole } from "../../shared/constants";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ClientDTO } from "../../shared/dtos/user.dto";
+import { SendEmailUseCase } from "../common/send-email.usecase";
 
 
 

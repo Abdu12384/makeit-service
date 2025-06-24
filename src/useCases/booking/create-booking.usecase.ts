@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { ICreateBookingUseCase } from "../../domain/interface/useCaseInterface/booking/create-booking-usecase.interface.js";
-import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
-import { NotificationType } from "../../shared/dtos/notification.js";
+import { ICreateBookingUseCase } from "../../domain/interface/useCaseInterface/booking/create-booking-usecase.interface";
+import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
+import { NotificationType } from "../../shared/dtos/notification";
 
 
 

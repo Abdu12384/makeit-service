@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { IDashboardControllerInterface } from "../../domain/interface/controllerInterfaces/dashboard/dashboard-controller.interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
+import { IDashboardControllerInterface } from "../../domain/interface/controllerInterfaces/dashboard/dashboard-controller.interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { HTTP_STATUS } from "../../shared/constants";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
 import { SUCCESS_MESSAGES } from "../../shared/constants";
-import { IGetAllDashboardDataUseCase } from "../../domain/interface/useCaseInterface/dashboard/get-all-dashboard-data-usecase.interface.js";
+import { IGetAllDashboardDataUseCase } from "../../domain/interface/useCaseInterface/dashboard/get-all-dashboard-data-usecase.interface";
 
 
 

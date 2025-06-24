@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,14 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CategoryController = void 0;
+const tsyringe_1 = require("tsyringe");
+const error_handler_1 = require("../../shared/utils/error.handler");
+const constants_1 = require("../../shared/constants");
 let CategoryController = class CategoryController {
-    _createCategoryUseCase;
-    _getAllCategoriesUseCase;
-    _updateStatusCategoryUseCase;
-    _editCategoryUseCase;
     constructor(_createCategoryUseCase, _getAllCategoriesUseCase, _updateStatusCategoryUseCase, _editCategoryUseCase) {
         this._createCategoryUseCase = _createCategoryUseCase;
         this._getAllCategoriesUseCase = _getAllCategoriesUseCase;
@@ -27,86 +35,94 @@ let CategoryController = class CategoryController {
     // ══════════════════════════════════════════════════════════
     //  Create Category
     // ══════════════════════════════════════════════════════════
-    async createCategory(req, res) {
-        try {
-            const data = req.body;
-            const category = await this._createCategoryUseCase.execute(data);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                category,
-                message: SUCCESS_MESSAGES.CREATED
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    createCategory(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = req.body;
+                const category = yield this._createCategoryUseCase.execute(data);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    category,
+                    message: constants_1.SUCCESS_MESSAGES.CREATED
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Get All Categories
     // ══════════════════════════════════════════════════════════
-    async getAllCategories(req, res) {
-        try {
-            console.log(req.query);
-            const { search, page, limit } = req.query;
-            const { role } = req.user;
-            const pageNumber = Number(page);
-            const pageSize = Number(limit);
-            const categories = await this._getAllCategoriesUseCase.execute(pageNumber, pageSize, search, role);
-            console.log(categories);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                categories,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    getAllCategories(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(req.query);
+                const { search, page, limit } = req.query;
+                const { role } = req.user;
+                const pageNumber = Number(page);
+                const pageSize = Number(limit);
+                const categories = yield this._getAllCategoriesUseCase.execute(pageNumber, pageSize, search, role);
+                console.log(categories);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    categories,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Get Service By Id
     // ══════════════════════════════════════════════════════════
-    async updateCategoryStatus(req, res) {
-        try {
-            console.log(req.params);
-            const { id } = req.params;
-            const { status } = req.body;
-            const category = await this._updateStatusCategoryUseCase.execute(id, status);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                category,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    updateCategoryStatus(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(req.params);
+                const { id } = req.params;
+                const { status } = req.body;
+                const category = yield this._updateStatusCategoryUseCase.execute(id, status);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    category,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Edit Category
     // ══════════════════════════════════════════════════════════
-    async editCategory(req, res) {
-        try {
-            const { id } = req.params;
-            const { title, description, image } = req.body;
-            const category = await this._editCategoryUseCase.execute(id, title, description, image);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                category,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    editCategory(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { title, description, image } = req.body;
+                const category = yield this._editCategoryUseCase.execute(id, title, description, image);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    category,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
 };
-CategoryController = __decorate([
-    injectable(),
-    __param(0, inject("ICategoryUseCase")),
-    __param(1, inject("IGetCategoryUseCase")),
-    __param(2, inject("IUpdateStatusCategoryUseCase")),
-    __param(3, inject("IEditCategoryUseCase")),
+exports.CategoryController = CategoryController;
+exports.CategoryController = CategoryController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("ICategoryUseCase")),
+    __param(1, (0, tsyringe_1.inject)("IGetCategoryUseCase")),
+    __param(2, (0, tsyringe_1.inject)("IUpdateStatusCategoryUseCase")),
+    __param(3, (0, tsyringe_1.inject)("IEditCategoryUseCase")),
     __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], CategoryController);
-export { CategoryController };
 //# sourceMappingURL=category.controller.js.map

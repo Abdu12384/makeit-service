@@ -1,6 +1,6 @@
 import { model,ObjectId } from "mongoose";
-import { IEventEntity } from "../../../../domain/entities/event.entity.js";
-import { eventSchema } from "../schema/event.schema.js";
+import { IEventEntity } from "../../../../domain/entities/event.entity";
+import { eventSchema } from "../schema/event.schema";
 
 export interface IEventModel extends IEventEntity{
   _id:ObjectId   

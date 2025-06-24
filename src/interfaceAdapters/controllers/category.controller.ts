@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { ICategoryController } from "../../domain/interface/controllerInterfaces/category/category-controller.interface.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
+import { ICategoryController } from "../../domain/interface/controllerInterfaces/category/category-controller.interface";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { Request, Response } from "express";
-import { ICategoryUseCase } from "../../domain/interface/useCaseInterface/admin/create-category-usecase.interface.js";
-import { IGetCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/get-category-usecase.interface.js";
-import { IUpdateStatusCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/update-category-usecase.interface.js";
-import { IEditCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/edit-category-usecase.interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
+import { ICategoryUseCase } from "../../domain/interface/useCaseInterface/admin/create-category-usecase.interface";
+import { IGetCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/get-category-usecase.interface";
+import { IUpdateStatusCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/update-category-usecase.interface";
+import { IEditCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/edit-category-usecase.interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
 
 
 

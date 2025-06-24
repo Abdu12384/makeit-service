@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe"
 import { IGetEventByIdUseCase } from "../../domain/interface/useCaseInterface/event/get-event-by-id-usecase.interface"
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface"
-import { CustomError } from "../../domain/utils/custom.error.js"
-import { ERROR_MESSAGES } from "../../shared/constants.js"
-import { HTTP_STATUS } from "../../shared/constants.js"
+import { CustomError } from "../../domain/utils/custom.error"
+import { ERROR_MESSAGES } from "../../shared/constants"
+import { HTTP_STATUS } from "../../shared/constants"
 import { IEventEntity } from "../../domain/entities/event.entity"
 
 

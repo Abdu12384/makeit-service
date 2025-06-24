@@ -3,13 +3,13 @@ import { ILoginUserUseCase } from "../../domain/interface/useCaseInterface/auth/
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
 import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
-import { IAdminEntity } from "../../domain/entities/admin.entity.js";
-import { IClientEntity } from "../../domain/entities/client.entity.js";
-import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
-import { LoginUserDTO } from "../../shared/dtos/user.dto.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface.js";
+import { IAdminEntity } from "../../domain/entities/admin.entity";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
+import { LoginUserDTO } from "../../shared/dtos/user.dto";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
 
 
 

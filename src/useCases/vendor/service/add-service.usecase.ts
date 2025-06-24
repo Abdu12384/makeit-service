@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IAddServiceUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/add-service-usecase.interface.js";
-import { IServiceEntity } from "../../../domain/entities/service.entity.js";
-import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface.js";
-import { CustomError } from "../../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants.js";
-import { generateUniqueId } from "../../../shared/utils/unique-uuid.helper.js";
+import { IAddServiceUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/add-service-usecase.interface";
+import { IServiceEntity } from "../../../domain/entities/service.entity";
+import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface";
+import { CustomError } from "../../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { generateUniqueId } from "../../../shared/utils/unique-uuid.helper";
 
 
 

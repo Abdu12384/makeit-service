@@ -1,6 +1,6 @@
 import { model } from "mongoose";
-import { transactionSchema } from "../schema/transaction.schema.js"; 
-import { ITransactionsEntity } from "../../../../domain/entities/transaction.entity.js";
+import { transactionSchema } from "../schema/transaction.schema"; 
+import { ITransactionsEntity } from "../../../../domain/entities/transaction.entity";
 import { ObjectId } from "mongoose";
 
 

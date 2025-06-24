@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,70 +8,90 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { chatModel } from "../../../frameworks/database/mongodb/model/chat.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { messageModel } from "../../../frameworks/database/mongodb/model/message.model.js";
-import { injectable } from "tsyringe";
-let ChatRepository = class ChatRepository extends BaseRepository {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChatRepository = void 0;
+const chat_model_1 = require("../../../frameworks/database/mongodb/model/chat.model");
+const base_repository_1 = require("../base.repository");
+const message_model_1 = require("../../../frameworks/database/mongodb/model/message.model");
+const tsyringe_1 = require("tsyringe");
+let ChatRepository = class ChatRepository extends base_repository_1.BaseRepository {
     constructor() {
-        super(chatModel);
+        super(chat_model_1.chatModel);
     }
-    async findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId) {
-        let chat = await chatModel.findOne({
-            $or: [
-                { senderId, senderModel, receiverId, receiverModel, chatId },
-                { senderId: receiverId, senderModel: receiverModel, receiverId: senderId, receiverModel: senderModel, chatId },
-            ],
-        }).lean();
-        if (!chat) {
-            const newChat = await this.save({
-                senderId,
-                senderModel,
-                receiverId,
-                receiverModel,
-                chatId,
-                lastMessage: "",
-                lastMessageAt: "",
-            });
-            return newChat;
-        }
-        return chat;
-    }
-    async saveMessage(message) {
-        const newMessage = new messageModel({
-            ...message,
-            seen: false,
+    findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let chat = yield chat_model_1.chatModel.findOne({
+                $or: [
+                    { senderId, senderModel, receiverId, receiverModel, chatId },
+                    { senderId: receiverId, senderModel: receiverModel, receiverId: senderId, receiverModel: senderModel, chatId },
+                ],
+            }).lean();
+            if (!chat) {
+                const newChat = yield this.save({
+                    senderId,
+                    senderModel,
+                    receiverId,
+                    receiverModel,
+                    chatId,
+                    lastMessage: "",
+                    lastMessageAt: "",
+                });
+                return newChat;
+            }
+            return chat;
         });
-        const savedMessage = await newMessage.save();
-        return savedMessage.toObject();
     }
-    async updateChatLastMessage(chatId, lastMessage, lastMessageAt) {
-        await chatModel.findOneAndUpdate({ chatId }, {
-            lastMessage,
-            lastMessageAt,
-        }, { new: true });
+    saveMessage(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const newMessage = new message_model_1.messageModel(Object.assign(Object.assign({}, message), { seen: false }));
+            const savedMessage = yield newMessage.save();
+            return savedMessage.toObject();
+        });
     }
-    async getMessages(chatId, skip, limit) {
-        return await messageModel.find({ chatId })
-            // .sort({ sendedTime: 1 })
-            // .skip(skip)
-            // .limit(limit)
-            .lean();
+    updateChatLastMessage(chatId, lastMessage, lastMessageAt) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield chat_model_1.chatModel.findOneAndUpdate({ chatId }, {
+                lastMessage,
+                lastMessageAt,
+            }, { new: true });
+        });
     }
-    async getUserChats(userId) {
-        return await chatModel.find({
-            $or: [{ senderId: userId }, { receiverId: userId }],
-        })
-            .sort({ updatedAt: -1 })
-            .lean();
+    getMessages(chatId, skip, limit) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield message_model_1.messageModel.find({ chatId })
+                // .sort({ sendedTime: 1 })
+                // .skip(skip)
+                // .limit(limit)
+                .lean();
+        });
     }
-    async markMessagesAsSeen(chatId, userId) {
-        await messageModel.updateMany({ chatId, senderId: { $ne: userId }, seen: false }, { seen: true });
+    getUserChats(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield chat_model_1.chatModel.find({
+                $or: [{ senderId: userId }, { receiverId: userId }],
+            })
+                .sort({ updatedAt: -1 })
+                .lean();
+        });
+    }
+    markMessagesAsSeen(chatId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield message_model_1.messageModel.updateMany({ chatId, senderId: { $ne: userId }, seen: false }, { seen: true });
+        });
     }
 };
-ChatRepository = __decorate([
-    injectable(),
+exports.ChatRepository = ChatRepository;
+exports.ChatRepository = ChatRepository = __decorate([
+    (0, tsyringe_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], ChatRepository);
-export { ChatRepository };
 //# sourceMappingURL=chat.repository.js.map

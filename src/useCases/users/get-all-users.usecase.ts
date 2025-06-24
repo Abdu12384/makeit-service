@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/users/get-all-users-usecase.interface.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IPaginatedUsers } from "../../domain/entities/paginated/paginated-users.entity.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/users/get-all-users-usecase.interface";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IPaginatedUsers } from "../../domain/entities/paginated/paginated-users.entity";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 
 

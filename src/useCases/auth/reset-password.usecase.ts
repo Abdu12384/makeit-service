@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IResetPasswordUseCase } from "../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface.js";
-import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+import { IResetPasswordUseCase } from "../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface";
+import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { JwtPayload } from "jsonwebtoken";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface.js";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
 
 
 

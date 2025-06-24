@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,13 +11,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReviewController = void 0;
+const tsyringe_1 = require("tsyringe");
+const error_handler_1 = require("../../shared/utils/error.handler");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let ReviewController = class ReviewController {
-    _addReviewUseCase;
-    _getAllReviewsUseCase;
     constructor(_addReviewUseCase, _getAllReviewsUseCase) {
         this._addReviewUseCase = _addReviewUseCase;
         this._getAllReviewsUseCase = _getAllReviewsUseCase;
@@ -24,55 +34,59 @@ let ReviewController = class ReviewController {
     // ══════════════════════════════════════════════════════════
     //  Create Review
     // ══════════════════════════════════════════════════════════
-    async createReview(req, res) {
-        try {
-            const { targetId, targetType, comment, rating } = req.body;
-            console.log(req.body);
-            const { userId } = req.user;
-            if (!userId) {
-                throw new CustomError(ERROR_MESSAGES.MISSING_PARAMETERS, HTTP_STATUS.BAD_REQUEST);
+    createReview(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { targetId, targetType, comment, rating } = req.body;
+                console.log(req.body);
+                const { userId } = req.user;
+                if (!userId) {
+                    throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.MISSING_PARAMETERS, constants_1.HTTP_STATUS.BAD_REQUEST);
+                }
+                const addReview = yield this._addReviewUseCase.execute({
+                    targetId,
+                    comment,
+                    rating,
+                    reviewerId: userId,
+                    targetType
+                });
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.ADDED,
+                    review: addReview
+                });
             }
-            const addReview = await this._addReviewUseCase.execute({
-                targetId,
-                comment,
-                rating,
-                reviewerId: userId,
-                targetType
-            });
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.ADDED,
-                review: addReview
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Get All Reviews
     // ══════════════════════════════════════════════════════════
-    async getAllReviews(req, res) {
-        try {
-            const { limit, page, targetId, targetType } = req.query;
-            const pageNumber = Number(page);
-            const pageSize = Number(limit);
-            const reviews = await this._getAllReviewsUseCase.execute(targetId, targetType, pageNumber, pageSize);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                reviews
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    getAllReviews(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { limit, page, targetId, targetType } = req.query;
+                const pageNumber = Number(page);
+                const pageSize = Number(limit);
+                const reviews = yield this._getAllReviewsUseCase.execute(targetId, targetType, pageNumber, pageSize);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    reviews
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
 };
-ReviewController = __decorate([
-    injectable(),
-    __param(0, inject("IAddReviewUseCase")),
-    __param(1, inject("IGetAllReviewUseCase")),
+exports.ReviewController = ReviewController;
+exports.ReviewController = ReviewController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IAddReviewUseCase")),
+    __param(1, (0, tsyringe_1.inject)("IGetAllReviewUseCase")),
     __metadata("design:paramtypes", [Object, Object])
 ], ReviewController);
-export { ReviewController };
 //# sourceMappingURL=review.controller.js.map

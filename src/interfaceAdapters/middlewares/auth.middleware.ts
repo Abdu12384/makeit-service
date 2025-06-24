@@ -1,8 +1,8 @@
 import { JwtPayload } from "jsonwebtoken";
-import { JWTService } from "../../useCases/services/jwt-service.js";
+import { JWTService } from "../../useCases/services/jwt-service";
 import { NextFunction, Request, Response } from "express";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { redisClient } from "../../frameworks/cashe/redis.client.js";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { redisClient } from "../../frameworks/cashe/redis.client";
 
 
 

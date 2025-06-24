@@ -1,7 +1,7 @@
-import { paymentModel } from "../../../frameworks/database/mongodb/model/payment.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { IPaymentModel } from "../../../frameworks/database/mongodb/model/payment.model.js";
-import { IPaymentRepository } from "../../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
+import { paymentModel } from "../../../frameworks/database/mongodb/model/payment.model";
+import { BaseRepository } from "../base.repository";
+import { IPaymentModel } from "../../../frameworks/database/mongodb/model/payment.model";
+import { IPaymentRepository } from "../../../domain/interface/repositoryInterfaces/payment/payment-repository";
 import { injectable } from "tsyringe";
 
 

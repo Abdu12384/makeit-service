@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,64 +11,73 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LoginUserUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let LoginUserUseCase = class LoginUserUseCase {
-    _clientRepository;
-    _vendorRepository;
-    _adminRepository;
-    _passwordBcrypt;
     constructor(_clientRepository, _vendorRepository, _adminRepository, _passwordBcrypt) {
         this._clientRepository = _clientRepository;
         this._vendorRepository = _vendorRepository;
         this._adminRepository = _adminRepository;
         this._passwordBcrypt = _passwordBcrypt;
     }
-    async execute(user) {
-        let repository;
-        if (user.role === 'client') {
-            repository = this._clientRepository;
-        }
-        else if (user.role === 'vendor') {
-            repository = this._vendorRepository;
-        }
-        else if (user.role === 'admin') {
-            repository = this._adminRepository;
-        }
-        else {
-            throw new CustomError(ERROR_MESSAGES.INVALID_ROLE, HTTP_STATUS.BAD_REQUEST);
-        }
-        if (!user.email || !user.password) {
-            throw new CustomError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.BAD_REQUEST);
-        }
-        const userData = await repository.findOne({ email: user.email });
-        if (!userData) {
-            throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        }
-        if (userData.status === "pending") {
-            throw new CustomError(ERROR_MESSAGES.ACCOUNT_UNDER_VERIFICATION, HTTP_STATUS.FORBIDDEN);
-        }
-        if (userData.status !== "active") {
-            throw new CustomError(ERROR_MESSAGES.BLOCKED, HTTP_STATUS.FORBIDDEN);
-        }
-        if (user.password) {
-            const isPasswordMatch = await this._passwordBcrypt.compare(user.password, userData.password);
-            console.log('comaprison', user.password, isPasswordMatch);
-            if (!isPasswordMatch) {
-                throw new CustomError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.FORBIDDEN);
+    execute(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let repository;
+            if (user.role === 'client') {
+                repository = this._clientRepository;
             }
-        }
-        return userData;
+            else if (user.role === 'vendor') {
+                repository = this._vendorRepository;
+            }
+            else if (user.role === 'admin') {
+                repository = this._adminRepository;
+            }
+            else {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_ROLE, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            if (!user.email || !user.password) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            const userData = yield repository.findOne({ email: user.email });
+            if (!userData) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
+            }
+            if (userData.status === "pending") {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.ACCOUNT_UNDER_VERIFICATION, constants_1.HTTP_STATUS.FORBIDDEN);
+            }
+            if (userData.status !== "active") {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BLOCKED, constants_1.HTTP_STATUS.FORBIDDEN);
+            }
+            if (user.password) {
+                const isPasswordMatch = yield this._passwordBcrypt.compare(user.password, userData.password);
+                console.log('comaprison', user.password, isPasswordMatch);
+                if (!isPasswordMatch) {
+                    throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS.FORBIDDEN);
+                }
+            }
+            return userData;
+        });
     }
 };
-LoginUserUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IClientRepository")),
-    __param(1, inject("IVendorRepository")),
-    __param(2, inject("IAdminRepository")),
-    __param(3, inject("IPasswordHasher")),
+exports.LoginUserUseCase = LoginUserUseCase;
+exports.LoginUserUseCase = LoginUserUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IClientRepository")),
+    __param(1, (0, tsyringe_1.inject)("IVendorRepository")),
+    __param(2, (0, tsyringe_1.inject)("IAdminRepository")),
+    __param(3, (0, tsyringe_1.inject)("IPasswordHasher")),
     __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], LoginUserUseCase);
-export { LoginUserUseCase };
 //# sourceMappingURL=login-user.usecase.js.map

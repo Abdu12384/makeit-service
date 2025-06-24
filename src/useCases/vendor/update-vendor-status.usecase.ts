@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateVendorStatusUseCase } from "../../domain/interface/useCaseInterface/vendor/update-vendor-status-usecase.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { ISendEmailUseCase } from "../../domain/interface/useCaseInterface/common/send-email-usecase.interface.js";
-import { statusTypes, VENDOR_APPLICATION_MAIL_CONTENT } from "../../shared/constants.js";
+import { IUpdateVendorStatusUseCase } from "../../domain/interface/useCaseInterface/vendor/update-vendor-status-usecase.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { ISendEmailUseCase } from "../../domain/interface/useCaseInterface/common/send-email-usecase.interface";
+import { statusTypes, VENDOR_APPLICATION_MAIL_CONTENT } from "../../shared/constants";
 
 
 @injectable()

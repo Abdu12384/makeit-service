@@ -1,5 +1,5 @@
-import { IClientEntity } from "../../../entities/client.entity.js";
-import { IBaseRepository } from "../base-repository.interface.js";
+import { IClientEntity } from "../../../entities/client.entity";
+import { IBaseRepository } from "../base-repository.interface";
 
 export interface IClientRepository extends IBaseRepository<IClientEntity>{
    createClient(client: IClientEntity): Promise<IClientEntity|null>

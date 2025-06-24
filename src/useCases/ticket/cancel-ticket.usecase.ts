@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { ICancelTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/cancel-ticket-usecase.interface.js";
-import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js";
-import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
-import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
-import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
-import { NotificationType } from "../../shared/dtos/notification.js";
+import { ICancelTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/cancel-ticket-usecase.interface";
+import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
+import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
+import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
+import { NotificationType } from "../../shared/dtos/notification";
 
 @injectable()
 export default class CancelTicketUseCase implements ICancelTicketUseCase {

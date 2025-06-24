@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
-import { IRefreshTokenModel, RefreshTokenModel } from "../../../frameworks/database/mongodb/model/refresh-token.model.js";
-import { BaseRepository } from "../base.repository.js";
+import { IRefreshTokenModel, RefreshTokenModel } from "../../../frameworks/database/mongodb/model/refresh-token.model";
+import { BaseRepository } from "../base.repository";
 
 
 

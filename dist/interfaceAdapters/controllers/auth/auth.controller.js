@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,24 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { injectable, inject } from "tsyringe";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants.js";
-import { handleErrorResponse } from "../../../shared/utils/error.handler.js";
-import { userSchemas } from "../../../useCases/auth/validation/user-signup.validation.schema.js";
-import { clearAuthCookies, setAuthCookies, updateCookieWithAccessToken } from "../../../shared/utils/cookie.helper.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthController = void 0;
+const tsyringe_1 = require("tsyringe");
+const constants_1 = require("../../../shared/constants");
+const error_handler_1 = require("../../../shared/utils/error.handler");
+const user_signup_validation_schema_1 = require("../../../useCases/auth/validation/user-signup.validation.schema");
+const cookie_helper_1 = require("../../../shared/utils/cookie.helper");
 let AuthController = class AuthController {
-    _registerUseCase;
-    _sendOtpEmailUseCase;
-    _varifyOtpUseCase;
-    _loginUseCase;
-    _generateTokenUseCase;
-    _googleUseCase;
-    _refreshTokenUseCase;
-    _blackListTokenUseCase;
-    _revokeRefreshTokenUseCase;
-    _forgotPasswordUseCase;
-    _resetPasswordUseCase;
-    _clearFCMTokenUseCase;
     constructor(_registerUseCase, _sendOtpEmailUseCase, _varifyOtpUseCase, _loginUseCase, _generateTokenUseCase, _googleUseCase, _refreshTokenUseCase, _blackListTokenUseCase, _revokeRefreshTokenUseCase, _forgotPasswordUseCase, _resetPasswordUseCase, _clearFCMTokenUseCase) {
         this._registerUseCase = _registerUseCase;
         this._sendOtpEmailUseCase = _sendOtpEmailUseCase;
@@ -45,125 +56,133 @@ let AuthController = class AuthController {
     // ══════════════════════════════════════════════════════════
     // 📧 Sending OTP to User Email
     // ══════════════════════════════════════════════════════════
-    async sendOtp(req, res) {
-        try {
-            console.log('otpsend', req.body);
-            const { email } = req.body;
-            console.log('otp sending....');
-            await this._sendOtpEmailUseCase.execute(email);
-            res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    sendOtp(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('otpsend', req.body);
+                const { email } = req.body;
+                console.log('otp sending....');
+                yield this._sendOtpEmailUseCase.execute(email);
+                res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     // 📝 Register New User
     // ══════════════════════════════════════════════════════════
-    async register(req, res) {
-        try {
-            const { formdata, otpString } = req.body;
-            console.log('varifying...', formdata, otpString);
-            await this._varifyOtpUseCase.execute(formdata.email, otpString);
-            const { role } = formdata;
-            console.log(role);
-            const schema = userSchemas[role];
-            console.log(schema);
-            if (!schema) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({
-                    success: true,
-                    message: ERROR_MESSAGES.INVALID_CREDENTIALS
-                });
-                return;
+    register(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { formdata, otpString } = req.body;
+                console.log('varifying...', formdata, otpString);
+                yield this._varifyOtpUseCase.execute(formdata.email, otpString);
+                const { role } = formdata;
+                console.log(role);
+                const schema = user_signup_validation_schema_1.userSchemas[role];
+                console.log(schema);
+                if (!schema) {
+                    res.status(constants_1.HTTP_STATUS.BAD_REQUEST).json({
+                        success: true,
+                        message: constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS
+                    });
+                    return;
+                }
+                const validatedData = schema.parse(formdata);
+                const client = yield this._registerUseCase.createUsers(validatedData);
+                res.status(constants_1.HTTP_STATUS.CREATED).json({ message: constants_1.SUCCESS_MESSAGES.CREATED, data: client });
             }
-            const validatedData = schema.parse(formdata);
-            const client = await this._registerUseCase.createUsers(validatedData);
-            res.status(HTTP_STATUS.CREATED).json({ message: SUCCESS_MESSAGES.CREATED, data: client });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     // 🔐 User Login Controller
     // ══════════════════════════════════════════════════════════
-    async login(req, res) {
-        try {
-            const data = req.body;
-            console.log('user data', data);
-            // const validatedData = loginSchema.parse(data)
-            // if(!validatedData){
-            //   res.status(HTTP_STATUS.BAD_REQUEST).json({
-            //     success:false,
-            //     message: ERROR_MESSAGES.INSUFFICIENT_FUNDS,
-            //   })
-            // }
-            const user = await this._loginUseCase.execute(data);
-            if (!user.userId || !user.email || !user.role) {
-                throw new Error("User ID, email, or role is missing");
-            }
-            const token = await this._generateTokenUseCase.execute(user.userId, user.email, user.role);
-            const accessTokenName = `${user.role}_access_token`;
-            const refreshTokenName = `${user.role}_refresh_token`;
-            setAuthCookies(res, token.accessToken, token.refreshToken, accessTokenName, refreshTokenName);
-            const { password, ...userWihoutPassword } = user;
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-                user: {
-                    ...userWihoutPassword,
+    login(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = req.body;
+                console.log('user data', data);
+                // const validatedData = loginSchema.parse(data)
+                // if(!validatedData){
+                //   res.status(HTTP_STATUS.BAD_REQUEST).json({
+                //     success:false,
+                //     message: ERROR_MESSAGES.INSUFFICIENT_FUNDS,
+                //   })
+                // }
+                const user = yield this._loginUseCase.execute(data);
+                if (!user.userId || !user.email || !user.role) {
+                    throw new Error("User ID, email, or role is missing");
                 }
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+                const token = yield this._generateTokenUseCase.execute(user.userId, user.email, user.role);
+                const accessTokenName = `${user.role}_access_token`;
+                const refreshTokenName = `${user.role}_refresh_token`;
+                (0, cookie_helper_1.setAuthCookies)(res, token.accessToken, token.refreshToken, accessTokenName, refreshTokenName);
+                const { password } = user, userWihoutPassword = __rest(user, ["password"]);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.LOGIN_SUCCESS,
+                    user: Object.assign({}, userWihoutPassword)
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  User Google Login Controller
     // ══════════════════════════════════════════════════════════
-    async authenticateWithGoogle(req, res) {
-        try {
-            const { credential, client_id, role } = req.body;
-            const user = await this._googleUseCase.execute(credential, client_id, role);
-            if (!user.userId || !user.email || !user.role) {
-                throw new Error("User ID, email, or role is missing");
+    authenticateWithGoogle(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { credential, client_id, role } = req.body;
+                const user = yield this._googleUseCase.execute(credential, client_id, role);
+                if (!user.userId || !user.email || !user.role) {
+                    throw new Error("User ID, email, or role is missing");
+                }
+                const tokens = yield this._generateTokenUseCase.execute(user.userId, user.email, user.role);
+                const accessTokenName = `${user.role}_access_token`;
+                const refreshTokenName = `${user.role}_refresh_token`;
+                (0, cookie_helper_1.setAuthCookies)(res, tokens.accessToken, tokens.refreshToken, accessTokenName, refreshTokenName);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.LOGIN_SUCCESS,
+                    user: user,
+                });
             }
-            const tokens = await this._generateTokenUseCase.execute(user.userId, user.email, user.role);
-            const accessTokenName = `${user.role}_access_token`;
-            const refreshTokenName = `${user.role}_refresh_token`;
-            setAuthCookies(res, tokens.accessToken, tokens.refreshToken, accessTokenName, refreshTokenName);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-                user: user,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  User Logout
     // ══════════════════════════════════════════════════════════
-    async logout(req, res) {
-        try {
-            await this._blackListTokenUseCase.execute(req.user.access_token);
-            await this._revokeRefreshTokenUseCase.execute(req.user.refresh_token);
-            await this._clearFCMTokenUseCase.execute(req.user.userId, req.user.role);
-            const user = req.user;
-            console.log(user, 'logout user');
-            const accessTokenName = `${user.role}_access_token`;
-            const refreshTokenName = `${user.role}_refresh_token`;
-            clearAuthCookies(res, accessTokenName, refreshTokenName);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.LOGOUT_SUCCESS,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this._blackListTokenUseCase.execute(req.user.access_token);
+                yield this._revokeRefreshTokenUseCase.execute(req.user.refresh_token);
+                yield this._clearFCMTokenUseCase.execute(req.user.userId, req.user.role);
+                const user = req.user;
+                console.log(user, 'logout user');
+                const accessTokenName = `${user.role}_access_token`;
+                const refreshTokenName = `${user.role}_refresh_token`;
+                (0, cookie_helper_1.clearAuthCookies)(res, accessTokenName, refreshTokenName);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.LOGOUT_SUCCESS,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Token Refresh Handler
@@ -173,62 +192,66 @@ let AuthController = class AuthController {
             const refreshToken = req.user.refresh_token;
             const newTokens = this._refreshTokenUseCase.execute(refreshToken);
             const accessTokenName = `${newTokens.role}_access_token`;
-            updateCookieWithAccessToken(res, newTokens.accessToken, accessTokenName);
-            res.status(HTTP_STATUS.OK).json({
+            (0, cookie_helper_1.updateCookieWithAccessToken)(res, newTokens.accessToken, accessTokenName);
+            res.status(constants_1.HTTP_STATUS.OK).json({
                 success: true,
-                message: SUCCESS_MESSAGES.OPERATION_SUCCESS
+                message: constants_1.SUCCESS_MESSAGES.OPERATION_SUCCESS
             });
         }
         catch (error) {
-            clearAuthCookies(res, `${req.user.role}_access_token`, `${req.user.role}_refresh_token`);
-            res.status(HTTP_STATUS.UNAUTHORIZED).json({
-                message: ERROR_MESSAGES.INVALID_TOKEN
+            (0, cookie_helper_1.clearAuthCookies)(res, `${req.user.role}_access_token`, `${req.user.role}_refresh_token`);
+            res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
+                message: constants_1.ERROR_MESSAGES.INVALID_TOKEN
             });
         }
     }
     // ══════════════════════════════════════════════════════════
     //  Forgot Password Handler
     // ══════════════════════════════════════════════════════════
-    async forgotPassword(req, res) {
-        try {
-            const { email } = req.body;
-            await this._forgotPasswordUseCase.execute(email);
-            res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    forgotPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email } = req.body;
+                yield this._forgotPasswordUseCase.execute(email);
+                res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Reset Password Handler
     // ══════════════════════════════════════════════════════════
-    async resetPassword(req, res) {
-        try {
-            const { password, token } = req.body;
-            console.log('token', token, password);
-            await this._resetPasswordUseCase.execute(token, password);
-            res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS);
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    resetPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { password, token } = req.body;
+                console.log('token', token, password);
+                yield this._resetPasswordUseCase.execute(token, password);
+                res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS);
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
 };
-AuthController = __decorate([
-    injectable(),
-    __param(0, inject("IClientRegisterUseCase")),
-    __param(1, inject("ISendOtpEmailUseCase")),
-    __param(2, inject("IVerifyOtpEmailUseCase")),
-    __param(3, inject("ILoginUserUseCase")),
-    __param(4, inject("IGenerateTokenUseCase")),
-    __param(5, inject("IGoogleUseCase")),
-    __param(6, inject("IRefreshTokenUseCase")),
-    __param(7, inject("IBlackListTokenUseCase")),
-    __param(8, inject("IRevokeRefreshTokenUseCase")),
-    __param(9, inject("IForgotPasswordUseCase")),
-    __param(10, inject("IResetPasswordUseCase")),
-    __param(11, inject("IClearFCMTokenUseCase")),
+exports.AuthController = AuthController;
+exports.AuthController = AuthController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IClientRegisterUseCase")),
+    __param(1, (0, tsyringe_1.inject)("ISendOtpEmailUseCase")),
+    __param(2, (0, tsyringe_1.inject)("IVerifyOtpEmailUseCase")),
+    __param(3, (0, tsyringe_1.inject)("ILoginUserUseCase")),
+    __param(4, (0, tsyringe_1.inject)("IGenerateTokenUseCase")),
+    __param(5, (0, tsyringe_1.inject)("IGoogleUseCase")),
+    __param(6, (0, tsyringe_1.inject)("IRefreshTokenUseCase")),
+    __param(7, (0, tsyringe_1.inject)("IBlackListTokenUseCase")),
+    __param(8, (0, tsyringe_1.inject)("IRevokeRefreshTokenUseCase")),
+    __param(9, (0, tsyringe_1.inject)("IForgotPasswordUseCase")),
+    __param(10, (0, tsyringe_1.inject)("IResetPasswordUseCase")),
+    __param(11, (0, tsyringe_1.inject)("IClearFCMTokenUseCase")),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], AuthController);
-export { AuthController };
 //# sourceMappingURL=auth.controller.js.map

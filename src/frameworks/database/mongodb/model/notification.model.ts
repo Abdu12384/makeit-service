@@ -1,6 +1,6 @@
 import { model, ObjectId } from "mongoose";
-import { INotificationEntity } from "../../../../domain/entities/notification.entity.js";
-import { notificationSchema } from "../schema/notification.schema.js";
+import { INotificationEntity } from "../../../../domain/entities/notification.entity";
+import { notificationSchema } from "../schema/notification.schema";
 
 
 

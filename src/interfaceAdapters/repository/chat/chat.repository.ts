@@ -1,11 +1,11 @@
-import { chatModel, IChatModel } from "../../../frameworks/database/mongodb/model/chat.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { IChatRepository } from "../../../domain/interface/repositoryInterfaces/chat/chat-repository.interface.js";
-import { IChatEntity } from "../../../domain/entities/chat.entity.js";
-import { messageModel } from "../../../frameworks/database/mongodb/model/message.model.js";
+import { chatModel, IChatModel } from "../../../frameworks/database/mongodb/model/chat.model";
+import { BaseRepository } from "../base.repository";
+import { IChatRepository } from "../../../domain/interface/repositoryInterfaces/chat/chat-repository.interface";
+import { IChatEntity } from "../../../domain/entities/chat.entity";
+import { messageModel } from "../../../frameworks/database/mongodb/model/message.model";
 import mongoose, { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
-import { IMessageEntity } from "../../../domain/entities/message.entity.js";
+import { IMessageEntity } from "../../../domain/entities/message.entity";
 
 
 

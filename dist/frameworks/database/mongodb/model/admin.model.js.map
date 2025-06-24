@@ -1,1 +1,1 @@
-{"version":3,"file":"admin.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/admin.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAY,MAAM,UAAU,CAAC;AAC3C,OAAO,EAAE,WAAW,EAAE,MAAM,2BAA2B,CAAC;AAQxD,MAAM,CAAC,MAAM,UAAU,GAAG,KAAK,CAAc,OAAO,EAAE,WAAW,CAAC,CAAC"}
+{"version":3,"file":"admin.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/admin.model.ts"],"names":[],"mappings":";;;AAAA,uCAA2C;AAC3C,yDAAqD;AAQxC,QAAA,UAAU,GAAG,IAAA,gBAAK,EAAc,OAAO,EAAE,0BAAW,CAAC,CAAC"}

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,52 +11,63 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { messaging } from "../../shared/config.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pushNotificationService = void 0;
+const tsyringe_1 = require("tsyringe");
+const config_1 = require("../../shared/config");
 let pushNotificationService = class pushNotificationService {
-    _clientRepository;
-    _vendorRepository;
-    _notificationRepo;
     constructor(_clientRepository, _vendorRepository, _notificationRepo) {
         this._clientRepository = _clientRepository;
         this._vendorRepository = _vendorRepository;
         this._notificationRepo = _notificationRepo;
     }
-    async sendNotification(userId, title, body, notificationType, model) {
-        const notification = {
-            userId,
-            title,
-            body,
-            notificationType
-        };
-        let repo;
-        if (model === "client") {
-            repo = this._clientRepository;
-        }
-        else {
-            repo = this._vendorRepository;
-        }
-        const user = await repo.findOne({ userId });
-        if (user?.userId) {
-            await this._notificationRepo.createNotification(user.userId, notificationType, title, body);
-        }
-        if (user?.fcmToken) {
-            await messaging.send({
-                notification: {
-                    title: title,
-                    body: body
-                },
-                token: user.fcmToken
-            });
-        }
+    sendNotification(userId, title, body, notificationType, model) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const notification = {
+                userId,
+                title,
+                body,
+                notificationType
+            };
+            let repo;
+            if (model === "client") {
+                repo = this._clientRepository;
+            }
+            else {
+                repo = this._vendorRepository;
+            }
+            const user = yield repo.findOne({ userId });
+            if (user === null || user === void 0 ? void 0 : user.userId) {
+                yield this._notificationRepo.createNotification(user.userId, notificationType, title, body);
+            }
+            const messaging = (0, config_1.getMessaging)();
+            if (user === null || user === void 0 ? void 0 : user.fcmToken) {
+                yield messaging.send({
+                    notification: {
+                        title: title,
+                        body: body
+                    },
+                    token: user.fcmToken
+                });
+            }
+        });
     }
 };
-pushNotificationService = __decorate([
-    injectable(),
-    __param(0, inject("IClientRepository")),
-    __param(1, inject("IVendorRepository")),
-    __param(2, inject("INotificationRepository")),
+exports.pushNotificationService = pushNotificationService;
+exports.pushNotificationService = pushNotificationService = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IClientRepository")),
+    __param(1, (0, tsyringe_1.inject)("IVendorRepository")),
+    __param(2, (0, tsyringe_1.inject)("INotificationRepository")),
     __metadata("design:paramtypes", [Object, Object, Object])
 ], pushNotificationService);
-export { pushNotificationService };
 //# sourceMappingURL=firebase-push-notification.js.map

@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { IForgotPasswordUseCase } from "../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface.js";
-import { IEmailService } from "../../domain/interface/servicesInterface/email.service.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS, RESET_PASSWORD_MAIL_CONTENT } from "../../shared/constants.js";
-import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface.js";
-import { IGenerateTokenUseCase } from "../../domain/interface/useCaseInterface/auth/genarate-token-usecase.interface.js";
-import { config } from "../../shared/config.js";
+import { IForgotPasswordUseCase } from "../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface";
+import { IEmailService } from "../../domain/interface/servicesInterface/email.service.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS, RESET_PASSWORD_MAIL_CONTENT } from "../../shared/constants";
+import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface";
+import { IGenerateTokenUseCase } from "../../domain/interface/useCaseInterface/auth/genarate-token-usecase.interface";
+import { config } from "../../shared/config";
 
 
 

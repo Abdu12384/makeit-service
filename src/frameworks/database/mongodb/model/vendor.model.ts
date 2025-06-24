@@ -1,6 +1,6 @@
 import { model, ObjectId } from "mongoose";
-import { IVendorEntity } from "../../../../domain/entities/vendor.entity.js";
-import { VendorSchema } from "../schema/vendor.schema.js";
+import { IVendorEntity } from "../../../../domain/entities/vendor.entity";
+import { VendorSchema } from "../schema/vendor.schema";
 
 
 export interface IVendorModel extends IVendorEntity, Document{

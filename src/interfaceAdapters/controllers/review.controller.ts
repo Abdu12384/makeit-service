@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IReviewController } from "../../domain/interface/controllerInterfaces/review/review-controller.interface.js";
+import { IReviewController } from "../../domain/interface/controllerInterfaces/review/review-controller.interface";
 import { Request, Response } from "express";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { IAddReviewUseCase } from "../../domain/interface/useCaseInterface/review/add-review-usecase.interface.js";
-import { IGetAllReviewUseCase } from "../../domain/interface/useCaseInterface/review/get-all-review-usecase.interface.js";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { IAddReviewUseCase } from "../../domain/interface/useCaseInterface/review/add-review-usecase.interface";
+import { IGetAllReviewUseCase } from "../../domain/interface/useCaseInterface/review/get-all-review-usecase.interface";
 
 
 

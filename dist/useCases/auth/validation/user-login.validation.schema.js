@@ -1,9 +1,12 @@
-import { z } from 'zod';
-import { strongEmailRegex } from "../../../shared/validation/email.validation.js";
-import { passwordSchema } from "../../../shared/validation/password.validation.js";
-export const loginSchema = z.object({
-    email: strongEmailRegex,
-    password: passwordSchema,
-    role: z.enum(["admin", "client", "vendor"]),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginSchema = void 0;
+const zod_1 = require("zod");
+const email_validation_1 = require("../../../shared/validation/email.validation");
+const password_validation_1 = require("../../../shared/validation/password.validation");
+exports.loginSchema = zod_1.z.object({
+    email: email_validation_1.strongEmailRegex,
+    password: password_validation_1.passwordSchema,
+    role: zod_1.z.enum(["admin", "client", "vendor"]),
 });
 //# sourceMappingURL=user-login.validation.schema.js.map

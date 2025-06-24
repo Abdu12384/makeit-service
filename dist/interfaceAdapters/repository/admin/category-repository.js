@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,17 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { BaseRepository } from "../base.repository.js";
-import { CategoryModel } from "../../../frameworks/database/mongodb/model/category.model.js";
-import { injectable } from "tsyringe";
-let CategoryRepository = class CategoryRepository extends BaseRepository {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CategoryRepository = void 0;
+const base_repository_1 = require("../base.repository");
+const category_model_1 = require("../../../frameworks/database/mongodb/model/category.model");
+const tsyringe_1 = require("tsyringe");
+let CategoryRepository = class CategoryRepository extends base_repository_1.BaseRepository {
     constructor() {
-        super(CategoryModel);
+        super(category_model_1.CategoryModel);
     }
 };
-CategoryRepository = __decorate([
-    injectable(),
+exports.CategoryRepository = CategoryRepository;
+exports.CategoryRepository = CategoryRepository = __decorate([
+    (0, tsyringe_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], CategoryRepository);
-export { CategoryRepository };
 //# sourceMappingURL=category-repository.js.map

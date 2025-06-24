@@ -2,7 +2,7 @@
 import { IEmailService } from "../../domain/interface/servicesInterface/email.service.interface";
 import nodemailer from 'nodemailer'
 import { injectable } from "tsyringe";
-import { VERIFICATION_MAIL_CONTENT } from "../../shared/constants.js";
+import { VERIFICATION_MAIL_CONTENT } from "../../shared/constants";
 
 
 

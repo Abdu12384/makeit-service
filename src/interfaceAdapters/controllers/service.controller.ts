@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IServiceController } from "../../domain/interface/controllerInterfaces/service/service-controller.interface.js";
+import { IServiceController } from "../../domain/interface/controllerInterfaces/service/service-controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { IAddServiceUseCase } from "../../domain/interface/useCaseInterface/vendor/service/add-service-usecase.interface.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { IGetAllServicesUseCase } from "../../domain/interface/useCaseInterface/vendor/service/get-all-service-usecase.interface.js";
-import { IEditServiceUseCase } from "../../domain/interface/useCaseInterface/vendor/service/edit-service-usecase.interface.js";
-import { IUpdateServiceStatusUseCase } from "../../domain/interface/useCaseInterface/vendor/service/update-service-status-usecase.interface.js";
-import { IGetServiceByIdUseCase } from "../../domain/interface/useCaseInterface/vendor/service/get-service-by-id-usecase.interface.js";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { IAddServiceUseCase } from "../../domain/interface/useCaseInterface/vendor/service/add-service-usecase.interface";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { IGetAllServicesUseCase } from "../../domain/interface/useCaseInterface/vendor/service/get-all-service-usecase.interface";
+import { IEditServiceUseCase } from "../../domain/interface/useCaseInterface/vendor/service/edit-service-usecase.interface";
+import { IUpdateServiceStatusUseCase } from "../../domain/interface/useCaseInterface/vendor/service/update-service-status-usecase.interface";
+import { IGetServiceByIdUseCase } from "../../domain/interface/useCaseInterface/vendor/service/get-service-by-id-usecase.interface";
 
 
 

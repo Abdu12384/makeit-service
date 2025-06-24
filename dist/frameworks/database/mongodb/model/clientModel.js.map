@@ -1,1 +1,1 @@
-{"version":3,"file":"clientModel.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/clientModel.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,2BAA2B,CAAC;AAEzD,OAAO,EAAE,KAAK,EAAoB,MAAM,UAAU,CAAC;AAMnD,MAAM,CAAC,MAAM,WAAW,GAAG,KAAK,CAAe,QAAQ,EAAC,YAAY,CAAC,CAAA"}
+{"version":3,"file":"clientModel.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/clientModel.ts"],"names":[],"mappings":";;;AAAA,yDAAsD;AAEtD,uCAAmD;AAMtC,QAAA,WAAW,GAAG,IAAA,gBAAK,EAAe,QAAQ,EAAC,2BAAY,CAAC,CAAA"}

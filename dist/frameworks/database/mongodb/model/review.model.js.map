@@ -1,1 +1,1 @@
-{"version":3,"file":"review.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/review.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AAEjC,OAAO,EAAE,YAAY,EAAE,MAAM,4BAA4B,CAAC;AAU1D,MAAM,CAAC,MAAM,WAAW,GAAG,KAAK,CAAgB,QAAQ,EAAE,YAAY,CAAC,CAAA"}
+{"version":3,"file":"review.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/review.model.ts"],"names":[],"mappings":";;;AAAA,uCAAiC;AAEjC,2DAAuD;AAU1C,QAAA,WAAW,GAAG,IAAA,gBAAK,EAAgB,QAAQ,EAAE,4BAAY,CAAC,CAAA"}

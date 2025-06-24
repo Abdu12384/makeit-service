@@ -1,6 +1,6 @@
 import { model } from "mongoose";
-import { IMessageEntity } from "../../../../domain/entities/message.entity.js";
-import { messageSchema } from "../schema/message.schema.js";
+import { IMessageEntity } from "../../../../domain/entities/message.entity";
+import { messageSchema } from "../schema/message.schema";
 import { ObjectId } from "mongoose";
 
 

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,13 +8,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import nodemailer from 'nodemailer';
-import { injectable } from "tsyringe";
-import { VERIFICATION_MAIL_CONTENT } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EmailService = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const tsyringe_1 = require("tsyringe");
+const constants_1 = require("../../shared/constants");
 let EmailService = class EmailService {
-    _transporter;
     constructor() {
-        this._transporter = nodemailer.createTransport({
+        this._transporter = nodemailer_1.default.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.EMAIL_USER,
@@ -21,40 +35,46 @@ let EmailService = class EmailService {
             }
         });
     }
-    async _sendMail(mailOptions) {
-        const info = await this._transporter.sendMail(mailOptions);
-        console.log('Email sent', info.response);
+    _sendMail(mailOptions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const info = yield this._transporter.sendMail(mailOptions);
+            console.log('Email sent', info.response);
+        });
     }
-    async sendOtpEmail(email, subject, otp) {
-        try {
-            console.log(email, subject);
+    sendOtpEmail(email, subject, otp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log(email, subject);
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: email,
+                    subject: subject,
+                    html: (0, constants_1.VERIFICATION_MAIL_CONTENT)(otp)
+                };
+                yield this._transporter.sendMail(mailOptions);
+                console.log(`OTP sent to ${email}`);
+            }
+            catch (error) {
+                console.error("Error sending OTP email:", error);
+            }
+        });
+    }
+    sendCustomEmail(to, subject, content) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(process.env.EMAIL_USER);
             const mailOptions = {
                 from: process.env.EMAIL_USER,
-                to: email,
-                subject: subject,
-                html: VERIFICATION_MAIL_CONTENT(otp)
+                to,
+                subject,
+                html: content,
             };
-            await this._transporter.sendMail(mailOptions);
-            console.log(`OTP sent to ${email}`);
-        }
-        catch (error) {
-            console.error("Error sending OTP email:", error);
-        }
-    }
-    async sendCustomEmail(to, subject, content) {
-        console.log(process.env.EMAIL_USER);
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to,
-            subject,
-            html: content,
-        };
-        await this._sendMail(mailOptions);
+            yield this._sendMail(mailOptions);
+        });
     }
 };
-EmailService = __decorate([
-    injectable(),
+exports.EmailService = EmailService;
+exports.EmailService = EmailService = __decorate([
+    (0, tsyringe_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], EmailService);
-export { EmailService };
 //# sourceMappingURL=email.service.js.map

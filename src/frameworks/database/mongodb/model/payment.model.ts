@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
-import { IPaymentEntity } from "../../../../domain/entities/payment.entity.js";
+import { IPaymentEntity } from "../../../../domain/entities/payment.entity";
 import { model } from "mongoose";
-import { paymentSchema } from "../schema/payment.schema.js";
+import { paymentSchema } from "../schema/payment.schema";
 
 export interface IPaymentModel extends IPaymentEntity {
     _id: ObjectId

@@ -1,8 +1,8 @@
 import { injectable } from "tsyringe";
-import { BaseRepository } from "../base.repository.js";
-import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface.js";
-import { IServiceModel, serviceModel } from "../../../frameworks/database/mongodb/model/service.model.js";
-import { FilterType, PopulatedItem, SortType } from "../../../shared/constants.js";
+import { BaseRepository } from "../base.repository";
+import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface";
+import { IServiceModel, serviceModel } from "../../../frameworks/database/mongodb/model/service.model";
+import { FilterType, PopulatedItem, SortType } from "../../../shared/constants";
 
 
 

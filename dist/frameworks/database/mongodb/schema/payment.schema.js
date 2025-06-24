@@ -1,5 +1,8 @@
-import { Schema } from "mongoose";
-export const paymentSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.paymentSchema = void 0;
+const mongoose_1 = require("mongoose");
+exports.paymentSchema = new mongoose_1.Schema({
     amount: {
         type: Number,
         required: true

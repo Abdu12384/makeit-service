@@ -1,7 +1,7 @@
 import { model } from "mongoose";
-import { chatSchema } from "../schema/chat.schema.js";
+import { chatSchema } from "../schema/chat.schema";
 import { ObjectId } from "mongoose";
-import { IChatEntity } from "../../../../domain/entities/chat.entity.js";
+import { IChatEntity } from "../../../../domain/entities/chat.entity";
 
 
 

@@ -1,10 +1,10 @@
-import { BaseRepository } from "../base.repository.js";
-import { eventModel, IEventModel } from "../../../frameworks/database/mongodb/model/event.model.js";
+import { BaseRepository } from "../base.repository";
+import { eventModel, IEventModel } from "../../../frameworks/database/mongodb/model/event.model";
 import { injectable } from "tsyringe";
-import { IEventRepository } from "../../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
-import { IVendorEntity } from "../../../domain/entities/vendor.entity.js";
-import { IClientEntity } from "../../../domain/entities/client.entity.js";
-import { IEventEntity } from "../../../domain/entities/event.entity.js";
+import { IEventRepository } from "../../../domain/interface/repositoryInterfaces/event/event-repository.interface";
+import { IVendorEntity } from "../../../domain/entities/vendor.entity";
+import { IClientEntity } from "../../../domain/entities/client.entity";
+import { IEventEntity } from "../../../domain/entities/event.entity";
 
 
 @injectable()

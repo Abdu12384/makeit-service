@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { ICategoryModel } from '../model/category.model.js'
+import { ICategoryModel } from '../model/category.model'
 
 export const categorySchema = new Schema<ICategoryModel>({
     categoryId: {

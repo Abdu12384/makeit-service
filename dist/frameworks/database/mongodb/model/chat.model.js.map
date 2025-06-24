@@ -1,1 +1,1 @@
-{"version":3,"file":"chat.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/chat.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AACjC,OAAO,EAAE,UAAU,EAAE,MAAM,0BAA0B,CAAC;AAYtD,MAAM,CAAC,MAAM,SAAS,GAAG,KAAK,CAAa,MAAM,EAAE,UAAU,CAAC,CAAC"}
+{"version":3,"file":"chat.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/chat.model.ts"],"names":[],"mappings":";;;AAAA,uCAAiC;AACjC,uDAAmD;AAYtC,QAAA,SAAS,GAAG,IAAA,gBAAK,EAAa,MAAM,EAAE,wBAAU,CAAC,CAAC"}

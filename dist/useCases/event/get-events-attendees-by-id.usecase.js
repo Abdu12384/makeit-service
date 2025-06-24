@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,35 +11,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GetEventsAttendeesByIdUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
 let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
-    _eventRepository;
-    _ticketRepository;
     constructor(_eventRepository, _ticketRepository) {
         this._eventRepository = _eventRepository;
         this._ticketRepository = _ticketRepository;
     }
-    async execute(eventId) {
-        const attendees = await this._eventRepository.findAttendeesById(eventId);
-        const tickets = await this._ticketRepository.findAll({ eventId });
-        if (!attendees || attendees.length === 0)
-            return [];
-        const enrichedAttendees = attendees.map((attendee) => {
-            const userId = typeof attendee === 'string' ? attendee : attendee.userId;
-            const userTicket = tickets.items.find((ticket) => ticket.clientId === userId);
-            return {
-                ...attendee,
-                ticket: userTicket || null
-            };
+    execute(eventId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const attendees = yield this._eventRepository.findAttendeesById(eventId);
+            const tickets = yield this._ticketRepository.findAll({ eventId });
+            if (!attendees || attendees.length === 0)
+                return [];
+            const enrichedAttendees = attendees.map((attendee) => {
+                const userId = typeof attendee === 'string' ? attendee : attendee.userId;
+                const userTicket = tickets.items.find((ticket) => ticket.clientId === userId);
+                return Object.assign(Object.assign({}, attendee), { ticket: userTicket || null });
+            });
+            return enrichedAttendees || [];
         });
-        return enrichedAttendees || [];
     }
 };
-GetEventsAttendeesByIdUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IEventRepository")),
-    __param(1, inject("ITicketRepository")),
+exports.GetEventsAttendeesByIdUseCase = GetEventsAttendeesByIdUseCase;
+exports.GetEventsAttendeesByIdUseCase = GetEventsAttendeesByIdUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IEventRepository")),
+    __param(1, (0, tsyringe_1.inject)("ITicketRepository")),
     __metadata("design:paramtypes", [Object, Object])
 ], GetEventsAttendeesByIdUseCase);
-export { GetEventsAttendeesByIdUseCase };
 //# sourceMappingURL=get-events-attendees-by-id.usecase.js.map

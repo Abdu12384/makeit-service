@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,9 +11,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { injectable, inject } from "tsyringe";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OtpService = void 0;
+const tsyringe_1 = require("tsyringe");
 let OtpService = class OtpService {
-    otpRepository;
     constructor(otpRepository) {
         this.otpRepository = otpRepository;
     }
@@ -21,32 +32,36 @@ let OtpService = class OtpService {
         return Math.floor(100000 + Math.random() * 900000).toString();
     }
     // ===================== Save OTP ===========================//
-    async storeOtp(email, otp) {
-        console.log('storing otp');
-        const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 2);
-        await this.otpRepository.deleteOtp(email);
-        await this.otpRepository.saveOtp({
-            email,
-            otp,
-            expiresAt
+    storeOtp(email, otp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('storing otp');
+            const expiresAt = new Date();
+            expiresAt.setMinutes(expiresAt.getMinutes() + 2);
+            yield this.otpRepository.deleteOtp(email);
+            yield this.otpRepository.saveOtp({
+                email,
+                otp,
+                expiresAt
+            });
         });
     }
     //======================= Varify OTP =========================//
-    async varifyOtp(email, otp) {
-        const savedOtp = await this.otpRepository.findOtpByEmail(email);
-        if (!savedOtp) {
-            return false;
-        }
-        const isOtpValid = savedOtp.otp === otp;
-        const isExpired = new Date() > new Date(savedOtp.expiresAt);
-        return isOtpValid && !isExpired;
+    varifyOtp(email, otp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedOtp = yield this.otpRepository.findOtpByEmail(email);
+            if (!savedOtp) {
+                return false;
+            }
+            const isOtpValid = savedOtp.otp === otp;
+            const isExpired = new Date() > new Date(savedOtp.expiresAt);
+            return isOtpValid && !isExpired;
+        });
     }
 };
-OtpService = __decorate([
-    injectable(),
-    __param(0, inject("IOtpRepositroy")),
+exports.OtpService = OtpService;
+exports.OtpService = OtpService = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IOtpRepositroy")),
     __metadata("design:paramtypes", [Object])
 ], OtpService);
-export { OtpService };
 //# sourceMappingURL=otp-service.js.map

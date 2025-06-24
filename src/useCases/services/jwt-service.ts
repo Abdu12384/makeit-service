@@ -1,10 +1,10 @@
 import jwt,{ JwtPayload, Secret } from "jsonwebtoken";
 import { injectable } from "tsyringe";
-import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface.js";
+import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface";
 import { string } from "zod";
 import { emit } from "process";
 import ms from 'ms'
-import { config } from "../../shared/config.js";
+import { config } from "../../shared/config";
 
 
 

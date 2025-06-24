@@ -1,6 +1,6 @@
 import { model, ObjectId } from "mongoose";
-import { adminSchema } from "../schema/admin.schema.js";
-import { IAdminEntity } from "../../../../domain/entities/admin.entity.js";
+import { adminSchema } from "../schema/admin.schema";
+import { IAdminEntity } from "../../../../domain/entities/admin.entity";
 
 
 export interface IAdminModel extends IAdminEntity, Document {

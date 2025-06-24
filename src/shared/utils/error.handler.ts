@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { ZodError } from "zod";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../constants.js";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../constants";
 
 export const handleErrorResponse = (res: Response, error: unknown): Response => {
   // Handle Zod validation errors

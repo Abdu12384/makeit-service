@@ -1,18 +1,18 @@
 import { inject, injectable } from "tsyringe";
-import { IConfirmTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/confirm-ticket-usecase.interface.js";
-import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
-import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
-import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
-import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js";
-import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
-import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
-import { NotificationType } from "../../shared/dtos/notification.js";
+import { IConfirmTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/confirm-ticket-usecase.interface";
+import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
+import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
+import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
+import { ITicketEntity } from "../../domain/entities/ticket.entity";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
+import { NotificationType } from "../../shared/dtos/notification";
 
 
 

@@ -1,16 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IChatUseCase } from "../../domain/interface/useCaseInterface/chat/chat-usecaes.interface.js";
-import { IChatRepository } from "../../domain/interface/repositoryInterfaces/chat/chat-repository.interface.js";
-import { IChatEntity } from "../../domain/entities/chat.entity.js";
-import { IMessageEntity } from "../../domain/entities/message.entity.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
-import { IClientEntity } from "../../domain/entities/client.entity.js";
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
-import { messaging } from "../../shared/config.js";
-
+import { IChatUseCase } from "../../domain/interface/useCaseInterface/chat/chat-usecaes.interface";
+import { IChatRepository } from "../../domain/interface/repositoryInterfaces/chat/chat-repository.interface";
+import { IChatEntity } from "../../domain/entities/chat.entity";
+import { IMessageEntity } from "../../domain/entities/message.entity";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
 
 
 

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
 
 
 

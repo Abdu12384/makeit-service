@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,17 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { injectable } from "tsyringe";
-import { transactionModel } from "../../../frameworks/database/mongodb/model/transaction.model.js";
-import { BaseRepository } from "../base.repository.js";
-let TransactionRepository = class TransactionRepository extends BaseRepository {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TransactionRepository = void 0;
+const tsyringe_1 = require("tsyringe");
+const transaction_model_1 = require("../../../frameworks/database/mongodb/model/transaction.model");
+const base_repository_1 = require("../base.repository");
+let TransactionRepository = class TransactionRepository extends base_repository_1.BaseRepository {
     constructor() {
-        super(transactionModel);
+        super(transaction_model_1.transactionModel);
     }
 };
-TransactionRepository = __decorate([
-    injectable(),
+exports.TransactionRepository = TransactionRepository;
+exports.TransactionRepository = TransactionRepository = __decorate([
+    (0, tsyringe_1.injectable)(),
     __metadata("design:paramtypes", [])
 ], TransactionRepository);
-export { TransactionRepository };
 //# sourceMappingURL=transaction.repository.js.map

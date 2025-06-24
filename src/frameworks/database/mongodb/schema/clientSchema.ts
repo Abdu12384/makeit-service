@@ -1,6 +1,6 @@
 import {Schema} from 'mongoose'
-import { IClientEntity } from '../../../../domain/entities/client.entity.js'
-import { IClientModel } from '../model/clientModel.js'
+import { IClientEntity } from '../../../../domain/entities/client.entity'
+import { IClientModel } from '../model/clientModel'
 export const clientSchema = new Schema<IClientModel>({
    userId:{
      type:String,

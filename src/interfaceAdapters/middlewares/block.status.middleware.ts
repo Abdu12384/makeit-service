@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { CustomRequest } from "./auth.middleware.js";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { CustomRequest } from "./auth.middleware";
 import { NextFunction , Response } from "express";
-import { clearAuthCookies } from "../../shared/utils/cookie.helper.js";
-import { IBlackListTokenUseCase } from "../../domain/interface/useCaseInterface/auth/blacklist-token-usecase.interface.js";
-import { IRefreshTokenUseCase } from "../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface.js";
+import { clearAuthCookies } from "../../shared/utils/cookie.helper";
+import { IBlackListTokenUseCase } from "../../domain/interface/useCaseInterface/auth/blacklist-token-usecase.interface";
+import { IRefreshTokenUseCase } from "../../domain/interface/useCaseInterface/auth/refresh-token-usecase.interface";
 
 
 

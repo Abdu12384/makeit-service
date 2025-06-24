@@ -1,6 +1,6 @@
 import { model } from "mongoose";
-import { IReviewEntity } from "../../../../domain/entities/review.entity.js";
-import { reviewSchema } from "../schema/review.schema.js";
+import { IReviewEntity } from "../../../../domain/entities/review.entity";
+import { reviewSchema } from "../schema/review.schema";
 
 
 

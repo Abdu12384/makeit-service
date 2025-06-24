@@ -1,9 +1,13 @@
-import { RepositoryRegistry } from "./repository.registry.js";
-import { UseCaseRegistry } from "./useCase.registry.js";
-export class DependencyInjection {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DependencyInjection = void 0;
+const repository_registry_1 = require("./repository.registry");
+const useCase_registry_1 = require("./useCase.registry");
+class DependencyInjection {
     static registerAll() {
-        UseCaseRegistry.registerUseCase();
-        RepositoryRegistry.registerRepositories();
+        useCase_registry_1.UseCaseRegistry.registerUseCase();
+        repository_registry_1.RepositoryRegistry.registerRepositories();
     }
 }
+exports.DependencyInjection = DependencyInjection;
 //# sourceMappingURL=index.js.map

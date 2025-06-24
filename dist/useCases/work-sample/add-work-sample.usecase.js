@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,31 +11,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AddWorkSampleUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
+const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 let AddWorkSampleUseCase = class AddWorkSampleUseCase {
-    _workSampleRepository;
     constructor(_workSampleRepository) {
         this._workSampleRepository = _workSampleRepository;
     }
-    async execute(data) {
-        const { title, description, images, vendorId } = data;
-        if (!title || !description || !images || !vendorId) {
-            throw new CustomError(ERROR_MESSAGES.MISSING_PARAMETERS, HTTP_STATUS.BAD_REQUEST);
-        }
-        const workSampleId = generateUniqueId("workSample");
-        await this._workSampleRepository.save({
-            ...data,
-            workSampleId,
+    execute(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { title, description, images, vendorId } = data;
+            if (!title || !description || !images || !vendorId) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.MISSING_PARAMETERS, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            const workSampleId = (0, unique_uuid_helper_1.generateUniqueId)("workSample");
+            yield this._workSampleRepository.save(Object.assign(Object.assign({}, data), { workSampleId }));
         });
     }
 };
-AddWorkSampleUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IWorkSampleRepository")),
+exports.AddWorkSampleUseCase = AddWorkSampleUseCase;
+exports.AddWorkSampleUseCase = AddWorkSampleUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IWorkSampleRepository")),
     __metadata("design:paramtypes", [Object])
 ], AddWorkSampleUseCase);
-export { AddWorkSampleUseCase };
 //# sourceMappingURL=add-work-sample.usecase.js.map

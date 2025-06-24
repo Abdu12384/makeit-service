@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import { ITransactionRepository } from "../../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
-import { ITransactionModel, transactionModel } from "../../../frameworks/database/mongodb/model/transaction.model.js";
-import { BaseRepository } from "../base.repository.js";
+import { ITransactionRepository } from "../../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
+import { ITransactionModel, transactionModel } from "../../../frameworks/database/mongodb/model/transaction.model";
+import { BaseRepository } from "../base.repository";
 
 
 

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,35 +11,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { NotificationType } from "../../shared/dtos/notification.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RescheduleBookingUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const notification_1 = require("../../shared/dtos/notification");
 let RescheduleBookingUseCase = class RescheduleBookingUseCase {
-    _bookingRepository;
-    _pushNotificationService;
     constructor(_bookingRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
         this._pushNotificationService = _pushNotificationService;
     }
-    async execute(bookingId, selectedDate, rescheduleReason) {
-        const booking = await this._bookingRepository.findOne({ bookingId });
-        if (!booking) {
-            throw new Error("Booking not found.");
-        }
-        await this._bookingRepository.updateOne({ bookingId }, {
-            $set: {
-                date: [selectedDate],
-                status: "Rescheduled",
-                rescheduleReason,
-            },
+    execute(bookingId, selectedDate, rescheduleReason) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const booking = yield this._bookingRepository.findOne({ bookingId });
+            if (!booking) {
+                throw new Error("Booking not found.");
+            }
+            yield this._bookingRepository.updateOne({ bookingId }, {
+                $set: {
+                    date: [selectedDate],
+                    status: "Rescheduled",
+                    rescheduleReason,
+                },
+            });
+            this._pushNotificationService.sendNotification(booking.clientId, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, `Your booking has been rescheduled to ${selectedDate}.`, "booking", "client");
         });
-        this._pushNotificationService.sendNotification(booking.clientId, NotificationType.RESCHEDULE_SERVICE_BOOKING, `Your booking has been rescheduled to ${selectedDate}.`, "booking", "client");
     }
 };
-RescheduleBookingUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IBookingRepository")),
-    __param(1, inject("IPushNotificationService")),
+exports.RescheduleBookingUseCase = RescheduleBookingUseCase;
+exports.RescheduleBookingUseCase = RescheduleBookingUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IBookingRepository")),
+    __param(1, (0, tsyringe_1.inject)("IPushNotificationService")),
     __metadata("design:paramtypes", [Object, Object])
 ], RescheduleBookingUseCase);
-export { RescheduleBookingUseCase };
 //# sourceMappingURL=resedul-booking.usecase.js.map

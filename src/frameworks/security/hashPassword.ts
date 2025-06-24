@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { injectable } from 'tsyringe'
-import { IPasswordHasher } from '../../domain/interface/useCaseInterface/auth/passwordHasher.interface.js'
+import { IPasswordHasher } from '../../domain/interface/useCaseInterface/auth/passwordHasher.interface'
 
 
 @injectable()

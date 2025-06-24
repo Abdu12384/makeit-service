@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { IQRService } from "../../domain/interface/servicesInterface/qr-service.interface.js";
-import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface.js";
-import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js";
-import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface.js";
-import { ICreateTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/create-ticket-usecase.interface.js";
-import { ITicketEntity } from "../../domain/entities/ticket.entity.js";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { IQRService } from "../../domain/interface/servicesInterface/qr-service.interface";
+import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface";
+import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
+import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { ICreateTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/create-ticket-usecase.interface";
+import { ITicketEntity } from "../../domain/entities/ticket.entity";
 
 
 

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { IUserController } from "../../domain/interface/controllerInterfaces/users/user-controller.intreface.js";
+import { IUserController } from "../../domain/interface/controllerInterfaces/users/user-controller.intreface";
 import { inject, injectable } from "tsyringe";
-import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/users/get-all-users-usecase.interface.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES, TRole } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { IUpdateUserStatusUseCase } from "../../domain/interface/useCaseInterface/users/update-user-status-usecase.interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { IGetUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/get-user-details-usecase.interface.js";
-import { IUpdateUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/update-user-details-usecase.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/users/change-password-usecase.interface.js";
-import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface.js";
+import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/users/get-all-users-usecase.interface";
+import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES, TRole } from "../../shared/constants";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { IUpdateUserStatusUseCase } from "../../domain/interface/useCaseInterface/users/update-user-status-usecase.interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { IGetUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/get-user-details-usecase.interface";
+import { IUpdateUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/update-user-details-usecase.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/users/change-password-usecase.interface";
+import { ISaveFCMTokenUseCase } from "../../domain/interface/useCaseInterface/users/save-fcm-token-usecase.interface";
 
 
 @injectable()

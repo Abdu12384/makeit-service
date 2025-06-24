@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
-import { AdminModel, IAdminModel } from "../../../frameworks/database/mongodb/model/admin.model.js";
-import { BaseRepository } from "../base.repository.js";
+import { AdminModel, IAdminModel } from "../../../frameworks/database/mongodb/model/admin.model";
+import { BaseRepository } from "../base.repository";
 
 
 

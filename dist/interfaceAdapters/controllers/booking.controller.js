@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,15 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BookingController = void 0;
+const tsyringe_1 = require("tsyringe");
+const constants_1 = require("../../shared/constants");
+const error_handler_1 = require("../../shared/utils/error.handler");
 let BookingController = class BookingController {
-    _createBookingUseCase;
-    _getAllBookingUseCase;
-    _updateBookingStatusUseCase;
-    _cancelBookingUseCase;
-    _rescheduleBookingUseCase;
     constructor(_createBookingUseCase, _getAllBookingUseCase, _updateBookingStatusUseCase, _cancelBookingUseCase, _rescheduleBookingUseCase) {
         this._createBookingUseCase = _createBookingUseCase;
         this._getAllBookingUseCase = _getAllBookingUseCase;
@@ -29,110 +36,120 @@ let BookingController = class BookingController {
     // ══════════════════════════════════════════════════════════
     //  Book Service
     // ══════════════════════════════════════════════════════════
-    async bookService(req, res) {
-        try {
-            const { serviceId } = req.params;
-            const { date, email, phone, vendorId } = req.body;
-            const { userId, role } = req.user;
-            const booking = await this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
-            console.log('created booking', booking);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                booking,
-                message: SUCCESS_MESSAGES.BOOKING_SUCCESS
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    bookService(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { serviceId } = req.params;
+                const { date, email, phone, vendorId } = req.body;
+                const { userId, role } = req.user;
+                const booking = yield this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
+                console.log('created booking', booking);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    booking,
+                    message: constants_1.SUCCESS_MESSAGES.BOOKING_SUCCESS
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Get All Bookings
     // ══════════════════════════════════════════════════════════
-    async getAllBookings(req, res) {
-        try {
-            const { page, limit } = req.query;
-            const { role, userId } = req.user;
-            const pageNumber = Number(page);
-            const pageSize = Number(limit);
-            const bookings = await this._getAllBookingUseCase.execute(pageNumber, pageSize, role, userId);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                bookings,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    getAllBookings(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { page, limit } = req.query;
+                const { role, userId } = req.user;
+                const pageNumber = Number(page);
+                const pageSize = Number(limit);
+                const bookings = yield this._getAllBookingUseCase.execute(pageNumber, pageSize, role, userId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    bookings,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Get All Bookings
     // ══════════════════════════════════════════════════════════
-    async updateBookingStatus(req, res) {
-        try {
-            const { bookingId } = req.params;
-            const { status, reason } = req.body;
-            console.log('bookingId', bookingId);
-            console.log('status', status);
-            console.log('reason', reason);
-            const booking = await this._updateBookingStatusUseCase.execute(bookingId, status, reason);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-                booking,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    updateBookingStatus(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { bookingId } = req.params;
+                const { status, reason } = req.body;
+                console.log('bookingId', bookingId);
+                console.log('status', status);
+                console.log('reason', reason);
+                const booking = yield this._updateBookingStatusUseCase.execute(bookingId, status, reason);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    booking,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Cancel Booking
     // ══════════════════════════════════════════════════════════
-    async cancelBooking(req, res) {
-        try {
-            const { bookingId } = req.params;
-            const booking = await this._cancelBookingUseCase.execute(bookingId);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-                booking,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    cancelBooking(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { bookingId } = req.params;
+                const booking = yield this._cancelBookingUseCase.execute(bookingId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    booking,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Reschedule Booking
     // ══════════════════════════════════════════════════════════
-    async rescheduleBooking(req, res) {
-        try {
-            const { bookingId } = req.params;
-            const { selectedDate, rescheduleReason } = req.body;
-            console.log('bookingId', bookingId);
-            console.log('selectedDate', selectedDate);
-            console.log('rescheduleReason', rescheduleReason);
-            const booking = await this._rescheduleBookingUseCase.execute(bookingId, selectedDate, rescheduleReason);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-                booking,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    rescheduleBooking(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { bookingId } = req.params;
+                const { selectedDate, rescheduleReason } = req.body;
+                console.log('bookingId', bookingId);
+                console.log('selectedDate', selectedDate);
+                console.log('rescheduleReason', rescheduleReason);
+                const booking = yield this._rescheduleBookingUseCase.execute(bookingId, selectedDate, rescheduleReason);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    booking,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
 };
-BookingController = __decorate([
-    injectable(),
-    __param(0, inject("ICreateBookingUseCase")),
-    __param(1, inject("IGetAllBookingUseCase")),
-    __param(2, inject("IUpdateBookingStatusUseCase")),
-    __param(3, inject("ICancelBookingUseCase")),
-    __param(4, inject("IRescheduleBookingUseCase")),
+exports.BookingController = BookingController;
+exports.BookingController = BookingController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("ICreateBookingUseCase")),
+    __param(1, (0, tsyringe_1.inject)("IGetAllBookingUseCase")),
+    __param(2, (0, tsyringe_1.inject)("IUpdateBookingStatusUseCase")),
+    __param(3, (0, tsyringe_1.inject)("ICancelBookingUseCase")),
+    __param(4, (0, tsyringe_1.inject)("IRescheduleBookingUseCase")),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
 ], BookingController);
-export { BookingController };
 //# sourceMappingURL=booking.controller.js.map

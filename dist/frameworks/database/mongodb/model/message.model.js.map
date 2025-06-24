@@ -1,1 +1,1 @@
-{"version":3,"file":"message.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/message.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AAEjC,OAAO,EAAE,aAAa,EAAE,MAAM,6BAA6B,CAAC;AAU5D,MAAM,CAAC,MAAM,YAAY,GAAG,KAAK,CAAgB,SAAS,EAAE,aAAa,CAAC,CAAC"}
+{"version":3,"file":"message.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/message.model.ts"],"names":[],"mappings":";;;AAAA,uCAAiC;AAEjC,6DAAyD;AAU5C,QAAA,YAAY,GAAG,IAAA,gBAAK,EAAgB,SAAS,EAAE,8BAAa,CAAC,CAAC"}

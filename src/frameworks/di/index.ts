@@ -1,5 +1,5 @@
-import { RepositoryRegistry } from "./repository.registry.js";
-import { UseCaseRegistry } from "./useCase.registry.js";
+import { RepositoryRegistry } from "./repository.registry";
+import { UseCaseRegistry } from "./useCase.registry";
 
 export class DependencyInjection{
     static registerAll(): void{

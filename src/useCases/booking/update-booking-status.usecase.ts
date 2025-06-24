@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe"
-import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface.js"
-import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js"
-import { IEmailService } from "../../domain/interface/servicesInterface/email.service.interface.js"
-import { CustomError } from "../../domain/utils/custom.error.js"
-import { HTTP_STATUS } from "../../shared/constants.js"
+import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface"
+import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface"
+import { IEmailService } from "../../domain/interface/servicesInterface/email.service.interface"
+import { CustomError } from "../../domain/utils/custom.error"
+import { HTTP_STATUS } from "../../shared/constants"
 
 
 

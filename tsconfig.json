@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022",                          // Latest JS features
-    "module": "ESNext",                          // ESM support
+    "target": "es2016",                          // Latest JS features
+    "module": "commonjs",                          // ESM support
     "moduleResolution": "node",                  // Node-style module resolution
     "outDir": "./dist",                          // Output folder
     "rootDir": "./src",                          // Source folder
@@ -15,6 +15,24 @@
     "experimentalDecorators": true,              // Enable decorators
     "emitDecoratorMetadata": true                
   },
-  "include": ["src"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
+
+// {
+//   "compilerOptions": {
+//     "target": "es2016",+
+//     "module": "commonjs",
+//     "moduleResolution": "node",
+//     "rootDir": "./src",
+//     "outDir": "./dist",
+//     "experimentalDecorators": true,
+//     "emitDecoratorMetadata": true,
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "skipLibCheck": true
+//   },
+//   "include": ["src/*/.ts", "src/types.d.ts"],
+//   "exclude": ["node_modules", "dist"]
+// }

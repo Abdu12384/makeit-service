@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IBookingController } from "../../domain/interface/controllerInterfaces/booking/booking-controller.interface.js";
-import {  HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
+import { IBookingController } from "../../domain/interface/controllerInterfaces/booking/booking-controller.interface";
+import {  HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { Request, Response } from "express";
-import { CustomRequest } from "../middlewares/auth.middleware.js";  
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { ICreateBookingUseCase } from "../../domain/interface/useCaseInterface/booking/create-booking-usecase.interface.js";
-import { IGetAllBookingUseCase } from "../../domain/interface/useCaseInterface/booking/get-all-booking-usecase.interface.js";
-import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface.js";
-import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface.js";
-import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface.js";
+import { CustomRequest } from "../middlewares/auth.middleware";  
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { ICreateBookingUseCase } from "../../domain/interface/useCaseInterface/booking/create-booking-usecase.interface";
+import { IGetAllBookingUseCase } from "../../domain/interface/useCaseInterface/booking/get-all-booking-usecase.interface";
+import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface";
+import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface";
+import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface";
 
 
 

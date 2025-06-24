@@ -1,6 +1,6 @@
 import { model, ObjectId, Document } from "mongoose";
-import { ITicketEntity } from "../../../../domain/entities/ticket.entity.js";
-import { ticketSchema } from "../schema/ticket.schema.js";
+import { ITicketEntity } from "../../../../domain/entities/ticket.entity";
+import { ticketSchema } from "../schema/ticket.schema";
 
 
 

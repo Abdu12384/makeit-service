@@ -1,6 +1,9 @@
-import { Schema } from "mongoose";
-import { NotificationType } from "../../../../shared/dtos/notification.js";
-export const notificationSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.notificationSchema = void 0;
+const mongoose_1 = require("mongoose");
+const notification_1 = require("../../../../shared/dtos/notification");
+exports.notificationSchema = new mongoose_1.Schema({
     userId: {
         type: String,
         ref: "Client",
@@ -8,7 +11,7 @@ export const notificationSchema = new Schema({
     },
     type: {
         type: String,
-        enum: NotificationType,
+        enum: notification_1.NotificationType,
         // required: true,
     },
     message: {

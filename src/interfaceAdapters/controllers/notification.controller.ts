@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
-import { INotificationController } from "../../domain/interface/controllerInterfaces/notification/notification-controller.interface.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IGetNotificationByIdUseCase } from "../../domain/interface/useCaseInterface/notification/get-notification-id-by-usecase-interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { IUpdateNotificationReadUseCase } from "../../domain/interface/useCaseInterface/notification/update-notificaton-read-usecase.interface.js";
+import { INotificationController } from "../../domain/interface/controllerInterfaces/notification/notification-controller.interface";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IGetNotificationByIdUseCase } from "../../domain/interface/useCaseInterface/notification/get-notification-id-by-usecase-interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { IUpdateNotificationReadUseCase } from "../../domain/interface/useCaseInterface/notification/update-notificaton-read-usecase.interface";
 
 
 

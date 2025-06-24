@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { IBaseRepository } from "../base-repository.interface.js";
+import { IBaseRepository } from "../base-repository.interface";
 import { IVendorEntity } from "../../../entities/vendor.entity";
 
 

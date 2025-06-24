@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import { IOtpEntity } from "../../../domain/entities/otp.entity.js";
-import { IOtpRepositroy } from "../../../domain/interface/repositoryInterfaces/common-services/otp-service.repository.js";
-import { otpModel } from "../../../frameworks/database/mongodb/model/otp.model.js";
+import { IOtpEntity } from "../../../domain/entities/otp.entity";
+import { IOtpRepositroy } from "../../../domain/interface/repositoryInterfaces/common-services/otp-service.repository";
+import { otpModel } from "../../../frameworks/database/mongodb/model/otp.model";
 
 
 @injectable()

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,35 +11,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EditCategoryUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let EditCategoryUseCase = class EditCategoryUseCase {
-    _categoryRepository;
     constructor(_categoryRepository) {
         this._categoryRepository = _categoryRepository;
     }
-    async execute(id, title, description, image) {
-        const category = await this._categoryRepository.findOne({
-            categoryId: id
-        });
-        const existingCategory = await this._categoryRepository.findOne({
-            title: { $regex: `^${title?.trim()}$`, $options: "i" },
-        });
-        if (existingCategory && existingCategory.categoryId !== id) {
-            throw new CustomError("Category title already exists", HTTP_STATUS.CONFLICT);
-        }
-        await this._categoryRepository.update({ categoryId: category?.categoryId }, {
-            title,
-            description,
-            image
+    execute(id, title, description, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const category = yield this._categoryRepository.findOne({
+                categoryId: id
+            });
+            const existingCategory = yield this._categoryRepository.findOne({
+                title: { $regex: `^${title === null || title === void 0 ? void 0 : title.trim()}$`, $options: "i" },
+            });
+            if (existingCategory && existingCategory.categoryId !== id) {
+                throw new custom_error_1.CustomError("Category title already exists", constants_1.HTTP_STATUS.CONFLICT);
+            }
+            yield this._categoryRepository.update({ categoryId: category === null || category === void 0 ? void 0 : category.categoryId }, {
+                title,
+                description,
+                image
+            });
         });
     }
 };
-EditCategoryUseCase = __decorate([
-    injectable(),
-    __param(0, inject("ICategoryRepository")),
+exports.EditCategoryUseCase = EditCategoryUseCase;
+exports.EditCategoryUseCase = EditCategoryUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("ICategoryRepository")),
     __metadata("design:paramtypes", [Object])
 ], EditCategoryUseCase);
-export { EditCategoryUseCase };
 //# sourceMappingURL=edit-category-usecase.js.map

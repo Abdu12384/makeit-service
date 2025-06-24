@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
-import { INotificationModel, notificationModel } from "../../../frameworks/database/mongodb/model/notification.model.js";
-import { BaseRepository } from "../base.repository.js";
-import { INotificationRepository } from "../../../domain/interface/repositoryInterfaces/notification/notification-repository.interface.js";
+import { INotificationModel, notificationModel } from "../../../frameworks/database/mongodb/model/notification.model";
+import { BaseRepository } from "../base.repository";
+import { INotificationRepository } from "../../../domain/interface/repositoryInterfaces/notification/notification-repository.interface";
 
 
 

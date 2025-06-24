@@ -1,6 +1,6 @@
 import { Request,RequestHandler,Response,Router } from "express";
-import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
-import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController, notificationController } from "../../di/resolver.js";
+import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
+import { authController, blockStatusMiddleware, userController, serviceController, categoryController, bookingController, eventController, walletController, ticketController, workSampleController, dashboardController, notificationController } from "../../di/resolver";
 
 
 

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,55 +11,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChangePasswordUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let ChangePasswordUseCase = class ChangePasswordUseCase {
-    _clientRepository;
-    _vendorRepository;
-    _passwordHasher;
     constructor(_clientRepository, _vendorRepository, _passwordHasher) {
         this._clientRepository = _clientRepository;
         this._vendorRepository = _vendorRepository;
         this._passwordHasher = _passwordHasher;
     }
-    async execute(userId, currentPassword, newPassword, role) {
-        console.log('userId', userId);
-        let repo;
-        let idField;
-        if (role === "client") {
-            repo = this._clientRepository;
-            idField = "clientId";
-        }
-        else if (role === "vendor") {
-            repo = this._vendorRepository;
-            idField = "vendorId";
-        }
-        else {
-            throw new CustomError(ERROR_MESSAGES.INVALID_ROLE, HTTP_STATUS.BAD_REQUEST);
-        }
-        const user = await repo.findOne({ userId });
-        console.log('user', user);
-        if (!user) {
-            throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, HTTP_STATUS.BAD_REQUEST);
-        }
-        const isPasswordValid = await this._passwordHasher.compare(currentPassword, user?.password);
-        if (!isPasswordValid) {
-            throw new CustomError(ERROR_MESSAGES.WRONG_CURRENT_PASSWORD, HTTP_STATUS.BAD_REQUEST);
-        }
-        if (newPassword === currentPassword) {
-            throw new CustomError(ERROR_MESSAGES.PASSWORD_SAME, HTTP_STATUS.BAD_REQUEST);
-        }
-        const hashedPassword = await this._passwordHasher.hash(newPassword);
-        await repo.update({ userId }, { password: hashedPassword });
+    execute(userId, currentPassword, newPassword, role) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('userId', userId);
+            let repo;
+            let idField;
+            if (role === "client") {
+                repo = this._clientRepository;
+                idField = "clientId";
+            }
+            else if (role === "vendor") {
+                repo = this._vendorRepository;
+                idField = "vendorId";
+            }
+            else {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_ROLE, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            const user = yield repo.findOne({ userId });
+            console.log('user', user);
+            if (!user) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            const isPasswordValid = yield this._passwordHasher.compare(currentPassword, user === null || user === void 0 ? void 0 : user.password);
+            if (!isPasswordValid) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.WRONG_CURRENT_PASSWORD, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            if (newPassword === currentPassword) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.PASSWORD_SAME, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            const hashedPassword = yield this._passwordHasher.hash(newPassword);
+            yield repo.update({ userId }, { password: hashedPassword });
+        });
     }
 };
-ChangePasswordUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IClientRepository")),
-    __param(1, inject("IVendorRepository")),
-    __param(2, inject("IPasswordHasher")),
+exports.ChangePasswordUseCase = ChangePasswordUseCase;
+exports.ChangePasswordUseCase = ChangePasswordUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IClientRepository")),
+    __param(1, (0, tsyringe_1.inject)("IVendorRepository")),
+    __param(2, (0, tsyringe_1.inject)("IPasswordHasher")),
     __metadata("design:paramtypes", [Object, Object, Object])
 ], ChangePasswordUseCase);
-export { ChangePasswordUseCase };
 //# sourceMappingURL=change-password-usecase.js.map

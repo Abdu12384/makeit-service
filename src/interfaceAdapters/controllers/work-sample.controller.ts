@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { IWorkSampleController } from "../../domain/interface/controllerInterfaces/work-sample/work-sample-controller.interface.js";
-import { IAddWorkSampleUseCase } from "../../domain/interface/useCaseInterface/work-sample/add-work-sample-usecase.interface.js";
-import { IUpdateWorkSampleUseCase } from "../../domain/interface/useCaseInterface/work-sample/update-work-sample-usecase.interface.js";
-import { IGetAllWorkSampleByIdUseCase } from "../../domain/interface/useCaseInterface/work-sample/get-all-work-sample-by-id-usecase.interface.js";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { IWorkSampleController } from "../../domain/interface/controllerInterfaces/work-sample/work-sample-controller.interface";
+import { IAddWorkSampleUseCase } from "../../domain/interface/useCaseInterface/work-sample/add-work-sample-usecase.interface";
+import { IUpdateWorkSampleUseCase } from "../../domain/interface/useCaseInterface/work-sample/update-work-sample-usecase.interface";
+import { IGetAllWorkSampleByIdUseCase } from "../../domain/interface/useCaseInterface/work-sample/get-all-work-sample-by-id-usecase.interface";
 
 
 

@@ -1,9 +1,9 @@
-import { BaseRepository } from "../base.repository.js";
-import { IReviewEntity } from "../../../domain/entities/review.entity.js";
-import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface.js";
+import { BaseRepository } from "../base.repository";
+import { IReviewEntity } from "../../../domain/entities/review.entity";
+import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface";
 import { injectable } from "tsyringe";
-import { reviewModel } from "../../../frameworks/database/mongodb/model/review.model.js";
-import { FilterType, SortType } from "../../../shared/constants.js";
+import { reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
+import { FilterType, SortType } from "../../../shared/constants";
 
 
 

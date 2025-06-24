@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IAddReviewUseCase } from "../../domain/interface/useCaseInterface/review/add-review-usecase.interface.js";
-import { IReviewEntity } from "../../domain/entities/review.entity.js";
-import { IReviewRepository } from "../../domain/interface/repositoryInterfaces/review/review-repository.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+import { IAddReviewUseCase } from "../../domain/interface/useCaseInterface/review/add-review-usecase.interface";
+import { IReviewEntity } from "../../domain/entities/review.entity";
+import { IReviewRepository } from "../../domain/interface/repositoryInterfaces/review/review-repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 
 

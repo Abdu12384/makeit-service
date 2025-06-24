@@ -1,13 +1,13 @@
 import { inject, injectable } from "tsyringe";
-import { IUpdateUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/update-user-details-usecase.interface.js";
-import { IAdminEntity } from "../../domain/entities/admin.entity.js";
-import { IClientEntity } from "../../domain/entities/client.entity.js";
-import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+import { IUpdateUserDetailsUseCase } from "../../domain/interface/useCaseInterface/users/update-user-details-usecase.interface";
+import { IAdminEntity } from "../../domain/entities/admin.entity";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 
 

@@ -1,8 +1,8 @@
 import {injectable} from 'tsyringe'
-import { IClientEntity } from "../../../domain/entities/client.entity.js";
-import { IClientRepository } from "../../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { ClientModel, IClientModel } from "../../../frameworks/database/mongodb/model/clientModel.js";
-import { BaseRepository } from '../base.repository.js';
+import { IClientEntity } from "../../../domain/entities/client.entity";
+import { IClientRepository } from "../../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { ClientModel, IClientModel } from "../../../frameworks/database/mongodb/model/clientModel";
+import { BaseRepository } from '../base.repository';
 
 @injectable()
 export class ClientRepository extends BaseRepository<IClientModel>{

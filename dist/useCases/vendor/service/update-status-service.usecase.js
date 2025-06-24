@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,35 +11,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateServiceStatusUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../../domain/utils/custom.error");
+const constants_1 = require("../../../shared/constants");
 let UpdateServiceStatusUseCase = class UpdateServiceStatusUseCase {
-    _serviceRepository;
     constructor(_serviceRepository) {
         this._serviceRepository = _serviceRepository;
     }
-    async execute(serviceId, status) {
-        const service = await this._serviceRepository.findOne({ serviceId });
-        if (!service) {
-            throw new CustomError("Service not found", HTTP_STATUS.NOT_FOUND);
-        }
-        service.status = status;
-        await this._serviceRepository.update({ serviceId }, service);
+    execute(serviceId, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const service = yield this._serviceRepository.findOne({ serviceId });
+            if (!service) {
+                throw new custom_error_1.CustomError("Service not found", constants_1.HTTP_STATUS.NOT_FOUND);
+            }
+            service.status = status;
+            yield this._serviceRepository.update({ serviceId }, service);
+        });
     }
-    async blockService(serviceId) {
-        const service = await this._serviceRepository.findOne({ serviceId });
-        if (!service) {
-            throw new CustomError("Service not found", HTTP_STATUS.NOT_FOUND);
-        }
-        const newStatus = service.status === "blocked" ? "active" : "blocked";
-        await this._serviceRepository.update({ serviceId }, { status: newStatus });
+    blockService(serviceId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const service = yield this._serviceRepository.findOne({ serviceId });
+            if (!service) {
+                throw new custom_error_1.CustomError("Service not found", constants_1.HTTP_STATUS.NOT_FOUND);
+            }
+            const newStatus = service.status === "blocked" ? "active" : "blocked";
+            yield this._serviceRepository.update({ serviceId }, { status: newStatus });
+        });
     }
 };
-UpdateServiceStatusUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IServiceRepository")),
+exports.UpdateServiceStatusUseCase = UpdateServiceStatusUseCase;
+exports.UpdateServiceStatusUseCase = UpdateServiceStatusUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IServiceRepository")),
     __metadata("design:paramtypes", [Object])
 ], UpdateServiceStatusUseCase);
-export { UpdateServiceStatusUseCase };
 //# sourceMappingURL=update-status-service.usecase.js.map

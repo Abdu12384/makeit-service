@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,27 +11,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES } from "../../shared/constants.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EditEventUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
+const constants_2 = require("../../shared/constants");
 let EditEventUseCase = class EditEventUseCase {
-    _eventRepository;
     constructor(_eventRepository) {
         this._eventRepository = _eventRepository;
     }
-    async execute(eventId, data) {
-        const event = await this._eventRepository.findOne({ eventId });
-        if (!event) {
-            throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        }
-        await this._eventRepository.update({ eventId: event.eventId }, data);
+    execute(eventId, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const event = yield this._eventRepository.findOne({ eventId });
+            if (!event) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_2.HTTP_STATUS.NOT_FOUND);
+            }
+            yield this._eventRepository.update({ eventId: event.eventId }, data);
+        });
     }
 };
-EditEventUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IEventRepository")),
+exports.EditEventUseCase = EditEventUseCase;
+exports.EditEventUseCase = EditEventUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IEventRepository")),
     __metadata("design:paramtypes", [Object])
 ], EditEventUseCase);
-export { EditEventUseCase };
 //# sourceMappingURL=edit-event.usecase.js.map

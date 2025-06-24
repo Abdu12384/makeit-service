@@ -1,4 +1,4 @@
-import { User } from "./user.entity.js";
+import { User } from "./user.entity";
 export interface IClientEntity extends User{
    userId?:string,
    googleVarified?:boolean,

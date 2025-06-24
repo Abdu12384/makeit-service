@@ -1,35 +1,37 @@
-import { Router } from "express";
-import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController, notificationController } from "../../di/resolver.js";
-import { decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
-export class ClientRoute {
-    clientRoute;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClientRoute = void 0;
+const express_1 = require("express");
+const resolver_1 = require("../../di/resolver");
+const auth_middleware_1 = require("../../../interfaceAdapters/middlewares/auth.middleware");
+class ClientRoute {
     constructor() {
-        this.clientRoute = Router();
+        this.clientRoute = (0, express_1.Router)();
         this.setRoute();
     }
     setRoute() {
-        this.clientRoute.put("/client/details", verifyAuth, 
+        this.clientRoute.put("/client/details", auth_middleware_1.verifyAuth, 
         // authorizeRole(["client"])
-        blockStatusMiddleware.checkStatus, (req, res) => {
-            userController.updateUserDetails(req, res);
+        resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.userController.updateUserDetails(req, res);
         });
-        this.clientRoute.put("/client/change-password", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            userController.changePassword(req, res);
+        this.clientRoute.put("/client/change-password", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.userController.changePassword(req, res);
         });
         /** ==========================
          *  saveFCMToken
         * ========================== */
-        this.clientRoute.post("/client/save-fcm-token", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            userController.saveFCMToken(req, res);
+        this.clientRoute.post("/client/save-fcm-token", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.userController.saveFCMToken(req, res);
         });
         /** ==========================
          *  getClientNotifications
         * ========================== */
-        this.clientRoute.get("/client/notifications", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            notificationController.getNotifications(req, res);
+        this.clientRoute.get("/client/notifications", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.notificationController.getNotifications(req, res);
         });
-        this.clientRoute.put("/client/notifications/read", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            notificationController.markNotificationAsRead(req, res);
+        this.clientRoute.put("/client/notifications/read", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.notificationController.markNotificationAsRead(req, res);
         });
         /** ==========================
          *  Client Service Management Routes
@@ -39,41 +41,41 @@ export class ClientRoute {
         // authorizeRole(["client"])
         // blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            serviceController.getAllServices(req, res);
+            resolver_1.serviceController.getAllServices(req, res);
         });
         this.clientRoute.get("/client/services/:serviceId", 
         // verifyAuth,
         // blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            serviceController.getServiceById(req, res);
+            resolver_1.serviceController.getServiceById(req, res);
         });
-        this.clientRoute.put("/client/profile", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+        this.clientRoute.put("/client/profile", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             console.log('client profile');
-            userController.updateUserDetails(req, res);
+            resolver_1.userController.updateUserDetails(req, res);
         });
         /** ==========================
          *  Client Booking Management Routes
         * ========================== */
-        this.clientRoute.get("/client/bookings", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            bookingController.getAllBookings(req, res);
+        this.clientRoute.get("/client/bookings", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.bookingController.getAllBookings(req, res);
         });
-        this.clientRoute.post("/client/services/:serviceId/book", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            bookingController.bookService(req, res);
+        this.clientRoute.post("/client/services/:serviceId/book", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.bookingController.bookService(req, res);
         });
-        this.clientRoute.post("/client/create-booking-payment", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            paymentController.handleBookingPayment(req, res);
+        this.clientRoute.post("/client/create-booking-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.paymentController.handleBookingPayment(req, res);
         });
         this.clientRoute.post("/client/confirm-payment", 
         // verifyAuth,
         // blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            paymentController.confirmPayment(req, res);
+            resolver_1.paymentController.confirmPayment(req, res);
         });
         this.clientRoute.put("/client/cancel-booking/:bookingId", 
         // verifyAuth,
         // blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            bookingController.cancelBooking(req, res);
+            resolver_1.bookingController.cancelBooking(req, res);
         });
         /** ==========================
          *  Client Event  Routes
@@ -82,66 +84,67 @@ export class ClientRoute {
         //  verifyAuth,
         //  blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            eventController.getAllEvents(req, res);
+            resolver_1.eventController.getAllEvents(req, res);
         });
         this.clientRoute.get("/client/events/:eventId", 
         //  verifyAuth,
         //  blockStatusMiddleware.checkStatus as RequestHandler,
         (req, res) => {
-            eventController.getEventById(req, res);
+            resolver_1.eventController.getEventById(req, res);
         });
-        this.clientRoute.get("/client/events/:eventId/check-booking", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            eventController.checkEventBookingAvailability(req, res);
+        this.clientRoute.get("/client/events/:eventId/check-booking", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.eventController.checkEventBookingAvailability(req, res);
         });
         /** ==========================
          *  Client Ticket  Routes
         * ========================== */
-        this.clientRoute.get("/client/tickets", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            ticketController.getAllTicketsByClientId(req, res);
+        this.clientRoute.get("/client/tickets", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.ticketController.getAllTicketsByClientId(req, res);
         });
-        this.clientRoute.post("/client/create-ticket", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            ticketController.createTicket(req, res);
+        this.clientRoute.post("/client/create-ticket", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.ticketController.createTicket(req, res);
         });
-        this.clientRoute.post("/client/confirm-ticket-payment", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            ticketController.confirmTicketAndPayment(req, res);
+        this.clientRoute.post("/client/confirm-ticket-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.ticketController.confirmTicketAndPayment(req, res);
         });
-        this.clientRoute.put("/client/cancel-ticket/:ticketId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            ticketController.cancelTicket(req, res);
+        this.clientRoute.put("/client/cancel-ticket/:ticketId", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.ticketController.cancelTicket(req, res);
         });
         /** ==========================
          *  Client Wallet Management Routes
         * ========================== */
-        this.clientRoute.get("/client/wallet", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            walletController.getWalletById(req, res);
+        this.clientRoute.get("/client/wallet", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.walletController.getWalletById(req, res);
         });
         /** ==========================
          *  Client Review Management Routes
          * ========================== */
-        this.clientRoute.get("/client/reviews", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            reviewController.getAllReviews(req, res);
+        this.clientRoute.get("/client/reviews", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.reviewController.getAllReviews(req, res);
         });
-        this.clientRoute.post("/client/review", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            reviewController.createReview(req, res);
+        this.clientRoute.post("/client/review", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.reviewController.createReview(req, res);
         });
         /** ==========================
          *  Client Vendor Work Sample Management Routes
          * ========================== */
-        this.clientRoute.get("/client/work-sample/:vendorId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            workSampleController.getAllWorkSamplesByVendorId(req, res);
+        this.clientRoute.get("/client/work-sample/:vendorId", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.workSampleController.getAllWorkSamplesByVendorId(req, res);
         });
         /** ==========================
          *  Client Session Management Routes
         * ========================== */
         // logout
-        this.clientRoute.post('/client/logout', verifyAuth, 
+        this.clientRoute.post('/client/logout', auth_middleware_1.verifyAuth, 
         // authorizeRole(["client"])
-        blockStatusMiddleware.checkStatus, (req, res) => {
-            authController.logout(req, res);
+        resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.authController.logout(req, res);
         });
-        this.clientRoute.post("/client/refresh-token", decodeToken, (req, res) => {
+        this.clientRoute.post("/client/refresh-token", auth_middleware_1.decodeToken, (req, res) => {
             console.log("refreshing client", req.body);
-            authController.handleTokenRefresh(req, res);
+            resolver_1.authController.handleTokenRefresh(req, res);
         });
     }
 }
+exports.ClientRoute = ClientRoute;
 //# sourceMappingURL=clientRoute.js.map

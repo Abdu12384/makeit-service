@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,37 +11,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserExistenceService = void 0;
+const tsyringe_1 = require("tsyringe");
 let UserExistenceService = class UserExistenceService {
-    _clientRepository;
-    _vendorRepository;
-    _adminRepository;
     constructor(_clientRepository, _vendorRepository, _adminRepository) {
         this._clientRepository = _clientRepository;
         this._vendorRepository = _vendorRepository;
         this._adminRepository = _adminRepository;
     }
-    async findUserByEmail(email) {
-        const [client, admin, vendor] = await Promise.all([
-            this._clientRepository.findOne({ email }),
-            this._adminRepository.findOne({ email }),
-            this._vendorRepository.findOne({ email }),
-        ]);
-        if (client)
-            return { exists: true, user: client, role: 'client' };
-        if (admin)
-            return { exists: true, user: admin, role: 'admin' };
-        if (vendor)
-            return { exists: true, user: vendor, role: 'vendor' };
-        return { exists: false, user: null, role: null };
+    findUserByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [client, admin, vendor] = yield Promise.all([
+                this._clientRepository.findOne({ email }),
+                this._adminRepository.findOne({ email }),
+                this._vendorRepository.findOne({ email }),
+            ]);
+            if (client)
+                return { exists: true, user: client, role: 'client' };
+            if (admin)
+                return { exists: true, user: admin, role: 'admin' };
+            if (vendor)
+                return { exists: true, user: vendor, role: 'vendor' };
+            return { exists: false, user: null, role: null };
+        });
     }
 };
-UserExistenceService = __decorate([
-    injectable(),
-    __param(0, inject('IClientRepository')),
-    __param(1, inject('IVendorRepository')),
-    __param(2, inject('IAdminRepository')),
+exports.UserExistenceService = UserExistenceService;
+exports.UserExistenceService = UserExistenceService = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)('IClientRepository')),
+    __param(1, (0, tsyringe_1.inject)('IVendorRepository')),
+    __param(2, (0, tsyringe_1.inject)('IAdminRepository')),
     __metadata("design:paramtypes", [Object, Object, Object])
 ], UserExistenceService);
-export { UserExistenceService };
 //# sourceMappingURL=user-existence.service.js.map

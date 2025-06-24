@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe"
-import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface.js"
-import { IEditCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/edit-category-usecase.interface.js"
-import { CustomError } from "../../domain/utils/custom.error.js"
-import { HTTP_STATUS } from "../../shared/constants.js"
+import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface"
+import { IEditCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/edit-category-usecase.interface"
+import { CustomError } from "../../domain/utils/custom.error"
+import { HTTP_STATUS } from "../../shared/constants"
 
 
 

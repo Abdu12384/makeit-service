@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe"
-import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface.js"
-import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface.js"
-import { IServiceRepository } from "../../domain/interface/repositoryInterfaces/service/service-repository.interface.js"
-import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface.js"
-import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository.js"
-import { IBookingEntity } from "../../domain/entities/booking.entity.js"
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js"
+import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface"
+import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface"
+import { IServiceRepository } from "../../domain/interface/repositoryInterfaces/service/service-repository.interface"
+import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface"
+import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository"
+import { IBookingEntity } from "../../domain/entities/booking.entity"
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper"
 
 
 

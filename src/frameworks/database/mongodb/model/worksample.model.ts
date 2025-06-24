@@ -1,6 +1,6 @@
 import { model, ObjectId } from "mongoose";
-import { IWorkSampleEntity } from "../../../../domain/entities/worksample.entity.js";
-import { workSampleSchema } from "../schema/worksample.schema.js";
+import { IWorkSampleEntity } from "../../../../domain/entities/worksample.entity";
+import { workSampleSchema } from "../schema/worksample.schema";
 
 
 

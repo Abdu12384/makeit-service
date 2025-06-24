@@ -1,80 +1,83 @@
-import { Router } from "express";
-import { authController, blockStatusMiddleware, bookingController, categoryController, dashboardController, eventController, userController, vendorController, walletController } from "../../di/resolver.js";
-import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware.js";
-export class AdminRoute {
-    adminRoute;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AdminRoute = void 0;
+const express_1 = require("express");
+const resolver_1 = require("../../di/resolver");
+const auth_middleware_1 = require("../../../interfaceAdapters/middlewares/auth.middleware");
+class AdminRoute {
     constructor() {
-        this.adminRoute = Router();
+        this.adminRoute = (0, express_1.Router)();
         this.setRoute();
     }
     setRoute() {
         /** =========================
          *  User Management Routes
          * ========================= */
-        this.adminRoute.get('/admin/users', verifyAuth, authorizeRole(['admin']), (req, res) => {
-            userController.getAllUsers(req, res);
+        this.adminRoute.get('/admin/users', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), (req, res) => {
+            resolver_1.userController.getAllUsers(req, res);
         });
-        this.adminRoute.patch('/admin/user/status', verifyAuth, authorizeRole(['admin']), (req, res) => {
-            userController.updateUserStatus(req, res);
+        this.adminRoute.patch('/admin/user/status', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), (req, res) => {
+            resolver_1.userController.updateUserStatus(req, res);
         });
         /** ==========================
             *  Vendor Management Routes
            * ========================== */
-        this.adminRoute.get("/admin/vendors", verifyAuth, authorizeRole(['admin']), (req, res) => {
-            vendorController.getAllVendors(req, res);
+        this.adminRoute.get("/admin/vendors", auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), (req, res) => {
+            resolver_1.vendorController.getAllVendors(req, res);
         });
-        this.adminRoute.put('/admin/vendor/:vendorId', verifyAuth, authorizeRole(['admin']), (req, res) => {
-            vendorController.updateVendorStatus(req, res);
+        this.adminRoute.put('/admin/vendor/:vendorId', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), (req, res) => {
+            resolver_1.vendorController.updateVendorStatus(req, res);
         });
         /** ==========================
          *  Session  Routes
         * ========================== */
-        this.adminRoute.post('/admin/refresh-token', decodeToken, (req, res) => {
+        this.adminRoute.post('/admin/refresh-token', auth_middleware_1.decodeToken, (req, res) => {
             console.log("refreshing Admin", req.body);
-            authController.handleTokenRefresh(req, res);
+            resolver_1.authController.handleTokenRefresh(req, res);
         });
-        this.adminRoute.get("/admin/refresh-session", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            userController.refreshSession(req, res);
+        this.adminRoute.get("/admin/refresh-session", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.userController.refreshSession(req, res);
         });
         /** ==========================
          *  Dashboard Routes
         * ========================== */
-        this.adminRoute.get('/admin/dashboard', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            dashboardController.getAllDashboardData(req, res);
+        this.adminRoute.get('/admin/dashboard', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.dashboardController.getAllDashboardData(req, res);
         });
         /** ==========================
          *  Category Management Routes
         * ========================== */
-        this.adminRoute.post('/admin/category', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            categoryController.createCategory(req, res);
+        this.adminRoute.post('/admin/category', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.categoryController.createCategory(req, res);
         });
-        this.adminRoute.get('/admin/category', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            categoryController.getAllCategories(req, res);
+        this.adminRoute.get('/admin/category', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.categoryController.getAllCategories(req, res);
         });
-        this.adminRoute.patch('/admin/category/:id', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            categoryController.updateCategoryStatus(req, res);
+        this.adminRoute.patch('/admin/category/:id', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.categoryController.updateCategoryStatus(req, res);
         });
-        this.adminRoute.put('/admin/category/:id', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            categoryController.editCategory(req, res);
+        this.adminRoute.put('/admin/category/:id', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.categoryController.editCategory(req, res);
         });
         /** ==========================
          *  Wallet Management Routes
         * ========================== */
-        this.adminRoute.get('/admin/wallet', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            walletController.getWalletById(req, res);
+        this.adminRoute.get('/admin/wallet', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.walletController.getWalletById(req, res);
         });
-        this.adminRoute.get('/admin/events', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
+        this.adminRoute.get('/admin/events', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             console.log(req.body),
-                eventController.getAllEvents(req, res);
+                resolver_1.eventController.getAllEvents(req, res);
         });
-        this.adminRoute.get('/admin/bookings', verifyAuth, authorizeRole(['admin']), blockStatusMiddleware.checkStatus, (req, res) => {
-            bookingController.getAllBookings(req, res);
+        this.adminRoute.get('/admin/bookings', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.bookingController.getAllBookings(req, res);
         });
         // logout
         // ---------
-        this.adminRoute.post("/admin/logout", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
-            authController.logout(req, res);
+        this.adminRoute.post("/admin/logout", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.authController.logout(req, res);
         });
     }
 }
+exports.AdminRoute = AdminRoute;
 //# sourceMappingURL=adminRoute.js.map

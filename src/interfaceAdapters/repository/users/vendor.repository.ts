@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
-import { IVendorModel, VendorModel } from "../../../frameworks/database/mongodb/model/vendor.model.js";
-import { BaseRepository } from "../base.repository.js";
+import { IVendorModel, VendorModel } from "../../../frameworks/database/mongodb/model/vendor.model";
+import { BaseRepository } from "../base.repository";
 
 
 @injectable()

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,35 +11,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CheckEventBookingAvliblityUseCase = void 0;
+const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let CheckEventBookingAvliblityUseCase = class CheckEventBookingAvliblityUseCase {
-    _eventRepository;
-    _ticketRepository;
     constructor(_eventRepository, _ticketRepository) {
         this._eventRepository = _eventRepository;
         this._ticketRepository = _ticketRepository;
     }
-    async execute(eventId, userId, ticketCount) {
-        const event = await this._eventRepository.findOne({ eventId });
-        if (!event)
-            throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        const ticket = await this._ticketRepository.findOne({ eventId, clientId: userId });
-        console.log(ticket);
-        if (ticket?.ticketCount + ticketCount > event.maxTicketsPerUser) {
-            throw new CustomError(`You have already purchased the maximum allowed tickets. You can only book ${event.maxTicketsPerUser - ticket?.ticketCount}`, HTTP_STATUS.BAD_REQUEST);
-        }
-        if (event.totalTicket === event.ticketPurchased) {
-            throw new CustomError("Event is already full", HTTP_STATUS.BAD_REQUEST);
-        }
+    execute(eventId, userId, ticketCount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const event = yield this._eventRepository.findOne({ eventId });
+            if (!event)
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
+            const ticket = yield this._ticketRepository.findOne({ eventId, clientId: userId });
+            console.log(ticket);
+            if ((ticket === null || ticket === void 0 ? void 0 : ticket.ticketCount) + ticketCount > event.maxTicketsPerUser) {
+                throw new custom_error_1.CustomError(`You have already purchased the maximum allowed tickets. You can only book ${event.maxTicketsPerUser - (ticket === null || ticket === void 0 ? void 0 : ticket.ticketCount)}`, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            if (event.totalTicket === event.ticketPurchased) {
+                throw new custom_error_1.CustomError("Event is already full", constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+        });
     }
 };
-CheckEventBookingAvliblityUseCase = __decorate([
-    injectable(),
-    __param(0, inject("IEventRepository")),
-    __param(1, inject("ITicketRepository")),
+exports.CheckEventBookingAvliblityUseCase = CheckEventBookingAvliblityUseCase;
+exports.CheckEventBookingAvliblityUseCase = CheckEventBookingAvliblityUseCase = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IEventRepository")),
+    __param(1, (0, tsyringe_1.inject)("ITicketRepository")),
     __metadata("design:paramtypes", [Object, Object])
 ], CheckEventBookingAvliblityUseCase);
-export { CheckEventBookingAvliblityUseCase };
 //# sourceMappingURL=check-event-booking-avliblity.usecase.js.map

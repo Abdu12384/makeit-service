@@ -1,12 +1,12 @@
 import { inject, injectable } from "tsyringe";
-import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface.js";
-import { IWalletEntity } from "../../domain/entities/wallet.entity.js";
-import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { ITransactionsEntity } from "../../domain/entities/transaction.entity.js";
-import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
+import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
+import { IWalletEntity } from "../../domain/entities/wallet.entity";
+import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
+import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
 
 
 

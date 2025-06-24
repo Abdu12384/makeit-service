@@ -1,5 +1,8 @@
-import { Schema } from 'mongoose';
-export const clientSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.clientSchema = void 0;
+const mongoose_1 = require("mongoose");
+exports.clientSchema = new mongoose_1.Schema({
     userId: {
         type: String,
         required: false

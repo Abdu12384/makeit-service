@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { messaging } from "../../shared/config.js";
-import { INotificationRepository } from "../../domain/interface/repositoryInterfaces/notification/notification-repository.interface.js";
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { getMessaging } from "../../shared/config";
+import { INotificationRepository } from "../../domain/interface/repositoryInterfaces/notification/notification-repository.interface";
 
 
 
@@ -54,6 +54,8 @@ export class pushNotificationService implements IPushNotificationService{
         body
       );
     }
+
+    const messaging = getMessaging();
 
     if(user?.fcmToken) {
         await messaging.send({

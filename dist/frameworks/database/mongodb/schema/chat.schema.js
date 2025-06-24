@@ -1,5 +1,8 @@
-import { Schema } from "mongoose";
-export const chatSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.chatSchema = void 0;
+const mongoose_1 = require("mongoose");
+exports.chatSchema = new mongoose_1.Schema({
     chatId: {
         type: String,
         required: true

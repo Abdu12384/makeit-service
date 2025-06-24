@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/users/change-password-usecase.interface.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface.js";
+import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/users/change-password-usecase.interface";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
 
 
 

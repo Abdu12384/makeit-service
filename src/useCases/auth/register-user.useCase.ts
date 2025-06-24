@@ -1,15 +1,15 @@
 import { injectable, inject} from "tsyringe";
-import { IClientEntity } from "../../domain/entities/client.entity.js";
-import { IRegisterUseCase } from "../../domain/interface/useCaseInterface/auth/register.usecase.js";
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface.js";
-import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface.js";
-import { UserDTO } from "../../shared/dtos/user.dto.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants.js";
-import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface.js";
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface.js";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { IVendorEntity } from "../../domain/entities/vendor.entity.js";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { IRegisterUseCase } from "../../domain/interface/useCaseInterface/auth/register.usecase";
+import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
+import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
+import { UserDTO } from "../../shared/dtos/user.dto";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface";
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
 
 @injectable()
 export class RegisterClientUseCase implements IRegisterUseCase{

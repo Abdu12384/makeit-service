@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import { IPaymentController } from "../../domain/interface/controllerInterfaces/payment/payment-cantroller.interface.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface.js";
-import { IBookingConfirmPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-confirm-payment-usecase.interface.js";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
+import { IPaymentController } from "../../domain/interface/controllerInterfaces/payment/payment-cantroller.interface";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
+import { HTTP_STATUS } from "../../shared/constants";
+import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface";
+import { IBookingConfirmPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-confirm-payment-usecase.interface";
+import { CustomRequest } from "../middlewares/auth.middleware";
 
 
 

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,17 +11,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { inject, injectable } from "tsyringe";
-import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
-import { CustomError } from "../../domain/utils/custom.error.js";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserController = void 0;
+const tsyringe_1 = require("tsyringe");
+const constants_1 = require("../../shared/constants");
+const error_handler_1 = require("../../shared/utils/error.handler");
+const custom_error_1 = require("../../domain/utils/custom.error");
 let UserController = class UserController {
-    _getAllUserUserCase;
-    _updateUserStatusUseCase;
-    _getUserDetailsUseCase;
-    _updateUserDetailsUseCase;
-    _changePasswordUseCase;
-    _saveFCMTokenUseCase;
     constructor(_getAllUserUserCase, _updateUserStatusUseCase, _getUserDetailsUseCase, _updateUserDetailsUseCase, _changePasswordUseCase, _saveFCMTokenUseCase) {
         this._getAllUserUserCase = _getAllUserUserCase;
         this._updateUserStatusUseCase = _updateUserStatusUseCase;
@@ -32,141 +49,153 @@ let UserController = class UserController {
     // ══════════════════════════════════════════════════════════
     //  Get All Users (Role Based)
     // ══════════════════════════════════════════════════════════
-    async getAllUsers(req, res) {
-        try {
-            const { page = 1, limit = 10, search = "", userType } = req.query;
-            const pageNumber = Number(page);
-            const pageSize = Number(limit);
-            const userTypeString = typeof userType === "string" ? userType : "client";
-            const searchTermString = typeof search === "string" ? search : "";
-            if (userType === "vendor") {
-                const { users, total } = await this._getAllUserUserCase.execute("vendor", pageNumber, pageSize, searchTermString);
-                res.status(HTTP_STATUS.OK).json({
+    getAllUsers(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { page = 1, limit = 10, search = "", userType } = req.query;
+                const pageNumber = Number(page);
+                const pageSize = Number(limit);
+                const userTypeString = typeof userType === "string" ? userType : "client";
+                const searchTermString = typeof search === "string" ? search : "";
+                if (userType === "vendor") {
+                    const { users, total } = yield this._getAllUserUserCase.execute("vendor", pageNumber, pageSize, searchTermString);
+                    res.status(constants_1.HTTP_STATUS.OK).json({
+                        success: true,
+                        users,
+                        totalPages: total,
+                        currentPages: pageNumber
+                    });
+                    return;
+                }
+                const { users, total } = yield this._getAllUserUserCase.execute(userTypeString, pageNumber, pageSize, searchTermString);
+                res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     users,
                     totalPages: total,
                     currentPages: pageNumber
                 });
-                return;
             }
-            const { users, total } = await this._getAllUserUserCase.execute(userTypeString, pageNumber, pageSize, searchTermString);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                users,
-                totalPages: total,
-                currentPages: pageNumber
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //  Update User Status
     // ══════════════════════════════════════════════════════════
-    async updateUserStatus(req, res) {
-        try {
-            const { userType, userId } = req.query;
-            await this._updateUserStatusUseCase.execute(userType, userId);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    updateUserStatus(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userType, userId } = req.query;
+                yield this._updateUserStatusUseCase.execute(userType, userId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //   Refresh Session
     // ══════════════════════════════════════════════════════════
-    async refreshSession(req, res) {
-        try {
-            const { userId, role } = req.user;
-            if (!userId || !role) {
-                res.status(HTTP_STATUS.UNAUTHORIZED).json({
-                    success: false,
-                    message: ERROR_MESSAGES.INVALID_TOKEN,
+    refreshSession(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId, role } = req.user;
+                if (!userId || !role) {
+                    res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
+                        success: false,
+                        message: constants_1.ERROR_MESSAGES.INVALID_TOKEN,
+                    });
+                    return;
+                }
+                const user = yield this._getUserDetailsUseCase.execute(userId, role);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    user: user,
                 });
-                return;
             }
-            const user = await this._getUserDetailsUseCase.execute(userId, role);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                user: user,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //   Update User Details
     // ══════════════════════════════════════════════════════════
-    async updateUserDetails(req, res) {
-        try {
-            const data = req.body;
-            console.log(data);
-            const { userId, role } = req.user;
-            const updatedUser = await this._updateUserDetailsUseCase.execute(userId, role, data);
-            if (!updatedUser) {
-                throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+    updateUserDetails(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const data = req.body;
+                console.log(data);
+                const { userId, role } = req.user;
+                const updatedUser = yield this._updateUserDetailsUseCase.execute(userId, role, data);
+                if (!updatedUser) {
+                    throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
+                }
+                const { password } = updatedUser, userWithoutPassword = __rest(updatedUser, ["password"]);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    user: userWithoutPassword,
+                });
             }
-            const { password, ...userWithoutPassword } = updatedUser;
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-                user: userWithoutPassword,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //   Change Password
     // ══════════════════════════════════════════════════════════
-    async changePassword(req, res) {
-        try {
-            const { currentPassword, newPassword } = req.body;
-            const { userId, role } = req.user;
-            const updatedUser = await this._changePasswordUseCase.execute(userId, currentPassword, newPassword, role);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    changePassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { currentPassword, newPassword } = req.body;
+                const { userId, role } = req.user;
+                const updatedUser = yield this._changePasswordUseCase.execute(userId, currentPassword, newPassword, role);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
     // ══════════════════════════════════════════════════════════
     //   Save FCM Token
     // ══════════════════════════════════════════════════════════
-    async saveFCMToken(req, res) {
-        try {
-            const { token } = req.body;
-            const { userId, role } = req.user;
-            const updatedUser = await this._saveFCMTokenUseCase.execute(userId, token, role);
-            res.status(HTTP_STATUS.OK).json({
-                success: true,
-                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-            });
-        }
-        catch (error) {
-            handleErrorResponse(res, error);
-        }
+    saveFCMToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { token } = req.body;
+                const { userId, role } = req.user;
+                const updatedUser = yield this._saveFCMTokenUseCase.execute(userId, token, role);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
     }
 };
-UserController = __decorate([
-    injectable(),
-    __param(0, inject("IGetAllUsersUseCase")),
-    __param(1, inject("IUpdateUserStatusUseCase")),
-    __param(2, inject("IGetUserDetailsUseCase")),
-    __param(3, inject("IUpdateUserDetailsUseCase")),
-    __param(4, inject("IChangePasswordUseCase")),
-    __param(5, inject("ISaveFCMTokenUseCase")),
+exports.UserController = UserController;
+exports.UserController = UserController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("IGetAllUsersUseCase")),
+    __param(1, (0, tsyringe_1.inject)("IUpdateUserStatusUseCase")),
+    __param(2, (0, tsyringe_1.inject)("IGetUserDetailsUseCase")),
+    __param(3, (0, tsyringe_1.inject)("IUpdateUserDetailsUseCase")),
+    __param(4, (0, tsyringe_1.inject)("IChangePasswordUseCase")),
+    __param(5, (0, tsyringe_1.inject)("ISaveFCMTokenUseCase")),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], UserController);
-export { UserController };
 //# sourceMappingURL=user.controller.js.map

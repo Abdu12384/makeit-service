@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IWalletController } from "../../domain/interface/controllerInterfaces/wallet/wallet-controller.interface.js";
+import { IWalletController } from "../../domain/interface/controllerInterfaces/wallet/wallet-controller.interface";
 import { Request, Response } from "express";
-import { CustomRequest } from "../middlewares/auth.middleware.js";
-import { HTTP_STATUS } from "../../shared/constants.js";
-import { handleErrorResponse } from "../../shared/utils/error.handler.js";
+import { CustomRequest } from "../middlewares/auth.middleware";
+import { HTTP_STATUS } from "../../shared/constants";
+import { handleErrorResponse } from "../../shared/utils/error.handler";
 import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface";
 
 

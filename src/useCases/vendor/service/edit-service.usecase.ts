@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IEditServiceUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/edit-service-usecase.interface.js";
-import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface.js";
-import { IServiceEntity } from "../../../domain/entities/service.entity.js";
-import { CustomError } from "../../../domain/utils/custom.error.js";  
-import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants.js";
+import { IEditServiceUseCase } from "../../../domain/interface/useCaseInterface/vendor/service/edit-service-usecase.interface";
+import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface";
+import { IServiceEntity } from "../../../domain/entities/service.entity";
+import { CustomError } from "../../../domain/utils/custom.error";  
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 
 

@@ -1,5 +1,5 @@
 import { Request,Response,Router } from "express";
-import { authController} from "../../di/resolver.js";
+import { authController} from "../../di/resolver";
 
 
 
