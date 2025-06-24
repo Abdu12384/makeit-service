@@ -11,6 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { inject, injectable } from "tsyringe";
+import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 let BookingPaymentUseCase = class BookingPaymentUseCase {
     _bookingRepository;
     _serviceRepository;
@@ -22,30 +23,76 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
         this._paymentService = _paymentService;
         this._paymentRepository = _paymentRepository;
     }
-    async confirmPayment(paymentIntentId, bookingId) {
-        const booking = await this._bookingRepository.findOne({ bookingId });
+    async confirmPayment(paymentIntentId, bookingId, bookingDetails, clientId) {
+        let booking = await this._bookingRepository.findOne({ bookingId });
         console.log("booking", booking);
-        if (!booking)
-            throw new Error("Booking not found");
-        if (booking.status != 'Completed')
-            throw new Error('This Booking is not completed');
-        if (booking.paymentStatus == "Successfull")
-            throw new Error('This booking is Already paid');
-        const service = await this._serviceRepository.findOne({ serviceId: booking.serviceId });
-        if (!service) {
-            throw new Error("Service not found");
+        let serviceId = booking?.serviceId || bookingDetails.serviceId;
+        const service = await this._serviceRepository.findOne({ serviceId });
+        const totalAmount = service?.servicePrice;
+        const advanceAmount = Math.round(totalAmount * 0.3);
+        const balanceAmount = totalAmount - advanceAmount;
+        let amountToPay;
+        if (!booking) {
+            // New booking → pay advance
+            const newBookingId = generateUniqueId("booking");
+            booking = await this._bookingRepository.save({
+                bookingId: newBookingId,
+                clientId,
+                serviceId: bookingDetails.serviceId,
+                email: bookingDetails.email,
+                phone: bookingDetails.phone,
+                vendorId: bookingDetails.vendorId,
+                date: [bookingDetails.date],
+                status: "Pending",
+                paymentStatus: "AdvancePaid",
+                vendorApproval: "Pending",
+                balanceAmount: balanceAmount,
+            });
+            amountToPay = advanceAmount;
         }
-        const totalAmount = service.servicePrice;
-        const clientStripeId = await this._paymentService.createPaymentIntent(totalAmount, "service", { bookingId });
+        else {
+            if (booking.paymentStatus === "Successfull") {
+                throw new Error("This booking is already fully paid.");
+            }
+            if (booking.paymentStatus === "Pending") {
+                // First advance payment for existing booking
+                amountToPay = advanceAmount;
+                await this._bookingRepository.updateOne({ bookingId: booking.bookingId }, {
+                    $set: {
+                        paymentStatus: "AdvancePaid",
+                        balanceAmount: balanceAmount,
+                        status: "Confirmed",
+                    },
+                });
+            }
+            else if (booking.paymentStatus === "AdvancePaid") {
+                // Balance payment
+                if (!booking.balanceAmount || booking.balanceAmount <= 0) {
+                    throw new Error("No balance amount available to pay.");
+                }
+                amountToPay = booking.balanceAmount;
+                await this._bookingRepository.updateOne({ bookingId: booking.bookingId }, {
+                    $set: {
+                        paymentStatus: "Successfull",
+                        balanceAmount: 0,
+                    },
+                });
+            }
+            else {
+                throw new Error("Invalid payment status.");
+            }
+        }
+        console.log("amountToPay", amountToPay);
+        const clientStripeId = await this._paymentService.createPaymentIntent(amountToPay, "service", { bookingId });
         const payment = await this._paymentRepository.save({
             clientId: booking.clientId,
             receiverId: service?.vendorId,
             bookingId: booking.bookingId,
-            amount: totalAmount,
+            amount: amountToPay,
             currency: "INR",
             purpose: "serviceBooking",
             status: "pending",
-            paymentId: paymentIntentId
+            paymentId: paymentIntentId,
         });
         console.log("payment", payment);
         return { booking, clientStripeId };

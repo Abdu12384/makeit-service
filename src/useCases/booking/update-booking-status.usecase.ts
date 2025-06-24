@@ -38,13 +38,13 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
         
         if (status === "Approved" ) {
 
-          const conflict = await this._bookingRepository.checkVendorBookingConflict(
-            booking.vendorId,
-            booking.date[0] as Date,
-            booking.bookingId as string,
-          );
+          // const conflict = await this._bookingRepository.checkVendorBookingConflict(
+          //   booking.vendorId,
+          //   booking.date[0] as Date,
+          //   booking.bookingId as string,
+          // );
         
-          if (conflict) throw new CustomError("You already have an approved booking on this date.",HTTP_STATUS.BAD_REQUEST);
+          // if (conflict) throw new CustomError("You already have an approved booking on this date.",HTTP_STATUS.BAD_REQUEST);
 
           booking.vendorApproval = "Approved";
           booking.status = "Pending";

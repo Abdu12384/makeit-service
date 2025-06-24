@@ -8,6 +8,7 @@ import { ICreateBookingUseCase } from "../../domain/interface/useCaseInterface/b
 import { IGetAllBookingUseCase } from "../../domain/interface/useCaseInterface/booking/get-all-booking-usecase.interface.js";
 import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface.js";
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface.js";
+import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface.js";
 
 
 
@@ -25,6 +26,8 @@ export class BookingController implements IBookingController{
     private _updateBookingStatusUseCase: IUpdateBookingStatusUseCase,  
     @inject("ICancelBookingUseCase") 
     private _cancelBookingUseCase: ICancelBookingUseCase, 
+    @inject("IRescheduleBookingUseCase") 
+    private _rescheduleBookingUseCase: IRescheduleBookingUseCase,
 
     ){}
 
@@ -142,5 +145,31 @@ export class BookingController implements IBookingController{
         }
     }
 
+
+    // ══════════════════════════════════════════════════════════
+    //  Reschedule Booking
+    // ══════════════════════════════════════════════════════════
+
+     async rescheduleBooking(req:Request,res:Response): Promise<void>{
+        try {
+            const {bookingId} = req.params
+            const {selectedDate,rescheduleReason} = req.body
+            console.log('bookingId',bookingId)
+            console.log('selectedDate',selectedDate)
+            console.log('rescheduleReason',rescheduleReason)
+            const booking = await this._rescheduleBookingUseCase.execute(
+                bookingId,
+                selectedDate,
+                rescheduleReason,
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                booking,
+            })
+        } catch (error) {
+            handleErrorResponse(res, error)
+        }
+    }
     
 }

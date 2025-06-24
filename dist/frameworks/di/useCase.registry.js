@@ -66,6 +66,7 @@ import { GetNotificationByIdUseCase } from "../../useCases/notification/get-noti
 import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase.js";
 import { CheckEventBookingAvliblityUseCase } from "../../useCases/event/check-event-booking-avliblity.usecase.js";
 import { BlockEventUseCase } from "../../useCases/event/block-event-usecase.js";
+import { RescheduleBookingUseCase } from "../../useCases/booking/resedul-booking.usecase.js";
 export class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -271,6 +272,9 @@ export class UseCaseRegistry {
         });
         container.register("IBlockEventUseCase", {
             useClass: BlockEventUseCase
+        });
+        container.register("IRescheduleBookingUseCase", {
+            useClass: RescheduleBookingUseCase
         });
     }
 }

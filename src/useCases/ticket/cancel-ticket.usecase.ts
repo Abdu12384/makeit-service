@@ -129,7 +129,7 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
       eventDetails.ticketPurchased = Math.max(0, eventDetails.ticketPurchased! - cancelCount); 
       eventDetails.attendeesCount = Math.max(0, eventDetails.attendeesCount - cancelCount); 
 
-      eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount! - cancelCount); 
+      eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount! - cancelCount) || 0; 
 
       await this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
 

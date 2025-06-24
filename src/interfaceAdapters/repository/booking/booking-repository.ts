@@ -61,6 +61,7 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
                               email: 1,
                               status: 1,
                               vendorApproval: 1,
+                              balanceAmount: 1,
                               paymentStatus: 1,
                               isComplete: 1,
                               createdAt: 1,
@@ -137,6 +138,12 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
   
     return !!conflict;  
   }
+
+  // base.repository.ts
+async updateOne(filter: any, updateData: any): Promise<void> {
+    await this.model.updateOne(filter, updateData).exec();
+  }
+  
   
 
 }

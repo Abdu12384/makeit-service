@@ -11,45 +11,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { inject, injectable } from "tsyringe";
-import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
 import { NotificationType } from "../../shared/dtos/notification.js";
-let CreateBookingUseCase = class CreateBookingUseCase {
+let RescheduleBookingUseCase = class RescheduleBookingUseCase {
     _bookingRepository;
     _pushNotificationService;
     constructor(_bookingRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
         this._pushNotificationService = _pushNotificationService;
     }
-    async execute(serviceId, date, email, phone, vendorId, userId) {
-        const bookingId = generateUniqueId("booking");
-        const bookingsDetails = await this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
-        const bookedDate = bookingsDetails?.date;
-        console.log("bookeddate", bookedDate);
-        // if(bookedDate && bookingsDetails.vendorApproval === "Approved"){
-        //   if (Array.isArray(bookedDate) && bookedDate.length > 0) {
-        //     throw new CustomError(
-        //       `${new Date(bookedDate[0]).toDateString()} is already booked. Please select another date.`,
-        //       HTTP_STATUS.BAD_REQUEST
-        //     );
-        //   }
-        // }
-        const booking = await this._bookingRepository.save({
-            bookingId,
-            clientId: userId,
-            serviceId,
-            email,
-            phone,
-            vendorId,
-            date: [date],
+    async execute(bookingId, selectedDate, rescheduleReason) {
+        const booking = await this._bookingRepository.findOne({ bookingId });
+        if (!booking) {
+            throw new Error("Booking not found.");
+        }
+        await this._bookingRepository.updateOne({ bookingId }, {
+            $set: {
+                date: [selectedDate],
+                status: "Rescheduled",
+                rescheduleReason,
+            },
         });
-        await this._pushNotificationService.sendNotification(vendorId, NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
+        this._pushNotificationService.sendNotification(booking.clientId, NotificationType.RESCHEDULE_SERVICE_BOOKING, `Your booking has been rescheduled to ${selectedDate}.`, "booking", "client");
     }
 };
-CreateBookingUseCase = __decorate([
+RescheduleBookingUseCase = __decorate([
     injectable(),
     __param(0, inject("IBookingRepository")),
     __param(1, inject("IPushNotificationService")),
     __metadata("design:paramtypes", [Object, Object])
-], CreateBookingUseCase);
-export { CreateBookingUseCase };
-//# sourceMappingURL=create-booking.usecase.js.map
+], RescheduleBookingUseCase);
+export { RescheduleBookingUseCase };
+//# sourceMappingURL=resedul-booking.usecase.js.map

@@ -81,6 +81,9 @@ export class VendorRoute {
         this.vendorRoute.get("/vendor/events/attendees/:eventId", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
             eventController.getAttendeesById(req, res);
         });
+        this.vendorRoute.patch("/vendor/bookings/:bookingId/reschedule", verifyAuth, blockStatusMiddleware.checkStatus, (req, res) => {
+            bookingController.rescheduleBooking(req, res);
+        });
         /** ==========================
          *  Ticket Management Routes
         * ========================== */

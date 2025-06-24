@@ -188,6 +188,12 @@ export class VendorRoute {
             eventController.getAttendeesById(req,res)
           })
 
+          this.vendorRoute.patch("/vendor/bookings/:bookingId/reschedule",
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
+            (req: Request, res: Response) => {
+              bookingController.rescheduleBooking(req,res)
+            })
 
 
 

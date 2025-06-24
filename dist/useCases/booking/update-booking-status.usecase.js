@@ -30,9 +30,12 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
             this._mailService.sendCustomEmail(booking.email, "Booking Cancelled", `Your booking has been cancelled. Reason: ${reason || "No reason provided."}`);
         }
         if (status === "Approved") {
-            const conflict = await this._bookingRepository.checkVendorBookingConflict(booking.vendorId, booking.date[0], booking.bookingId);
-            if (conflict)
-                throw new CustomError("You already have an approved booking on this date.", HTTP_STATUS.BAD_REQUEST);
+            // const conflict = await this._bookingRepository.checkVendorBookingConflict(
+            //   booking.vendorId,
+            //   booking.date[0] as Date,
+            //   booking.bookingId as string,
+            // );
+            // if (conflict) throw new CustomError("You already have an approved booking on this date.",HTTP_STATUS.BAD_REQUEST);
             booking.vendorApproval = "Approved";
             booking.status = "Pending";
         }

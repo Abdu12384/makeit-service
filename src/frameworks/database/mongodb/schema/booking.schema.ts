@@ -15,7 +15,7 @@ export const bookingSchema = new Schema<IBookingModel>({
     }],
     paymentStatus: {
         type: String,
-        enum: ["Pending", "Failed", "Successfull", "Refunded"],
+        enum: ["Pending", "Failed", "Successfull", "Refunded",'AdvancePaid','Confirmed','Rescheduled'],
         default: "Pending"
     },
     serviceId: {
@@ -46,7 +46,7 @@ export const bookingSchema = new Schema<IBookingModel>({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Rejected', 'Completed','Cancelled'],
+        enum: ['Pending', 'Rejected', 'Completed','Cancelled','Confirmed'],
         default: "Pending"
     },
     createdAt: {
@@ -56,7 +56,16 @@ export const bookingSchema = new Schema<IBookingModel>({
     isComplete:{
         type:Boolean,
         default:false
-    }
+    },
+    balanceAmount: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      rescheduleReason:{
+        type:String,
+        required:false
+      }
 }, {
     timestamps: true
 })

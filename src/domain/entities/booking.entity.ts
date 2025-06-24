@@ -14,4 +14,6 @@ export interface IBookingEntity {
     status: string
     createdAt: Date
     isComplete: boolean
+    balanceAmount?:number
+    rescheduleReason?:string
 }

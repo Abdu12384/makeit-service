@@ -8,4 +8,5 @@ export interface IBookingRepository extends IBaseRepository<IBookingEntity> {
     findAllWithVendorClient(filter: FilterType, skip: number, limit: number,sort: SortType): Promise<{ items: IBookingEntity[], total: number }>;
     findExactApprovedBookingByVendorAndDate(vendorId: string, date: Date): Promise<IBookingEntity | null>;
     checkVendorBookingConflict(vendorId: string, bookingDate: Date, currentBookingId: string): Promise<boolean>;
+    updateOne(filter: any, updateData: any): Promise<void>;
 }

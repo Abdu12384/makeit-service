@@ -18,11 +18,13 @@ let BookingController = class BookingController {
     _getAllBookingUseCase;
     _updateBookingStatusUseCase;
     _cancelBookingUseCase;
-    constructor(_createBookingUseCase, _getAllBookingUseCase, _updateBookingStatusUseCase, _cancelBookingUseCase) {
+    _rescheduleBookingUseCase;
+    constructor(_createBookingUseCase, _getAllBookingUseCase, _updateBookingStatusUseCase, _cancelBookingUseCase, _rescheduleBookingUseCase) {
         this._createBookingUseCase = _createBookingUseCase;
         this._getAllBookingUseCase = _getAllBookingUseCase;
         this._updateBookingStatusUseCase = _updateBookingStatusUseCase;
         this._cancelBookingUseCase = _cancelBookingUseCase;
+        this._rescheduleBookingUseCase = _rescheduleBookingUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Book Service
@@ -101,6 +103,27 @@ let BookingController = class BookingController {
             handleErrorResponse(res, error);
         }
     }
+    // ══════════════════════════════════════════════════════════
+    //  Reschedule Booking
+    // ══════════════════════════════════════════════════════════
+    async rescheduleBooking(req, res) {
+        try {
+            const { bookingId } = req.params;
+            const { selectedDate, rescheduleReason } = req.body;
+            console.log('bookingId', bookingId);
+            console.log('selectedDate', selectedDate);
+            console.log('rescheduleReason', rescheduleReason);
+            const booking = await this._rescheduleBookingUseCase.execute(bookingId, selectedDate, rescheduleReason);
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                booking,
+            });
+        }
+        catch (error) {
+            handleErrorResponse(res, error);
+        }
+    }
 };
 BookingController = __decorate([
     injectable(),
@@ -108,7 +131,8 @@ BookingController = __decorate([
     __param(1, inject("IGetAllBookingUseCase")),
     __param(2, inject("IUpdateBookingStatusUseCase")),
     __param(3, inject("ICancelBookingUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object])
+    __param(4, inject("IRescheduleBookingUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
 ], BookingController);
 export { BookingController };
 //# sourceMappingURL=booking.controller.js.map

@@ -135,6 +135,8 @@ import { ICheckEventBookingAvliblityUseCase } from "../../domain/interface/useCa
 import { CheckEventBookingAvliblityUseCase } from "../../useCases/event/check-event-booking-avliblity.usecase.js";
 import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface.js";
 import { BlockEventUseCase } from "../../useCases/event/block-event-usecase.js";
+import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface.js";
+import { RescheduleBookingUseCase } from "../../useCases/booking/resedul-booking.usecase.js";
 
 
 
@@ -426,6 +428,10 @@ export class UseCaseRegistry {
 
     container.register<IBlockEventUseCase>("IBlockEventUseCase",{
       useClass: BlockEventUseCase
+    })
+
+    container.register<IRescheduleBookingUseCase>("IRescheduleBookingUseCase",{
+      useClass: RescheduleBookingUseCase
     })
 
   

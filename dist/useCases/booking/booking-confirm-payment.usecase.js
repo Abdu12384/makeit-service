@@ -25,13 +25,27 @@ let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
         if (!paymentIntent)
             throw new Error("Failed to confirm Stripe payment");
         console.log("paymentIntent", paymentIntent);
+        const existingBooking = await this._bookingRepository.findOne({ bookingId: booking.bookingId });
+        if (!existingBooking) {
+            throw new Error("Booking not found");
+        }
+        const paidAmount = paymentIntent.amount / 100;
+        console.log("paidAmount", paidAmount);
+        const balanceAmount = existingBooking.balanceAmount ?? 0;
+        console.log("balanceAmount", balanceAmount);
         if (paymentIntent.status === "succeeded") {
-            await this._bookingRepository.update({ bookingId: booking }, { paymentStatus: "Successfull" });
-            await this._paymentRepository.update({ bookingId: booking }, { status: "success" });
+            if (balanceAmount > 0 && paidAmount >= balanceAmount) {
+                await this._bookingRepository.update({ bookingId: booking.bookingId }, { paymentStatus: "Successfull", balanceAmount: 0 });
+            }
+            else {
+                const newBalance = existingBooking?.balanceAmount;
+                console.log("newBalance", newBalance);
+                await this._bookingRepository.update({ bookingId: booking.bookingId }, { balanceAmount: newBalance > 0 ? newBalance : 0 });
+            }
+            await this._paymentRepository.update({ bookingId: booking.bookingId }, { status: "success" });
         }
         else {
-            await this._bookingRepository.update({ bookingId: booking }, { paymentStatus: "Failed" });
-            await this._paymentRepository.update({ bookingId: booking }, { status: "failed" });
+            await this._paymentRepository.update({ bookingId: booking.bookingId }, { status: "failed" });
             throw new Error("Stripe payment not successful");
         }
     }

@@ -12,7 +12,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { inject, injectable } from "tsyringe";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper.js";
-import { messaging } from "../../shared/config.js";
 let ChatUseCase = class ChatUseCase {
     chatRepository;
     clientRepository;
@@ -65,16 +64,7 @@ let ChatUseCase = class ChatUseCase {
         const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
         console.log("receiverModel-------------------------------------------", receiverModel);
         const receiver = await this.findUserById(receiverId, receiverModel);
-        console.log("receiver-------------------------------------------", receiver?.fcmToken);
-        if (receiver?.fcmToken) {
-            await messaging.send({
-                notification: {
-                    title: "New Message",
-                    body: "You have a new message"
-                },
-                token: receiver.fcmToken
-            });
-        }
+        await this.pushNotificationService.sendNotification(receiverId, "New Message", "You have a new message", "new_message", receiverModel);
         return newMessage;
     }
     //======================================================

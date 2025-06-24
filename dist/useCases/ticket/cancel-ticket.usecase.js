@@ -108,7 +108,7 @@ let CancelTicketUseCase = class CancelTicketUseCase {
         }
         eventDetails.ticketPurchased = Math.max(0, eventDetails.ticketPurchased - cancelCount);
         eventDetails.attendeesCount = Math.max(0, eventDetails.attendeesCount - cancelCount);
-        eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount - cancelCount);
+        eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount - cancelCount) || 0;
         await this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
         await this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Cancelled", `Your booking for ${eventDetails?.title || "an event"} has been cancelled.`, NotificationType.TICKET_BOOKING, "client");
         await this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails?.title}.`, NotificationType.TICKET_BOOKING, "vendor");

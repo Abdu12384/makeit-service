@@ -5,6 +5,7 @@ import { handleErrorResponse } from "../../shared/utils/error.handler.js";
 import { HTTP_STATUS } from "../../shared/constants.js";
 import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface.js";
 import { IBookingConfirmPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-confirm-payment-usecase.interface.js";
+import { CustomRequest } from "../middlewares/auth.middleware.js";
 
 
 
@@ -34,10 +35,14 @@ export class PaymentController implements IPaymentController{
     async handleBookingPayment(req:Request,res:Response): Promise<void>{
         try {
 
-          const {bookingId, paymentIntentId} = req.body
+          const {bookingId, paymentIntentId,bookingDetails} = req.body
+
+          const {userId} = (req as CustomRequest).user
           const {clientStripeId,booking} = await this._createBookingPaymentUseCase.confirmPayment(
           paymentIntentId,
           bookingId,
+          bookingDetails,
+          userId
         )
          res.status(HTTP_STATUS.OK).json({
             success:true,

@@ -102,16 +102,14 @@ console.log("startChat-------------------------------------------", data);
     console.log("receiverModel-------------------------------------------", receiverModel)
     const receiver = await this.findUserById(receiverId, receiverModel);
 
-    console.log("receiver-------------------------------------------", receiver?.fcmToken);
-       if(receiver?.fcmToken) {
-            await messaging.send({
-                notification: {
-                    title: "New Message",
-                    body: "You have a new message"
-                },
-                token: receiver.fcmToken
-            });
-        }
+    
+        await this.pushNotificationService.sendNotification(
+          receiverId,
+          "New Message",
+          "You have a new message",
+          "new_message",
+          receiverModel
+        );
 
     return newMessage;
   }

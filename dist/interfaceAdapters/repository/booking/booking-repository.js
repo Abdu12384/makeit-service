@@ -59,6 +59,7 @@ let BookingRepository = class BookingRepository extends BaseRepository {
                                 email: 1,
                                 status: 1,
                                 vendorApproval: 1,
+                                balanceAmount: 1,
                                 paymentStatus: 1,
                                 isComplete: 1,
                                 createdAt: 1,
@@ -125,6 +126,10 @@ let BookingRepository = class BookingRepository extends BaseRepository {
             bookingId: { $ne: currentBookingId }
         });
         return !!conflict;
+    }
+    // base.repository.ts
+    async updateOne(filter, updateData) {
+        await this.model.updateOne(filter, updateData).exec();
     }
 };
 BookingRepository = __decorate([

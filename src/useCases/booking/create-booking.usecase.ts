@@ -27,15 +27,14 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
      
       const bookedDate = bookingsDetails?.date
       console.log("bookeddate",bookedDate)
-      if(bookedDate && bookingsDetails.vendorApproval === "Approved"){
-        if (Array.isArray(bookedDate) && bookedDate.length > 0) {
-          throw new CustomError(
-            `${new Date(bookedDate[0]).toDateString()} is already booked. Please select another date.`,
-            HTTP_STATUS.BAD_REQUEST
-          );
-        }
-      }
-
+      // if(bookedDate && bookingsDetails.vendorApproval === "Approved"){
+      //   if (Array.isArray(bookedDate) && bookedDate.length > 0) {
+      //     throw new CustomError(
+      //       `${new Date(bookedDate[0]).toDateString()} is already booked. Please select another date.`,
+      //       HTTP_STATUS.BAD_REQUEST
+      //     );
+      //   }
+      // }
       const booking = await this._bookingRepository.save({
         bookingId,
         clientId: userId,

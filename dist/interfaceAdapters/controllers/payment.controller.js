@@ -25,8 +25,9 @@ let PaymentController = class PaymentController {
     // ══════════════════════════════════════════════════════════
     async handleBookingPayment(req, res) {
         try {
-            const { bookingId, paymentIntentId } = req.body;
-            const { clientStripeId, booking } = await this._createBookingPaymentUseCase.confirmPayment(paymentIntentId, bookingId);
+            const { bookingId, paymentIntentId, bookingDetails } = req.body;
+            const { userId } = req.user;
+            const { clientStripeId, booking } = await this._createBookingPaymentUseCase.confirmPayment(paymentIntentId, bookingId, bookingDetails, userId);
             res.status(HTTP_STATUS.OK).json({
                 success: true,
                 clientStripeId,

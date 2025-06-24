@@ -33,8 +33,6 @@ export class UpdateServiceStatusUseCase implements IUpdateServiceStatusUseCase {
     
   }
 
-
-
   async blockService(serviceId: string): Promise<void> {    
     const service = await this._serviceRepository.findOne({serviceId})
     if(!service){
