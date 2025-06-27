@@ -33,12 +33,6 @@ export class pushNotificationService implements IPushNotificationService{
     notificationType: string,
     model: "client" | "vendor"
 ): Promise<void> {
-    const notification = {
-        userId,
-        title,
-        body,
-        notificationType
-    };
     let repo;
     if(model === "client"){
       repo = this._clientRepository;
@@ -50,8 +44,8 @@ export class pushNotificationService implements IPushNotificationService{
       await this._notificationRepo.createNotification(
         user.userId,
         notificationType,
+        body,
         title,
-        body
       );
     }
 

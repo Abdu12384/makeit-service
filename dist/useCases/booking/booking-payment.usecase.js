@@ -24,16 +24,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookingPaymentUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
+const notification_1 = require("../../shared/dtos/notification");
 let BookingPaymentUseCase = class BookingPaymentUseCase {
-    constructor(_bookingRepository, _serviceRepository, _paymentService, _paymentRepository) {
+    constructor(_bookingRepository, _vendorRepository, _serviceRepository, _paymentService, _paymentRepository, _transactionRepository, _walletRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
+        this._vendorRepository = _vendorRepository;
         this._serviceRepository = _serviceRepository;
         this._paymentService = _paymentService;
         this._paymentRepository = _paymentRepository;
+        this._transactionRepository = _transactionRepository;
+        this._walletRepository = _walletRepository;
+        this._pushNotificationService = _pushNotificationService;
     }
     confirmPayment(paymentIntentId, bookingId, bookingDetails, clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             let booking = yield this._bookingRepository.findOne({ bookingId });
+            let vendor = yield this._vendorRepository.findOne({ vendorId: booking === null || booking === void 0 ? void 0 : booking.vendorId });
             console.log("booking", booking);
             let serviceId = (booking === null || booking === void 0 ? void 0 : booking.serviceId) || bookingDetails.serviceId;
             const service = yield this._serviceRepository.findOne({ serviceId });
@@ -73,6 +81,24 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                             status: "Confirmed",
                         },
                     });
+                    let vendor = yield this._vendorRepository.VendorfindOne(booking === null || booking === void 0 ? void 0 : booking.vendorId);
+                    if (!vendor) {
+                        throw new Error("Vendor not found");
+                    }
+                    if (!Array.isArray(vendor.bookedDates)) {
+                        vendor.bookedDates = [{ date: new Date(booking.date[0]), count: 0 }];
+                    }
+                    const index = vendor === null || vendor === void 0 ? void 0 : vendor.bookedDates.findIndex(entry => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString());
+                    if (index !== -1) {
+                        vendor.bookedDates[index].count += 1;
+                    }
+                    else {
+                        vendor.bookedDates.push({
+                            date: new Date(booking.date[0]),
+                            count: 1
+                        });
+                    }
+                    yield this._vendorRepository.vendorSave(vendor);
                 }
                 else if (booking.paymentStatus === "AdvancePaid") {
                     // Balance payment
@@ -91,11 +117,23 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                     throw new Error("Invalid payment status.");
                 }
             }
-            console.log("amountToPay", amountToPay);
             const clientStripeId = yield this._paymentService.createPaymentIntent(amountToPay, "service", { bookingId });
+            const wallet = yield this._walletRepository.findOne({ userId: booking.vendorId });
+            if (!wallet) {
+                throw new custom_error_1.CustomError("Wallet not found", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
+            }
+            const vendorTransactionDetails = {
+                amount: amountToPay,
+                currency: "INR",
+                paymentStatus: "credit",
+                paymentType: "advancePayment",
+                walletId: wallet === null || wallet === void 0 ? void 0 : wallet.walletId,
+            };
+            const vendorTransaction = yield this._transactionRepository.save(vendorTransactionDetails);
+            const addMoneyToVendorWallet = yield this._walletRepository.updateWallet(booking.vendorId, amountToPay);
             const payment = yield this._paymentRepository.save({
                 clientId: booking.clientId,
-                receiverId: service === null || service === void 0 ? void 0 : service.vendorId,
+                receiverId: booking.vendorId,
                 bookingId: booking.bookingId,
                 amount: amountToPay,
                 currency: "INR",
@@ -104,6 +142,8 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                 paymentId: paymentIntentId,
             });
             console.log("payment", payment);
+            yield this._pushNotificationService.sendNotification(booking.clientId, "Booking Confirmed", `Your advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle} is successful.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "client");
+            yield this._pushNotificationService.sendNotification(booking.vendorId, "Advance Payment Received", `You have received advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle}.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "vendor");
             return { booking, clientStripeId };
         });
     }
@@ -112,9 +152,13 @@ exports.BookingPaymentUseCase = BookingPaymentUseCase;
 exports.BookingPaymentUseCase = BookingPaymentUseCase = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("IBookingRepository")),
-    __param(1, (0, tsyringe_1.inject)("IServiceRepository")),
-    __param(2, (0, tsyringe_1.inject)("IPaymentService")),
-    __param(3, (0, tsyringe_1.inject)("IPaymentRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object])
+    __param(1, (0, tsyringe_1.inject)("IVendorRepository")),
+    __param(2, (0, tsyringe_1.inject)("IServiceRepository")),
+    __param(3, (0, tsyringe_1.inject)("IPaymentService")),
+    __param(4, (0, tsyringe_1.inject)("IPaymentRepository")),
+    __param(5, (0, tsyringe_1.inject)("ITransactionRepository")),
+    __param(6, (0, tsyringe_1.inject)("IWalletRepository")),
+    __param(7, (0, tsyringe_1.inject)("IPushNotificationService")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
 ], BookingPaymentUseCase);
 //# sourceMappingURL=booking-payment.usecase.js.map

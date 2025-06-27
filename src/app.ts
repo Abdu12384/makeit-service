@@ -69,6 +69,3 @@ export class App {
 
 const app = new App()
 app.listen()
-
-
-

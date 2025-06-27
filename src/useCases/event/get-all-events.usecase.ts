@@ -33,10 +33,7 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
           isActive: true
         }
         if(searchTermString){
-          filter.$or = [
-            {name: {$regex: searchTermString, $options: "i"}},
-            {description: {$regex: searchTermString, $options: "i"}}
-          ]
+          filter.title = { $regex: searchTermString, $options: "i" }
         }
         const {items , total} = await this._eventRepository.findAll(
           filter,

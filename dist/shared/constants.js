@@ -60,6 +60,7 @@ exports.SUCCESS_MESSAGES = {
 exports.ERROR_MESSAGES = {
     WRONG_ID: "Invalid ID",
     TOKEN_EXPIRED: "Session expired login again",
+    OTP_EXPIRED: "OTP has expired. Please request a new one.",
     TOKEN_BLACKLISTED: "Session is no longer valid",
     EMAIL_NOT_FOUND: "Email not found",
     FORBIDDEN: "You don’t have access",
@@ -72,7 +73,7 @@ exports.ERROR_MESSAGES = {
     SERVICE_NOT_FOUND: "Service not found",
     INVALID_TOKEN: "Invalid session please login again",
     INVALID_ROLE: "Access denied",
-    INVALID_OTP: "Invalid or expired otp",
+    INVALID_OTP: "Invalid otp",
     INVALID_CREDENTIALS: "Wrong email or password",
     USER_NOT_FOUND: "User not found",
     ROUTE_NOT_FOUND: "Page not found",

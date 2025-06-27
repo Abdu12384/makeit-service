@@ -20,7 +20,7 @@ export const transactionSchema = new Schema<ITransactionModel>({
     },
     paymentType: {
         type: String,
-        enum: ["refund", "ticketBooking", "top-up", "bookingPayment", "adminCommission"]
+        enum: ["refund", "ticketBooking", "top-up", "bookingPayment", "adminCommission","serviceBooking","advancePayment"]
     },
     walletId: {
         type: String,

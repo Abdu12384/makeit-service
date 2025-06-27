@@ -1,5 +1,10 @@
 import { User } from "./user.entity";
 
+export interface IBookedDates {
+    date: Date,
+    count: number
+}
+
 export interface IVendorEntity extends User{
     idProof: string,
     vendorId: string,
@@ -7,4 +12,5 @@ export interface IVendorEntity extends User{
     rejectionReason?:string,
     aboutVendor?:string,
     fcmToken?:string
+    bookedDates?: IBookedDates[],
 }

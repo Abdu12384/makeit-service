@@ -19,13 +19,15 @@ export class VarifyOtpUseCase implements IVerifyOtpEmailUseCase{
      async execute(email: string, otp: string): Promise<boolean> {
          console.log('working');
          
-       const isOtpValid = await this._otpService.varifyOtp(email,otp)
-       console.log('isvalide',isOtpValid)
-
-        if(!isOtpValid){
-          throw new CustomError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST)
-        }
-
+       const result = await this._otpService.varifyOtp(email,otp)
+       if (result === "invalid") {
+        throw new CustomError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+      }
+    
+      if (result === "expired") {
+        throw new CustomError(ERROR_MESSAGES.OTP_EXPIRED, HTTP_STATUS.BAD_REQUEST);
+      }
+    
         return true
-       } 
+       }
      }   

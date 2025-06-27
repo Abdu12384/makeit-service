@@ -21,7 +21,7 @@ exports.transactionSchema = new mongoose_1.Schema({
     },
     paymentType: {
         type: String,
-        enum: ["refund", "ticketBooking", "top-up", "bookingPayment", "adminCommission"]
+        enum: ["refund", "ticketBooking", "top-up", "bookingPayment", "adminCommission", "serviceBooking", "advancePayment"]
     },
     walletId: {
         type: String,

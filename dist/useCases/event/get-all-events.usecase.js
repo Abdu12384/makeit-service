@@ -37,10 +37,7 @@ let GetAllEventsUseCase = class GetAllEventsUseCase {
                 isActive: true
             };
             if (searchTermString) {
-                filter.$or = [
-                    { name: { $regex: searchTermString, $options: "i" } },
-                    { description: { $regex: searchTermString, $options: "i" } }
-                ];
+                filter.title = { $regex: searchTermString, $options: "i" };
             }
             const { items, total } = yield this._eventRepository.findAll(filter, skip, validPageSize, { createdAt: -1 });
             const response = {

@@ -32,10 +32,12 @@ let VarifyOtpUseCase = class VarifyOtpUseCase {
     execute(email, otp) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('working');
-            const isOtpValid = yield this._otpService.varifyOtp(email, otp);
-            console.log('isvalide', isOtpValid);
-            if (!isOtpValid) {
+            const result = yield this._otpService.varifyOtp(email, otp);
+            if (result === "invalid") {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_OTP, constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
+            if (result === "expired") {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.OTP_EXPIRED, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             return true;
         });

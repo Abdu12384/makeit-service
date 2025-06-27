@@ -25,9 +25,10 @@ exports.CancelBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const notification_1 = require("../../shared/dtos/notification");
 let CancelBookingUseCase = class CancelBookingUseCase {
-    constructor(_bookingRepository, _pushNotificationService) {
+    constructor(_bookingRepository, _pushNotificationService, _vendorRepository) {
         this._bookingRepository = _bookingRepository;
         this._pushNotificationService = _pushNotificationService;
+        this._vendorRepository = _vendorRepository;
     }
     execute(bookingId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +38,20 @@ let CancelBookingUseCase = class CancelBookingUseCase {
             }
             booking.status = "Cancelled";
             yield this._bookingRepository.update({ bookingId }, booking);
+            const vendor = yield this._vendorRepository.VendorfindOne(booking.vendorId);
+            if (!vendor)
+                throw new Error("Vendor not found");
+            if (!Array.isArray(vendor.bookedDates)) {
+                vendor.bookedDates = [];
+            }
+            const oldIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString());
+            if (oldIndex !== -1) {
+                vendor.bookedDates[oldIndex].count -= 1;
+                if (vendor.bookedDates[oldIndex].count <= 0) {
+                    vendor.bookedDates.splice(oldIndex, 1);
+                }
+            }
+            yield this._vendorRepository.vendorSave(vendor);
             yield this._pushNotificationService.sendNotification(booking.clientId, notification_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "client");
             yield this._pushNotificationService.sendNotification(booking.vendorId, notification_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "vendor");
         });
@@ -47,6 +62,7 @@ exports.CancelBookingUseCase = CancelBookingUseCase = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("IBookingRepository")),
     __param(1, (0, tsyringe_1.inject)("IPushNotificationService")),
-    __metadata("design:paramtypes", [Object, Object])
+    __param(2, (0, tsyringe_1.inject)("IVendorRepository")),
+    __metadata("design:paramtypes", [Object, Object, Object])
 ], CancelBookingUseCase);
 //# sourceMappingURL=cancel-booking-usecase.js.map

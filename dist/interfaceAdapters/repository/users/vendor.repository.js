@@ -36,6 +36,21 @@ let VendorRepository = class VendorRepository extends base_repository_1.BaseRepo
             yield vendor_model_1.VendorModel.updateOne({ userId }, { $unset: { fcmToken: "" } });
         });
     }
+    vendorSave(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const vendorDoc = yield data.save();
+        });
+    }
+    VendorfindOne(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.model.findOne({ userId });
+        });
+    }
+    BookingDates(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.model.findOne({ userId }, { bookedDates: 1 });
+        });
+    }
 };
 exports.VendorRepository = VendorRepository;
 exports.VendorRepository = VendorRepository = __decorate([

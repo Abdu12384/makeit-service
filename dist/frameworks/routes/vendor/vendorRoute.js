@@ -65,6 +65,9 @@ class VendorRoute {
         this.vendorRoute.patch("/vendor/bookings/:bookingId", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.bookingController.updateBookingStatus(req, res);
         });
+        this.vendorRoute.get("/vendor/booked-dates", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.bookingController.getBookedDates(req, res);
+        });
         /** ==========================
          *  Event Management Routes
         * ========================== */

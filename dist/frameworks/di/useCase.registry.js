@@ -73,6 +73,7 @@ const update_notification_read_usecase_1 = require("../../useCases/notification/
 const check_event_booking_avliblity_usecase_1 = require("../../useCases/event/check-event-booking-avliblity.usecase");
 const block_event_usecase_1 = require("../../useCases/event/block-event-usecase");
 const resedul_booking_usecase_1 = require("../../useCases/booking/resedul-booking.usecase");
+const get_vendor_booked_dates_usecase_1 = require("../../useCases/booking/get-vendor-booked-dates.usecase");
 class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -237,6 +238,9 @@ class UseCaseRegistry {
         });
         tsyringe_1.container.register("IClearFCMTokenUseCase", {
             useClass: clear_fcm_token_usecase_1.ClearFCMTokenUseCase
+        });
+        tsyringe_1.container.register("IGetVendorBookedDatesUseCase", {
+            useClass: get_vendor_booked_dates_usecase_1.GetVendorBookedDatesUseCase
         });
         //======================= Register Bycripts =======================//
         tsyringe_1.container.register("IPasswordHasher", {

@@ -4,4 +4,8 @@ export interface IRescheduleBookingUseCase {
         selectedDate: string,
         rescheduleReason: string,
     ): Promise<void>
+    approveOrRejectRescheduleBooking(
+        bookingId: string,
+        status: string,
+    ): Promise<void>
 }

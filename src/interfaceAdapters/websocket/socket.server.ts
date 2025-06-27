@@ -32,27 +32,6 @@ export class SocketConfig {
 
 //==========================================================
 
-              //  socket.on("register", async (data: { userId: string; name: string }, response) => {
-              //   try {
-              //     // Fetch notifications for the user
-              //     const notifications = await this.notificationDatabase.findNotifications(data.userId);
-              //     response(notifications);
-        
-              //     // // Store user data in Redis and the users map
-              //     // await this.redisService.set(data.userId, 86400, JSON.stringify({ socketId: socket.id, name: data.name }));
-              //     // this.users.set(data.userId, { socketId: socket.id, name: data.name });
-              //     // socket.data.userId = data.userId;
-        
-              //     // // Optionally join the user to their own room for notifications (already done in users map)
-              //     // socket.join(data.userId);
-              //   } catch (error: any) {
-              //     console.error("Error registering user:", error);
-              //     response({ status: "error", message: error.message });
-              //   }
-              // });
-               
-
-//==========================================================
 
                socket.on("start-chat", async (data: {
                 senderId: string;

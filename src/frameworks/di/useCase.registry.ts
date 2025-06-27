@@ -137,6 +137,8 @@ import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/even
 import { BlockEventUseCase } from "../../useCases/event/block-event-usecase";
 import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface";
 import { RescheduleBookingUseCase } from "../../useCases/booking/resedul-booking.usecase";
+import { IGetVendorBookedDatesUseCase } from "../../domain/interface/useCaseInterface/booking/get-vendor-booked-dates-usecase.interface";
+import { GetVendorBookedDatesUseCase } from "../../useCases/booking/get-vendor-booked-dates.usecase";
 
 
 
@@ -365,6 +367,10 @@ export class UseCaseRegistry {
 
     container.register<IClearFCMTokenUseCase>("IClearFCMTokenUseCase",{
       useClass: ClearFCMTokenUseCase
+    })
+
+    container.register<IGetVendorBookedDatesUseCase>("IGetVendorBookedDatesUseCase",{
+      useClass: GetVendorBookedDatesUseCase
     })
     
    //======================= Register Bycripts =======================//

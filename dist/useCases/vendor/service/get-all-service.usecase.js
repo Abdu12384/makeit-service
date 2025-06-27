@@ -38,8 +38,9 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
                 filter.status = "active";
             }
             if (search) {
-                filter.title = { $regex: search, $options: "i" };
+                filter.serviceTitle = { $regex: search, $options: "i" };
             }
+            console.log('filter', filter);
             if (vendorId) {
                 filter.vendorId = vendorId;
             }

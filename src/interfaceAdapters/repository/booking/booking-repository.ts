@@ -66,6 +66,9 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
                               isComplete: 1,
                               createdAt: 1,
                               updatedAt: 1,
+                              rescheduleReason: 1,
+                              cancellationReason: 1,
+                              rescheduleStatus: 1,
                               vendor: {
                                   userId: 1,
                                   name: 1,

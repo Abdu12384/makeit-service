@@ -6,7 +6,14 @@ import { IPaymentService } from "../../domain/interface/servicesInterface/paymen
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository"
 import { IBookingEntity } from "../../domain/entities/booking.entity"
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper"
-
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity"
+import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface"
+import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface"
+import { CustomError } from "../../domain/utils/custom.error"
+import { HTTP_STATUS } from "../../shared/constants"
+import { NotificationType } from "../../shared/dtos/notification"
+import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
 
 
 
@@ -14,13 +21,18 @@ import { generateUniqueId } from "../../shared/utils/unique-uuid.helper"
 export class BookingPaymentUseCase implements IBookingPaymentUseCase{
     constructor(
         @inject("IBookingRepository") private _bookingRepository: IBookingRepository,
+        @inject("IVendorRepository") private _vendorRepository: IVendorRepository,
         @inject("IServiceRepository") private _serviceRepository: IServiceRepository,
         @inject("IPaymentService") private _paymentService: IPaymentService,
-        @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository
+        @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository,
+        @inject("ITransactionRepository") private _transactionRepository: ITransactionRepository,
+        @inject("IWalletRepository") private _walletRepository: IWalletRepository,
+        @inject("IPushNotificationService") private _pushNotificationService: IPushNotificationService
     ){}
 
     async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:any,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
         let booking = await this._bookingRepository.findOne({bookingId})
+        let vendor = await this._vendorRepository.findOne({vendorId:booking?.vendorId})
         console.log("booking",booking)
         let serviceId = booking?.serviceId || bookingDetails.serviceId;
         const service = await this._serviceRepository.findOne({ serviceId });
@@ -66,6 +78,31 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
                 },
               }
             );
+
+            let vendor = await this._vendorRepository.VendorfindOne(booking?.vendorId)
+            if (!vendor) {
+              throw new Error("Vendor not found"); 
+            }
+            
+            if (!Array.isArray(vendor.bookedDates)) {
+              vendor.bookedDates = [{date:new Date(booking!.date[0]),count:0}];
+            }
+
+            const index = vendor?.bookedDates.findIndex(entry =>
+              new Date(entry.date).toDateString() === new Date(booking!.date[0]).toDateString()
+            );
+
+            if (index !== -1) {
+              vendor.bookedDates[index].count += 1; 
+            } else {
+              vendor.bookedDates.push({
+                date: new Date(booking!.date[0]),
+                count: 1
+              }); 
+            }
+
+            await this._vendorRepository.vendorSave(vendor)
+
           } else if (booking.paymentStatus === "AdvancePaid") {
             // Balance payment
             if (!booking.balanceAmount || booking.balanceAmount <= 0) {
@@ -88,17 +125,31 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           }
         }
       
-        console.log("amountToPay", amountToPay);
-      
         const clientStripeId = await this._paymentService.createPaymentIntent(
           amountToPay,
           "service",
           { bookingId }
         );
+
+      const wallet = await this._walletRepository.findOne({userId:booking.vendorId})
+
+      if(!wallet){throw new CustomError("Wallet not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
+
+        const vendorTransactionDetails : ITransactionsEntity = {
+          amount: amountToPay,
+          currency: "INR",
+          paymentStatus: "credit",
+          paymentType: "advancePayment",
+          walletId:wallet?.walletId,
+        }
+
+        const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
+        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(booking.vendorId,amountToPay)
+        
       
         const payment = await this._paymentRepository.save({
           clientId: booking.clientId,
-          receiverId: service?.vendorId,
+          receiverId: booking.vendorId,
           bookingId: booking.bookingId,
           amount: amountToPay,
           currency: "INR",
@@ -108,7 +159,23 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         });
       
         console.log("payment", payment);
-      
+
+        await this._pushNotificationService.sendNotification(
+          booking.clientId,
+          "Booking Confirmed",
+          `Your advance payment for ${service?.serviceTitle} is successful.`,
+          NotificationType.BOOKIG_ADVANCE_PAYMENT,
+          "client"
+        );
+        
+        await this._pushNotificationService.sendNotification(
+          booking.vendorId,
+          "Advance Payment Received",
+          `You have received advance payment for ${service?.serviceTitle}.`,
+          NotificationType.BOOKIG_ADVANCE_PAYMENT,
+          "vendor"
+        );
+
         return { booking, clientStripeId };
     }
 }

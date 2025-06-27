@@ -72,7 +72,18 @@ exports.VendorSchema = new mongoose_1.Schema({
         type: String,
         default: null,
         required: false
-    }
+    },
+    bookedDates: [{
+            date: {
+                type: Date,
+                required: true,
+            },
+            count: {
+                type: Number,
+                default: 0,
+            }
+        },
+    ],
 }, {
     timestamps: true
 });

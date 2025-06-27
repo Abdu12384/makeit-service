@@ -24,5 +24,4 @@ export class OtpRepositroy implements IOtpRepositroy{
    await otpModel.deleteOne({email})
  }
 
-
 }

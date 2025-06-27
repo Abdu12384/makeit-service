@@ -28,9 +28,11 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
       filter.status = "active";
      }
 
-      if (search) {
-        filter.title = { $regex: search, $options: "i" };
+     
+     if (search) {
+       filter.serviceTitle = { $regex: search, $options: "i" };
       }
+      console.log('filter',filter)
       if (vendorId) {
         filter.vendorId = vendorId;
       } 

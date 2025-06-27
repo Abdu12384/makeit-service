@@ -125,20 +125,27 @@ export class ClientRoute {
 
 
           this.clientRoute.post("/client/confirm-payment",
-            // verifyAuth,
-            // blockStatusMiddleware.checkStatus as RequestHandler,
+            verifyAuth,
+            blockStatusMiddleware.checkStatus as RequestHandler,
             (req: Request, res:Response) =>{
               paymentController.confirmPayment(req,res)
             })  
 
 
             this.clientRoute.put("/client/cancel-booking/:bookingId",
-              // verifyAuth,
-              // blockStatusMiddleware.checkStatus as RequestHandler,
+              verifyAuth,
+              blockStatusMiddleware.checkStatus as RequestHandler,
               (req: Request, res:Response) =>{
                 bookingController.cancelBooking(req,res)
               })
 
+
+              this.clientRoute.patch("/client/bookings/:bookingId/reschedule",
+                verifyAuth,
+                blockStatusMiddleware.checkStatus as RequestHandler,
+                (req: Request, res: Response) => {
+                  bookingController.approveOrRejectRescheduleBooking(req,res)
+                })
             
 
 
@@ -149,16 +156,12 @@ export class ClientRoute {
       * ========================== */
 
        this.clientRoute.get("/client/events",
-      //  verifyAuth,
-      //  blockStatusMiddleware.checkStatus as RequestHandler,
        (req: Request, res:Response) =>{
          eventController.getAllEvents(req,res)
        }) 
 
 
        this.clientRoute.get("/client/events/:eventId",
-      //  verifyAuth,
-      //  blockStatusMiddleware.checkStatus as RequestHandler,
        (req: Request, res:Response) =>{
          eventController.getEventById(req,res)
        })

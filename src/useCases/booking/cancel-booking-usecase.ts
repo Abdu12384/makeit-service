@@ -3,6 +3,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface"
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
 import { NotificationType } from "../../shared/dtos/notification"
+import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
 
 
 
@@ -21,7 +22,9 @@ export class CancelBookingUseCase implements ICancelBookingUseCase{
         @inject("IBookingRepository")
         private _bookingRepository: IBookingRepository,
         @inject("IPushNotificationService")
-        private _pushNotificationService: IPushNotificationService
+        private _pushNotificationService: IPushNotificationService,
+        @inject("IVendorRepository")
+        private _vendorRepository: IVendorRepository
     ){}
 
     async execute(bookingId:string): Promise<void>{
@@ -29,8 +32,31 @@ export class CancelBookingUseCase implements ICancelBookingUseCase{
         if(!booking){
             throw new Error("Booking not found")
         }
+
         booking.status = "Cancelled"
         await this._bookingRepository.update({bookingId},booking)
+
+        const vendor = await this._vendorRepository.VendorfindOne(booking.vendorId);
+
+        if (!vendor) throw new Error("Vendor not found");
+
+        if (!Array.isArray(vendor.bookedDates)) {
+            vendor.bookedDates = [];
+          }
+
+          const oldIndex = vendor.bookedDates.findIndex(
+            (entry) => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString()
+          );
+          
+          if (oldIndex !== -1) {
+            vendor.bookedDates[oldIndex].count -= 1;
+            if (vendor.bookedDates[oldIndex].count <= 0) {
+              vendor.bookedDates.splice(oldIndex, 1);
+            }
+          }
+          await this._vendorRepository.vendorSave(vendor)
+
+        
 
         await this._pushNotificationService.sendNotification(
             booking.clientId,

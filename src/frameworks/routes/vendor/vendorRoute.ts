@@ -145,6 +145,12 @@ export class VendorRoute {
               })
 
 
+              this.vendorRoute.get("/vendor/booked-dates",
+                verifyAuth,
+                blockStatusMiddleware.checkStatus as RequestHandler,
+                (req: Request, res: Response) => {
+                  bookingController.getBookedDates(req,res)
+                })
 
           
       /** ==========================
@@ -187,6 +193,9 @@ export class VendorRoute {
           (req: Request, res: Response) => {
             eventController.getAttendeesById(req,res)
           })
+
+
+
 
           this.vendorRoute.patch("/vendor/bookings/:bookingId/reschedule",
             verifyAuth,

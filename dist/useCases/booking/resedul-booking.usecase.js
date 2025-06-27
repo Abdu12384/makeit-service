@@ -24,10 +24,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RescheduleBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const notification_1 = require("../../shared/dtos/notification");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let RescheduleBookingUseCase = class RescheduleBookingUseCase {
-    constructor(_bookingRepository, _pushNotificationService) {
+    constructor(_bookingRepository, _pushNotificationService, _vendorRepository) {
         this._bookingRepository = _bookingRepository;
         this._pushNotificationService = _pushNotificationService;
+        this._vendorRepository = _vendorRepository;
     }
     execute(bookingId, selectedDate, rescheduleReason) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -35,14 +38,72 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
             if (!booking) {
                 throw new Error("Booking not found.");
             }
+            const existingDate = new Date(booking.date[0]).toDateString();
+            const newRequestedDate = new Date(selectedDate).toDateString();
+            if (existingDate === newRequestedDate) {
+                throw new custom_error_1.CustomError("Selected date is the same as the current booking date.", constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
             yield this._bookingRepository.updateOne({ bookingId }, {
                 $set: {
-                    date: [selectedDate],
-                    status: "Rescheduled",
+                    rescheduleDate: selectedDate,
                     rescheduleReason,
+                    rescheduleStatus: "Requested"
                 },
             });
-            this._pushNotificationService.sendNotification(booking.clientId, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, `Your booking has been rescheduled to ${selectedDate}.`, "booking", "client");
+            this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has a new reschedule request from the vendor for ${selectedDate}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+        });
+    }
+    approveOrRejectRescheduleBooking(bookingId, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const booking = yield this._bookingRepository.findOne({ bookingId });
+            if (!booking) {
+                throw new Error("Booking not found.");
+            }
+            if (status === "Approved") {
+                const oldDate = new Date(booking.date[0]);
+                const newDate = new Date(booking.rescheduleDate);
+                const vendor = yield this._vendorRepository.VendorfindOne(booking.vendorId);
+                if (!vendor) {
+                    throw new Error("Vendor not found.");
+                }
+                if (!Array.isArray(vendor.bookedDates)) {
+                    vendor.bookedDates = [];
+                }
+                const oldIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === oldDate.toDateString());
+                if (oldIndex !== -1) {
+                    vendor.bookedDates[oldIndex].count -= 1;
+                    if (vendor.bookedDates[oldIndex].count <= 0) {
+                        vendor.bookedDates.splice(oldIndex, 1);
+                    }
+                }
+                const newIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === newDate.toDateString());
+                if (newIndex !== -1) {
+                    vendor.bookedDates[newIndex].count += 1;
+                }
+                else {
+                    vendor.bookedDates.push({ date: newDate, count: 1 });
+                }
+                yield this._vendorRepository.vendorSave(vendor);
+                yield this._bookingRepository.updateOne({ bookingId }, {
+                    $set: {
+                        status: "Rescheduled",
+                        date: [booking.rescheduleDate],
+                        rescheduleStatus: "Approved"
+                    },
+                });
+                this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been successfully rescheduled to ${new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `The client has accepted your reschedule request. New date: ${new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
+            }
+            if (status === "Rejected") {
+                yield this._bookingRepository.updateOne({ bookingId }, {
+                    $set: {
+                        status: "Pending",
+                        rescheduleStatus: "Rejected"
+                    },
+                });
+                this._pushNotificationService.sendNotification(booking.clientId, "booking", `You have rejected the vendor's request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `Client has rejected your request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
+            }
         });
     }
 };
@@ -51,6 +112,7 @@ exports.RescheduleBookingUseCase = RescheduleBookingUseCase = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("IBookingRepository")),
     __param(1, (0, tsyringe_1.inject)("IPushNotificationService")),
-    __metadata("design:paramtypes", [Object, Object])
+    __param(2, (0, tsyringe_1.inject)("IVendorRepository")),
+    __metadata("design:paramtypes", [Object, Object, Object])
 ], RescheduleBookingUseCase);
 //# sourceMappingURL=resedul-booking.usecase.js.map

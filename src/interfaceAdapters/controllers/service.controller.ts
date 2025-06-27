@@ -83,9 +83,6 @@ async getAllServices(req: Request, res: Response): Promise<void> {
         const userId = user?.userId;
         const role = user?.role;
 
-        
-       
-
         const services = await this._getAllServiceUseCase.execute(
           pageNumber,
           pageSize,

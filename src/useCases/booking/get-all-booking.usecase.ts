@@ -7,7 +7,6 @@ import { IBookingEntity } from "../../domain/entities/booking.entity";
 
 
 
-
 @injectable()
 export class GetAllBookingUseCase implements IGetAllBookingUseCase{
     constructor(

@@ -1,1 +1,1 @@
-{"version":3,"file":"vendor.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/vendor.model.ts"],"names":[],"mappings":";;;AAAA,uCAA2C;AAE3C,2DAAuD;AAO1C,QAAA,WAAW,GAAG,IAAA,gBAAK,EAAe,QAAQ,EAAC,4BAAY,CAAC,CAAA"}
+{"version":3,"file":"vendor.model.js","sourceRoot":"","sources":["../../../../../src/frameworks/database/mongodb/model/vendor.model.ts"],"names":[],"mappings":";;;AAAA,uCAA2C;AAE3C,2DAAuD;AAQ1C,QAAA,WAAW,GAAG,IAAA,gBAAK,EAAe,QAAQ,EAAC,4BAAY,CAAC,CAAA"}

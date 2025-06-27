@@ -5,5 +5,6 @@ export interface IBookingController{
     updateBookingStatus(req:Request,res:Response): Promise<void>
     cancelBooking(req:Request,res:Response): Promise<void>
     rescheduleBooking(req:Request,res:Response): Promise<void>
-    
+    approveOrRejectRescheduleBooking(req:Request,res:Response): Promise<void>
+    getBookedDates(req:Request,res:Response): Promise<void>
 }

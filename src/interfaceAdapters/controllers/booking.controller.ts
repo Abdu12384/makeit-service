@@ -9,6 +9,7 @@ import { IGetAllBookingUseCase } from "../../domain/interface/useCaseInterface/b
 import { IUpdateBookingStatusUseCase } from "../../domain/interface/useCaseInterface/booking/update-booking-status-usecase.interface";
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface";
 import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface";
+import { IGetVendorBookedDatesUseCase } from "../../domain/interface/useCaseInterface/booking/get-vendor-booked-dates-usecase.interface";
 
 
 
@@ -28,6 +29,8 @@ export class BookingController implements IBookingController{
     private _cancelBookingUseCase: ICancelBookingUseCase, 
     @inject("IRescheduleBookingUseCase") 
     private _rescheduleBookingUseCase: IRescheduleBookingUseCase,
+    @inject("IGetVendorBookedDatesUseCase") 
+    private _getVendorBookedDatesUseCase: IGetVendorBookedDatesUseCase,
 
     ){}
 
@@ -132,6 +135,7 @@ export class BookingController implements IBookingController{
      async cancelBooking(req:Request,res:Response): Promise<void>{
         try {
             const {bookingId} = req.params
+
             const booking = await this._cancelBookingUseCase.execute(
                 bookingId,
             )
@@ -161,6 +165,50 @@ export class BookingController implements IBookingController{
                 bookingId,
                 selectedDate,
                 rescheduleReason,
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                booking,
+            })
+        } catch (error) {
+            handleErrorResponse(res, error)
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  Approve or Reject Reschedule Booking
+    // ══════════════════════════════════════════════════════════
+
+     async approveOrRejectRescheduleBooking(req:Request,res:Response): Promise<void>{
+        try {
+            const {bookingId} = req.params
+            const {status} = req.body
+            console.log('bookingId',bookingId)
+            console.log('status',status)
+            const booking = await this._rescheduleBookingUseCase.approveOrRejectRescheduleBooking(
+                bookingId,
+                status,
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                booking,
+            })
+        } catch (error) {
+            handleErrorResponse(res, error)
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  Vendor Booked Dates
+    // ══════════════════════════════════════════════════════════
+
+     async getBookedDates(req:Request,res:Response): Promise<void>{
+        try {
+            const {role,userId} = (req as CustomRequest).user 
+            const booking = await this._getVendorBookedDatesUseCase.execute(
+                userId,
             )
             res.status(HTTP_STATUS.OK).json({
                 success:true,

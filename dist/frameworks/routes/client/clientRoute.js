@@ -65,31 +65,22 @@ class ClientRoute {
         this.clientRoute.post("/client/create-booking-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.paymentController.handleBookingPayment(req, res);
         });
-        this.clientRoute.post("/client/confirm-payment", 
-        // verifyAuth,
-        // blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.post("/client/confirm-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.paymentController.confirmPayment(req, res);
         });
-        this.clientRoute.put("/client/cancel-booking/:bookingId", 
-        // verifyAuth,
-        // blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.put("/client/cancel-booking/:bookingId", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.bookingController.cancelBooking(req, res);
+        });
+        this.clientRoute.patch("/client/bookings/:bookingId/reschedule", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.bookingController.approveOrRejectRescheduleBooking(req, res);
         });
         /** ==========================
          *  Client Event  Routes
         * ========================== */
-        this.clientRoute.get("/client/events", 
-        //  verifyAuth,
-        //  blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.get("/client/events", (req, res) => {
             resolver_1.eventController.getAllEvents(req, res);
         });
-        this.clientRoute.get("/client/events/:eventId", 
-        //  verifyAuth,
-        //  blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.get("/client/events/:eventId", (req, res) => {
             resolver_1.eventController.getEventById(req, res);
         });
         this.clientRoute.get("/client/events/:eventId/check-booking", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {

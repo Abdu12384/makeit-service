@@ -49,12 +49,15 @@ let OtpService = class OtpService {
     varifyOtp(email, otp) {
         return __awaiter(this, void 0, void 0, function* () {
             const savedOtp = yield this.otpRepository.findOtpByEmail(email);
-            if (!savedOtp) {
-                return false;
-            }
+            if (!savedOtp)
+                return "invalid";
             const isOtpValid = savedOtp.otp === otp;
             const isExpired = new Date() > new Date(savedOtp.expiresAt);
-            return isOtpValid && !isExpired;
+            if (!isOtpValid)
+                return "invalid";
+            if (isExpired)
+                return "expired";
+            return "valid";
         });
     }
 };

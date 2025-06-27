@@ -26,12 +26,13 @@ const tsyringe_1 = require("tsyringe");
 const constants_1 = require("../../shared/constants");
 const error_handler_1 = require("../../shared/utils/error.handler");
 let BookingController = class BookingController {
-    constructor(_createBookingUseCase, _getAllBookingUseCase, _updateBookingStatusUseCase, _cancelBookingUseCase, _rescheduleBookingUseCase) {
+    constructor(_createBookingUseCase, _getAllBookingUseCase, _updateBookingStatusUseCase, _cancelBookingUseCase, _rescheduleBookingUseCase, _getVendorBookedDatesUseCase) {
         this._createBookingUseCase = _createBookingUseCase;
         this._getAllBookingUseCase = _getAllBookingUseCase;
         this._updateBookingStatusUseCase = _updateBookingStatusUseCase;
         this._cancelBookingUseCase = _cancelBookingUseCase;
         this._rescheduleBookingUseCase = _rescheduleBookingUseCase;
+        this._getVendorBookedDatesUseCase = _getVendorBookedDatesUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Book Service
@@ -141,6 +142,47 @@ let BookingController = class BookingController {
             }
         });
     }
+    // ══════════════════════════════════════════════════════════
+    //  Approve or Reject Reschedule Booking
+    // ══════════════════════════════════════════════════════════
+    approveOrRejectRescheduleBooking(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { bookingId } = req.params;
+                const { status } = req.body;
+                console.log('bookingId', bookingId);
+                console.log('status', status);
+                const booking = yield this._rescheduleBookingUseCase.approveOrRejectRescheduleBooking(bookingId, status);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    booking,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
+    }
+    // ══════════════════════════════════════════════════════════
+    //  Vendor Booked Dates
+    // ══════════════════════════════════════════════════════════
+    getBookedDates(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { role, userId } = req.user;
+                const booking = yield this._getVendorBookedDatesUseCase.execute(userId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
+                    booking,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(res, error);
+            }
+        });
+    }
 };
 exports.BookingController = BookingController;
 exports.BookingController = BookingController = __decorate([
@@ -150,6 +192,7 @@ exports.BookingController = BookingController = __decorate([
     __param(2, (0, tsyringe_1.inject)("IUpdateBookingStatusUseCase")),
     __param(3, (0, tsyringe_1.inject)("ICancelBookingUseCase")),
     __param(4, (0, tsyringe_1.inject)("IRescheduleBookingUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    __param(5, (0, tsyringe_1.inject)("IGetVendorBookedDatesUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], BookingController);
 //# sourceMappingURL=booking.controller.js.map

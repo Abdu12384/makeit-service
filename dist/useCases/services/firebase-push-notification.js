@@ -32,12 +32,6 @@ let pushNotificationService = class pushNotificationService {
     }
     sendNotification(userId, title, body, notificationType, model) {
         return __awaiter(this, void 0, void 0, function* () {
-            const notification = {
-                userId,
-                title,
-                body,
-                notificationType
-            };
             let repo;
             if (model === "client") {
                 repo = this._clientRepository;
@@ -47,7 +41,7 @@ let pushNotificationService = class pushNotificationService {
             }
             const user = yield repo.findOne({ userId });
             if (user === null || user === void 0 ? void 0 : user.userId) {
-                yield this._notificationRepo.createNotification(user.userId, notificationType, title, body);
+                yield this._notificationRepo.createNotification(user.userId, notificationType, body, title);
             }
             const messaging = (0, config_1.getMessaging)();
             if (user === null || user === void 0 ? void 0 : user.fcmToken) {

@@ -17,7 +17,7 @@ exports.bookingSchema = new mongoose_1.Schema({
         }],
     paymentStatus: {
         type: String,
-        enum: ["Pending", "Failed", "Successfull", "Refunded", 'AdvancePaid', 'Confirmed', 'Rescheduled'],
+        enum: ["Pending", "Failed", "Successfull", "Refunded", 'AdvancePaid', 'Confirmed'],
         default: "Pending"
     },
     serviceId: {
@@ -48,7 +48,7 @@ exports.bookingSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Rejected', 'Completed', 'Cancelled', 'Confirmed'],
+        enum: ['Pending', 'Rejected', 'Completed', 'Cancelled', 'Confirmed', "vendorCancelled", "Rescheduled"],
         default: "Pending"
     },
     createdAt: {
@@ -67,7 +67,20 @@ exports.bookingSchema = new mongoose_1.Schema({
     rescheduleReason: {
         type: String,
         required: false
-    }
+    },
+    rescheduleDate: {
+        type: Date,
+        required: false
+    },
+    rescheduleStatus: {
+        type: String,
+        enum: ["Pending", "Approved", "Rejected", "Requested"],
+        default: "Pending"
+    },
+    cancellationReason: {
+        type: String,
+        required: false
+    },
 }, {
     timestamps: true
 });

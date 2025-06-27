@@ -35,17 +35,18 @@ export class OtpService implements IOtpService{
 
      
  //======================= Varify OTP =========================//
-  async varifyOtp(email: string, otp: string): Promise<boolean> {
+  async varifyOtp(email: string, otp: string): Promise<"valid" | "expired" | "invalid"> {
     const savedOtp = await this.otpRepository.findOtpByEmail(email)
 
-    if(!savedOtp){
-      return false
-    }
+    if(!savedOtp) return "invalid"
 
     const isOtpValid = savedOtp.otp === otp;
     const isExpired = new Date() > new Date(savedOtp.expiresAt)
 
-    return isOtpValid && !isExpired
-  }
+    if (!isOtpValid) return "invalid";
+    if (isExpired) return "expired";
+  
+    return "valid"; 
+   }
 
 }
