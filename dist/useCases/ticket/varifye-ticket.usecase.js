@@ -32,6 +32,7 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
     }
     execute(ticketId, eventId) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const ticket = yield this._ticketRepository.findOne({ ticketId });
             const event = yield this._eventRepository.findOne({ eventId });
             if (!event)
@@ -40,10 +41,13 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
                 throw new custom_error_1.CustomError("Ticket not found", constants_1.HTTP_STATUS.NOT_FOUND);
             if (ticket.eventId !== eventId)
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
+            if (ticket.checkedIn === "cancelled")
+                throw new custom_error_1.CustomError("Ticket already cancelled", constants_1.HTTP_STATUS.FORBIDDEN);
             if (ticket.ticketStatus === "used")
                 throw new custom_error_1.CustomError("Ticket already used", constants_1.HTTP_STATUS.FORBIDDEN);
             ticket.ticketStatus = "used";
             ticket.checkedIn = "checked_in";
+            event.checkedInCount = (_a = event.checkedInCount) !== null && _a !== void 0 ? _a : 0; // initialize if undefined
             event.checkedInCount += ticket.ticketCount;
             const updatedTicket = yield this._ticketRepository.update({ ticketId }, ticket);
             const updatedEvent = yield this._eventRepository.update({ eventId }, event);

@@ -36,7 +36,9 @@ let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
                 return [];
             const enrichedAttendees = attendees.map((attendee) => {
                 const userId = typeof attendee === 'string' ? attendee : attendee.userId;
+                console.log('userIddfdfd=--=-=-=-=-=---', userId);
                 const userTicket = tickets.items.find((ticket) => ticket.clientId === userId);
+                console.log('userTikc\\\\\\\\\=--=-=-=-=-=---', userTicket);
                 return Object.assign(Object.assign({}, attendee), { ticket: userTicket || null });
             });
             return enrichedAttendees || [];

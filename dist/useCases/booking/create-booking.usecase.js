@@ -37,6 +37,15 @@ let CreateBookingUseCase = class CreateBookingUseCase {
             const bookingId = (0, unique_uuid_helper_1.generateUniqueId)("booking");
             const bookingsDetails = yield this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
             const bookedDate = bookingsDetails === null || bookingsDetails === void 0 ? void 0 : bookingsDetails.date;
+            const existingBooking = yield this._bookingRepository.findOne({
+                clientId: userId,
+                serviceId: serviceId,
+                date: { $in: [date] },
+            });
+            console.log('exitst book', existingBooking);
+            if (existingBooking) {
+                throw new custom_error_1.CustomError("You have already booked this service for this date.", constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
             const booking = yield this._bookingRepository.save({
                 bookingId,
                 clientId: userId,
@@ -46,14 +55,6 @@ let CreateBookingUseCase = class CreateBookingUseCase {
                 vendorId,
                 date: [date],
             });
-            const existingBooking = yield this._bookingRepository.findOne({
-                clientId: userId,
-                serviceId: serviceId,
-                date: { $in: [date] },
-            });
-            if (existingBooking) {
-                throw new custom_error_1.CustomError("You have already booked this service for this date.", constants_1.HTTP_STATUS.BAD_REQUEST);
-            }
             yield this._pushNotificationService.sendNotification(vendorId, notification_1.NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
         });
     }

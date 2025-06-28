@@ -37,7 +37,7 @@ let UpdateVendorStatusUseCase = class UpdateVendorStatusUseCase {
                 yield this._vendorRepository.update({ userId: id }, { vendorStatus: "rejected" });
             }
             else {
-                yield this._vendorRepository.update({ userId: id }, { vendorStatus: "approved" });
+                yield this._vendorRepository.update({ userId: id }, { vendorStatus: "approved", status: "active" });
                 yield this._sendEmailUseCase.execute(vendor === null || vendor === void 0 ? void 0 : vendor.email, "MakeIt - Application approved", (0, constants_1.VENDOR_APPLICATION_MAIL_CONTENT)("your requst approved by admin", vendor === null || vendor === void 0 ? void 0 : vendor.name, "approved"));
             }
         });

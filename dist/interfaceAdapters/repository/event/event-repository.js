@@ -112,7 +112,7 @@ let EventRepository = class EventRepository extends base_repository_1.BaseReposi
                     }
                 }
             ]);
-            return ((_a = result[0]) === null || _a === void 0 ? void 0 : _a.attendees) || [];
+            return (((_a = result[0]) === null || _a === void 0 ? void 0 : _a.attendees) || []).reverse();
         });
     }
 };

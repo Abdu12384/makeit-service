@@ -44,7 +44,7 @@ let EmailService = class EmailService {
     sendOtpEmail(email, subject, otp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(email, subject);
+                console.log(email, subject, otp);
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: email,

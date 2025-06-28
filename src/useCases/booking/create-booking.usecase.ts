@@ -27,6 +27,21 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
      
       const bookedDate = bookingsDetails?.date
 
+      const existingBooking = await this._bookingRepository.findOne({
+        clientId: userId,
+        serviceId: serviceId,
+        date: { $in: [date] }, 
+      });
+
+      console.log('exitst book',existingBooking)
+      
+      if (existingBooking) {
+        throw new CustomError(
+          "You have already booked this service for this date.",
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+      
       const booking = await this._bookingRepository.save({
         bookingId,
         clientId: userId,
@@ -37,18 +52,6 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
         date:[date],
       })
 
-      const existingBooking = await this._bookingRepository.findOne({
-        clientId: userId,
-        serviceId: serviceId,
-        date: { $in: [date] }, 
-      });
-      
-      if (existingBooking) {
-        throw new CustomError(
-          "You have already booked this service for this date.",
-          HTTP_STATUS.BAD_REQUEST
-        );
-      }
 
       await this._pushNotificationService.sendNotification(
         vendorId,

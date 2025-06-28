@@ -37,7 +37,7 @@ let CheckEventBookingAvliblityUseCase = class CheckEventBookingAvliblityUseCase 
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             const ticket = yield this._ticketRepository.findOne({ eventId, clientId: userId });
             if ((ticket === null || ticket === void 0 ? void 0 : ticket.ticketCount) + ticketCount > event.maxTicketsPerUser) {
-                throw new custom_error_1.CustomError(`You have already purchased the maximum allowed tickets.`, constants_1.HTTP_STATUS.BAD_REQUEST);
+                throw new custom_error_1.CustomError(`You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - (ticket === null || ticket === void 0 ? void 0 : ticket.ticketCount)} more ticket(s).`, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             if (event.totalTicket === event.ticketPurchased) {
                 throw new custom_error_1.CustomError("Event is already full", constants_1.HTTP_STATUS.BAD_REQUEST);
