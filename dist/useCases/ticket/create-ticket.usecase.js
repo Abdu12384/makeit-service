@@ -36,10 +36,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
     }
     execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('clientId her', clientId);
-            console.log("vendorId ", vendorId);
             const eventDetails = yield this._eventRepository.findOne({ eventId });
-            console.log("eventDetails", eventDetails);
             if (!eventDetails) {
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             }
@@ -59,11 +56,9 @@ let CreateTicketUseCase = class CreateTicketUseCase {
                 throw new custom_error_1.CustomError("QR Code generation failed", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
             const clientStripeId = yield this._stripeService.createPaymentIntent(totalAmount, "ticket", { ticket: ticket });
-            console.log('clientStripeId', clientStripeId);
             if (!clientStripeId) {
                 throw new custom_error_1.CustomError("Error while creating stripe client id", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
-            console.log('clienId', clientId);
             const paymentDetails = {
                 amount: totalAmount,
                 currency: "INR",
@@ -80,7 +75,6 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             }
             let attendeesCount = (eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) || 0;
             attendeesCount += totalCount;
-            console.log('attendeesCount', attendeesCount);
             let currentAttendees = eventDetails.attendees || [];
             if (!currentAttendees.includes(clientId)) {
                 currentAttendees.push(clientId);
@@ -90,7 +84,6 @@ let CreateTicketUseCase = class CreateTicketUseCase {
                 attendees: currentAttendees
             };
             const updatedEvent = yield this._eventRepository.update({ eventId: eventDetails.eventId }, eventUpdate);
-            console.log('updatedEvent', updatedEvent);
             const ogTicket = {
                 email,
                 phone,
@@ -105,7 +98,6 @@ let CreateTicketUseCase = class CreateTicketUseCase {
                 paymentTransactionId: paymentDocument.paymentId,
                 vendorId: vendorId,
             };
-            console.log('ogTicket', ogTicket);
             const createdTicket = yield this._ticketRepository.save(ogTicket);
             if (!createdTicket) {
                 throw new custom_error_1.CustomError("Error while saving ticket details", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);

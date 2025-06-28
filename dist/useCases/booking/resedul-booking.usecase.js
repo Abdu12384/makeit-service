@@ -101,6 +101,21 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                         rescheduleStatus: "Rejected"
                     },
                 });
+                const vendor = yield this._vendorRepository.VendorfindOne(booking.vendorId);
+                if (!vendor) {
+                    throw new Error("Vendor not found.");
+                }
+                if (!Array.isArray(vendor.bookedDates)) {
+                    vendor.bookedDates = [];
+                }
+                const oldIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString());
+                if (oldIndex !== -1) {
+                    vendor.bookedDates[oldIndex].count -= 1;
+                    if (vendor.bookedDates[oldIndex].count <= 0) {
+                        vendor.bookedDates.splice(oldIndex, 1);
+                    }
+                }
+                yield this._vendorRepository.vendorSave(vendor);
                 this._pushNotificationService.sendNotification(booking.clientId, "booking", `You have rejected the vendor's request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
                 this._pushNotificationService.sendNotification(booking.vendorId, "booking", `Client has rejected your request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
             }

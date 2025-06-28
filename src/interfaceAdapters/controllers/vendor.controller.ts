@@ -50,7 +50,6 @@ export class VendorCantroller implements IVendorController{
              pageSize,
              searchTermString
          )
-         console.log(vendor, total)
          res.status(HTTP_STATUS.OK).json({
             success:true,
             vendor,

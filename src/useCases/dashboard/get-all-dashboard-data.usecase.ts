@@ -78,7 +78,6 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
 
     const recentBookings = await this._bookingRepository.findAllWithVendorClient(filter,skip,limit,sort)
 
-    console.log("recentBookings", JSON.stringify(recentBookings, null, 2));
 
     // Aggregate metrics
     const totalEvents = events.length;

@@ -51,7 +51,6 @@ export class AdminRoute {
      this.adminRoute.post('/admin/refresh-token',
       decodeToken,
       (req:Request, res:Response) =>{
-        console.log("refreshing Admin",req.body)
         authController.handleTokenRefresh(req, res)
      })
      
@@ -133,7 +132,6 @@ export class AdminRoute {
       verifyAuth,authorizeRole(['admin']),
       blockStatusMiddleware.checkStatus as RequestHandler,
       (req:Request, res:Response) =>{
-        console.log(req.body),
          eventController.getAllEvents(req,res)
      })
 

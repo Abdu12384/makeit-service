@@ -29,7 +29,6 @@ export class RegisterClientUseCase implements IRegisterUseCase{
    ) {}
 
 async createUsers(user: UserDTO): Promise<IClientEntity | null> {
-  console.log('useCase',user)
    const {role, email, password} = user
 
        const {exists} = await this._emailExistenService.findUserByEmail(email)

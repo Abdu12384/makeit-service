@@ -33,7 +33,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
     async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:any,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
         let booking = await this._bookingRepository.findOne({bookingId})
         let vendor = await this._vendorRepository.findOne({vendorId:booking?.vendorId})
-        console.log("booking",booking)
+
         let serviceId = booking?.serviceId || bookingDetails.serviceId;
         const service = await this._serviceRepository.findOne({ serviceId });
         const totalAmount = service?.servicePrice!;
@@ -158,7 +158,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           paymentId: paymentIntentId,
         });
       
-        console.log("payment", payment);
+
 
         await this._pushNotificationService.sendNotification(
           booking.clientId,

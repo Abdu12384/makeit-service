@@ -45,7 +45,6 @@ let EventController = class EventController {
                 const data = req.body;
                 const { userId, role } = req.user;
                 const event = yield this._createEventUseCase.execute(data, userId);
-                console.log(data);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: "Event Created"
@@ -145,7 +144,6 @@ let EventController = class EventController {
             try {
                 const { eventId } = req.params;
                 const { ticketCount } = req.query;
-                console.log('ticketCount', ticketCount);
                 const { userId } = req.user;
                 const event = yield this._checkEventBookingAvliblityUseCase.execute(eventId, userId, Number(ticketCount));
                 res.status(constants_1.HTTP_STATUS.OK).json({

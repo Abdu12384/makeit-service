@@ -36,8 +36,6 @@ let CancelTicketUseCase = class CancelTicketUseCase {
     execute(ticketId, cancelCount) {
         return __awaiter(this, void 0, void 0, function* () {
             const ticket = yield this._ticketRepository.findOneWithPopulate({ ticketId });
-            console.log('ticket', ticket);
-            console.log('cancelCount', cancelCount);
             if (!ticket) {
                 throw new custom_error_1.CustomError("Ticket not found", constants_1.HTTP_STATUS.NOT_FOUND);
             }
@@ -56,10 +54,8 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             const vendorShare = cancelAmount * 0.29;
             // Refundable to client
             const clientRefund = cancelAmount - platformFee - vendorShare;
-            console.log('clientRefund', clientRefund);
             /** Step 1: Refund to client */
             const clientWallet = yield this._walletRepository.updateWallet(ticket.clientId, clientRefund);
-            console.log('clientWallet', clientWallet);
             if (!clientWallet) {
                 throw new custom_error_1.CustomError("Failed to update client wallet", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
@@ -76,7 +72,6 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             }
             /** Step 2: Deduct from vendor */
             const vendorId = ticket.vendorId;
-            console.log('vendorId', vendorId);
             const vendorWallet = yield this._walletRepository.reduceMoney(vendorId, vendorShare);
             if (!vendorWallet) {
                 throw new custom_error_1.CustomError("Failed to deduct vendor wallet", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
@@ -121,7 +116,6 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
             /** Step 3: Update ticket status */
             yield this._ticketRepository.update({ ticketId }, ticket);
-            console.log('updated ticket', ticket);
         });
     }
 };

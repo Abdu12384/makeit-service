@@ -34,12 +34,10 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const ticket = yield this._ticketRepository.findOne({ ticketId });
             const event = yield this._eventRepository.findOne({ eventId });
-            console.log('ticket', ticket);
             if (!event)
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             if (!ticket)
                 throw new custom_error_1.CustomError("Ticket not found", constants_1.HTTP_STATUS.NOT_FOUND);
-            console.log('ticket.eventId', ticket.eventId);
             if (ticket.eventId !== eventId)
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             if (ticket.ticketStatus === "used")

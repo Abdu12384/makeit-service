@@ -90,7 +90,6 @@ async getAllServices(req: Request, res: Response): Promise<void> {
           role,
           userId
         )
-        console.log('services',services)
         res.status(HTTP_STATUS.OK).json({
            success: true,
            services,

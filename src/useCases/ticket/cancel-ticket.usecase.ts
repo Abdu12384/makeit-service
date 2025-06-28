@@ -28,8 +28,6 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
 
     async execute(ticketId: string,cancelCount:number): Promise<void> {
       const ticket = await this._ticketRepository.findOneWithPopulate({ ticketId });
-      console.log('ticket',ticket)
-      console.log('cancelCount',cancelCount)
   
       if (!ticket) {
         throw new CustomError("Ticket not found", HTTP_STATUS.NOT_FOUND);
@@ -56,11 +54,9 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
   
       // Refundable to client
       const clientRefund = cancelAmount - platformFee - vendorShare;
-      console.log('clientRefund',clientRefund)
   
       /** Step 1: Refund to client */
       const clientWallet = await this._walletRepository.updateWallet(ticket.clientId, clientRefund);
-      console.log('clientWallet',clientWallet)
       if (!clientWallet) {
         throw new CustomError("Failed to update client wallet", HTTP_STATUS.INTERNAL_SERVER_ERROR);
       }
@@ -80,7 +76,6 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
   
       /** Step 2: Deduct from vendor */
       const vendorId = ticket.vendorId;
-      console.log('vendorId',vendorId)
       const vendorWallet = await this._walletRepository.reduceMoney(vendorId, vendorShare);
       if (!vendorWallet) {
         throw new CustomError("Failed to deduct vendor wallet", HTTP_STATUS.INTERNAL_SERVER_ERROR);
@@ -151,6 +146,5 @@ export default class CancelTicketUseCase implements ICancelTicketUseCase {
 
       /** Step 3: Update ticket status */
       await this._ticketRepository.update({ ticketId }, ticket);
-      console.log('updated ticket',ticket)
     }
 }

@@ -48,7 +48,6 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
         if(!confirmPayment){throw new CustomError("Error while confirming payment",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
 
         const eventDetails = await this._eventRepository.findOne({eventId:ticket.eventId})
-        console.log('eventDetails',eventDetails)
       //   if (eventDetails?.ticketPurchased > eventDetails?.totalTicket) {
       //     throw new CustomError('Ticket full Sold out',HTTP_STATUS.FORBIDDEN)
       // } else if (eventDetails?.ticketPurchased + ticket.ticketCount > eventDetails?.totalTicket) {
@@ -58,7 +57,6 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
       const paymentDetails = await this._paymentRepository.update({paymentId:paymentIntentId},{status:"success"})
       
       const newTicketPurchased = (eventDetails?.ticketPurchased || 0) + ticket.ticketCount
-      console.log('newTicketPurchased',newTicketPurchased)
       const updateTicketCount = await this._eventRepository.update({eventId:ticket.eventId},{ticketPurchased:newTicketPurchased})
       const updatedTicket = await this._ticketRepository.update({ticketId:ticket.ticketId},{paymentStatus:"successfull"})
       const adminId = process.env.ADMIN_ID
@@ -112,7 +110,6 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
        const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(vendorId,vendorPrice)
        
-       console.log('transaction',transaction)
 
        await this._pushNotificationService.sendNotification(
         ticket.clientId,

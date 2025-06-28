@@ -50,12 +50,14 @@ let ResetPasswordUseCase = class ResetPasswordUseCase {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_ROLE, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             const hashedPassword = yield this._passwordHasher.hash(password);
-            const isPasswordSame = yield this._passwordHasher.compare(password, hashedPassword);
-            if (isPasswordSame) {
-                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.PASSWORD_SAME, constants_1.HTTP_STATUS.BAD_REQUEST);
-            }
+            // const isPasswordSame = await this._passwordHasher.compare(password, hashedPassword)
+            // if(isPasswordSame){
+            //   throw new CustomError(
+            //     ERROR_MESSAGES.PASSWORD_SAME,
+            //     HTTP_STATUS.BAD_REQUEST
+            //   )
+            // }
             const user = yield repository.update({ userId }, { password: hashedPassword });
-            console.log('user', user);
             if (!user) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             }

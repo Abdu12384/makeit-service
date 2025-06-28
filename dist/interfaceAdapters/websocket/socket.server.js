@@ -40,7 +40,6 @@ let SocketConfig = class SocketConfig {
     //==========================================================
     initializeSockets() {
         this.io.on("connect", (socket) => {
-            console.log("a user connected: ", socket.id);
             //==========================================================
             socket.on("start-chat", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -68,11 +67,9 @@ let SocketConfig = class SocketConfig {
             //==========================================================
             socket.on("join-room", (data, response) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    console.log("join-room", data);
                     yield this._chatUseCase.markMessagesAsSeen(data.roomId, data.userId);
                     socket.join(data.roomId);
                     socket.join(data.userId);
-                    console.log(`user ${socket.id} joined room: ${data.roomId}`);
                     socket.to(data.roomId).emit("user-joined", { userId: data.userId });
                     response({ status: "success", message: "Joined room successfully" });
                 }
@@ -90,7 +87,6 @@ let SocketConfig = class SocketConfig {
                         senderModel: data.senderModel,
                         messageContent: data.message,
                     });
-                    console.log("chatId -------------------------------------------", data.chatId);
                     this.io.to(data.chatId).emit("receive-message", message);
                     const chat = yield this._chatUseCase.getChatById(data.chatId);
                     if (chat) {

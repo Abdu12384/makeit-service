@@ -74,9 +74,7 @@ export class AuthController implements IClientAuthController{
 
   async sendOtp(req: Request, res: Response): Promise<void> {
      try {
-      console.log('otpsend',req.body)
       const {email}  = req.body
-        console.log('otp sending....')
         await this._sendOtpEmailUseCase.execute(email)
        res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS)
      } catch (error) {
@@ -97,14 +95,11 @@ export class AuthController implements IClientAuthController{
       try {
         
         const {formdata, otpString} = req.body
-        console.log('varifying...',formdata,otpString)
         
         await this._varifyOtpUseCase.execute(formdata.email, otpString)
         
         const {role} = formdata as {role: keyof typeof userSchemas}
-          console.log(role)
         const schema = userSchemas[role]
-          console.log(schema)
          if(!schema) {
            res.status(HTTP_STATUS.BAD_REQUEST).json({
             success:true,
@@ -140,7 +135,7 @@ export class AuthController implements IClientAuthController{
  async login(req: Request, res: Response): Promise<void> {
       try {
            const data = req.body as LoginUserDTO
-            console.log('user data',data)
+
             // const validatedData = loginSchema.parse(data)
             // if(!validatedData){
             //   res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -258,7 +253,6 @@ export class AuthController implements IClientAuthController{
       )
 
 			const user = (req as CustomRequest).user;
-      console.log(user,'logout user')
 			const accessTokenName = `${user.role}_access_token`;
 			const refreshTokenName = `${user.role}_refresh_token`;
 			clearAuthCookies(res, accessTokenName, refreshTokenName);
@@ -336,7 +330,6 @@ export class AuthController implements IClientAuthController{
 async resetPassword(req: Request, res: Response): Promise<void> {
    try {
       const {password,token} = req.body
-      console.log('token',token,password)
       await this._resetPasswordUseCase.execute(token, password)
       res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS)
    } catch (error) {

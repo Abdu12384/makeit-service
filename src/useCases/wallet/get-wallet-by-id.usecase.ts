@@ -47,10 +47,8 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
           wallet = await this.walletRepository.save(newWallet);
         }
       
-        console.log('wallet',wallet)
 
         const {items,total} = await this.transactionRepository.findAll({walletId:wallet.walletId},skip,limit,sort)
-        console.log('transaction',items)
 
         const response = {
             wallet,

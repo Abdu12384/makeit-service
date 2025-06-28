@@ -35,22 +35,18 @@ let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
             const paymentIntent = yield this._stripeService.confirmPayment(paymentIntentId);
             if (!paymentIntent)
                 throw new Error("Failed to confirm Stripe payment");
-            console.log("paymentIntent", paymentIntent);
             const existingBooking = yield this._bookingRepository.findOne({ bookingId: booking.bookingId });
             if (!existingBooking) {
                 throw new Error("Booking not found");
             }
             const paidAmount = paymentIntent.amount / 100;
-            console.log("paidAmount", paidAmount);
             const balanceAmount = (_a = existingBooking.balanceAmount) !== null && _a !== void 0 ? _a : 0;
-            console.log("balanceAmount", balanceAmount);
             if (paymentIntent.status === "succeeded") {
                 if (balanceAmount > 0 && paidAmount >= balanceAmount) {
                     yield this._bookingRepository.update({ bookingId: booking.bookingId }, { paymentStatus: "Successfull", balanceAmount: 0 });
                 }
                 else {
                     const newBalance = existingBooking === null || existingBooking === void 0 ? void 0 : existingBooking.balanceAmount;
-                    console.log("newBalance", newBalance);
                     yield this._bookingRepository.update({ bookingId: booking.bookingId }, { balanceAmount: newBalance > 0 ? newBalance : 0 });
                 }
                 yield this._paymentRepository.update({ bookingId: booking.bookingId }, { status: "success" });

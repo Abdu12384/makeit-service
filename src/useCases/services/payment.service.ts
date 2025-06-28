@@ -14,7 +14,7 @@ export class PaymentService implements IPaymentService {
         })
     }
     async createPaymentIntent(amount: number, purpose: "ticket" | "service", metadata: Record<string, any>): Promise<string> {
-        console.log(metadata)
+
 
         try {
             const paymentIntent = await this.stripe.paymentIntents.create({

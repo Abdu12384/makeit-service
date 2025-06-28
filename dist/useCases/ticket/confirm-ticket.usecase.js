@@ -44,7 +44,6 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 throw new custom_error_1.CustomError("Error while confirming payment", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
             const eventDetails = yield this._eventRepository.findOne({ eventId: ticket.eventId });
-            console.log('eventDetails', eventDetails);
             //   if (eventDetails?.ticketPurchased > eventDetails?.totalTicket) {
             //     throw new CustomError('Ticket full Sold out',HTTP_STATUS.FORBIDDEN)
             // } else if (eventDetails?.ticketPurchased + ticket.ticketCount > eventDetails?.totalTicket) {
@@ -52,7 +51,6 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
             // }
             const paymentDetails = yield this._paymentRepository.update({ paymentId: paymentIntentId }, { status: "success" });
             const newTicketPurchased = ((eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) || 0) + ticket.ticketCount;
-            console.log('newTicketPurchased', newTicketPurchased);
             const updateTicketCount = yield this._eventRepository.update({ eventId: ticket.eventId }, { ticketPurchased: newTicketPurchased });
             const updatedTicket = yield this._ticketRepository.update({ ticketId: ticket.ticketId }, { paymentStatus: "successfull" });
             const adminId = process.env.ADMIN_ID;
@@ -103,7 +101,6 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
             };
             const vendorTransaction = yield this._transactionRepository.save(vendorTransactionDetails);
             const addMoneyToVendorWallet = yield this._walletRepository.updateWallet(vendorId, vendorPrice);
-            console.log('transaction', transaction);
             yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been confirmed.`, notification_1.NotificationType.TICKET_BOOKING, "client");
             yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
             return updatedTicket;

@@ -42,7 +42,6 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
         return __awaiter(this, void 0, void 0, function* () {
             let booking = yield this._bookingRepository.findOne({ bookingId });
             let vendor = yield this._vendorRepository.findOne({ vendorId: booking === null || booking === void 0 ? void 0 : booking.vendorId });
-            console.log("booking", booking);
             let serviceId = (booking === null || booking === void 0 ? void 0 : booking.serviceId) || bookingDetails.serviceId;
             const service = yield this._serviceRepository.findOne({ serviceId });
             const totalAmount = service === null || service === void 0 ? void 0 : service.servicePrice;
@@ -141,7 +140,6 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                 status: "pending",
                 paymentId: paymentIntentId,
             });
-            console.log("payment", payment);
             yield this._pushNotificationService.sendNotification(booking.clientId, "Booking Confirmed", `Your advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle} is successful.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "client");
             yield this._pushNotificationService.sendNotification(booking.vendorId, "Advance Payment Received", `You have received advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle}.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "vendor");
             return { booking, clientStripeId };

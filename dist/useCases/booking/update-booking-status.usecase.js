@@ -132,7 +132,6 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                 booking.status = "Completed";
                 yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been completed.`, notification_1.NotificationType.BOOKING_COMPLETED, "client");
             }
-            console.log("booking", booking);
             yield this._bookingRepository.update({ bookingId }, booking);
         });
     }

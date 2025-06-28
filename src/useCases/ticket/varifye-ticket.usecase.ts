@@ -29,11 +29,9 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
 
           const ticket = await this._ticketRepository.findOne({ticketId})
           const event = await this._eventRepository.findOne({eventId})
-           console.log('ticket',ticket)
 
            if(!event) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
           if(!ticket) throw new CustomError("Ticket not found",HTTP_STATUS.NOT_FOUND)
-          console.log('ticket.eventId',ticket.eventId)
           if(ticket.eventId !== eventId) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
 
           if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)

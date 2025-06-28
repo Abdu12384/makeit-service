@@ -21,7 +21,6 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase{
        const accessToken = this._tokenService.generateAccessToken(payload)
        const refreshToken = this._tokenService.generateRefreshToken(payload)
        
-       console.log('herer',)
         
       await this._refreshTokenRepository.save({
          token: refreshToken,

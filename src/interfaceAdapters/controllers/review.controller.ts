@@ -34,7 +34,6 @@ export class ReviewController implements IReviewController {
     async createReview(req: Request, res: Response): Promise<void> {
         try {
             const {targetId,targetType,comment,rating} = req.body
-            console.log(req.body)
             const {userId} = (req as CustomRequest).user
             if(!userId){
                 throw new CustomError(

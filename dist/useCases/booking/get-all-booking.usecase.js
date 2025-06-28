@@ -34,7 +34,6 @@ let GetAllBookingUseCase = class GetAllBookingUseCase {
             const skip = (validPageNumber - 1) * validPageSize;
             const filter = {};
             if (role === "vendor" && userId) {
-                console.log("vendorId", userId);
                 filter.vendorId = userId;
             }
             else if (role === "client" && userId) {
@@ -43,7 +42,6 @@ let GetAllBookingUseCase = class GetAllBookingUseCase {
             const limit = validPageSize;
             const sort = { createdAt: -1 };
             const { items, total } = yield this._bookingRepository.findAllWithVendorClient(filter, skip, limit, sort);
-            console.log("items", items);
             const response = {
                 bookings: items,
                 total: Math.ceil(total / validPageSize)

@@ -145,6 +145,26 @@ async execute(
         }
       );
 
+      const vendor = await this._vendorRepository.VendorfindOne(booking.vendorId);
+      if (!vendor) {
+        throw new Error("Vendor not found.");
+      }
+
+      if (!Array.isArray(vendor.bookedDates)) {
+        vendor.bookedDates = [];
+      }
+
+      const oldIndex = vendor.bookedDates.findIndex(
+        (entry) => new Date(entry.date).toDateString() === new Date(booking?.rescheduleDate!).toDateString()
+      );
+      if (oldIndex !== -1) {
+        vendor.bookedDates[oldIndex].count -= 1;
+        if (vendor.bookedDates[oldIndex].count <= 0) {
+          vendor.bookedDates.splice(oldIndex, 1);
+        }
+      }
+      await this._vendorRepository.vendorSave(vendor)
+
       this._pushNotificationService.sendNotification(
         booking.clientId,
         "booking",

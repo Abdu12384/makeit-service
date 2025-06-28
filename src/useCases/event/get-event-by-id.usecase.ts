@@ -27,7 +27,6 @@ export class GetEventByIdUseCase implements IGetEventByIdUseCase{
                 HTTP_STATUS.NOT_FOUND
             )
         }
-        console.log('event',event)
         return event
     } 
 }

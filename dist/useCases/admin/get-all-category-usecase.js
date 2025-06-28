@@ -32,7 +32,6 @@ let GetAllCategoryUseCase = class GetAllCategoryUseCase {
             const validPage = Math.max(1, pageNumber || 1);
             const validLimit = Math.max(1, pageSize || 10);
             const skip = (validPage - 1) * validLimit;
-            console.log(validPage, validLimit, skip);
             const filter = {};
             if (search) {
                 filter.title = { $regex: search, $options: "i" };

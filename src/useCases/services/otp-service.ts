@@ -20,7 +20,6 @@ export class OtpService implements IOtpService{
 
   // ===================== Save OTP ===========================//
      async storeOtp(email: string, otp: string): Promise<void> {
-       console.log('storing otp')
       const expiresAt = new Date()
       expiresAt.setMinutes(expiresAt.getMinutes() + 2)
 

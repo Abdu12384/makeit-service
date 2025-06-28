@@ -36,7 +36,6 @@ let GetEventByIdUseCase = class GetEventByIdUseCase {
             if (!event) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_2.HTTP_STATUS.NOT_FOUND);
             }
-            console.log('event', event);
             return event;
         });
     }

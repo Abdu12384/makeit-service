@@ -62,7 +62,6 @@ let LoginUserUseCase = class LoginUserUseCase {
             }
             if (user.password) {
                 const isPasswordMatch = yield this._passwordBcrypt.compare(user.password, userData.password);
-                console.log('comaprison', user.password, isPasswordMatch);
                 if (!isPasswordMatch) {
                     throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS.FORBIDDEN);
                 }

@@ -21,12 +21,8 @@ export class BookingAutoCancelController implements IBookingAutoCancelController
 
   public static schedule(): void {
     cron.schedule("0 * * * *", async () => {
-      console.log("[CronJob] Running auto cancel booking...");
-
       const controller = container.resolve(BookingAutoCancelController);
       await controller.execute();
-
-      console.log("[CronJob] Booking auto cancel executed.");
     });
   }
 

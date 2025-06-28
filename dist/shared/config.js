@@ -31,7 +31,6 @@ function initializeFirebase() {
                 firebase_admin_1.default.initializeApp({
                     credential: firebase_admin_1.default.credential.cert(serviceAccount),
                 });
-                console.log("✅ Firebase initialized");
                 // ✅ Set messaging only after init
                 messagingInstance = firebase_admin_1.default.messaging();
             }

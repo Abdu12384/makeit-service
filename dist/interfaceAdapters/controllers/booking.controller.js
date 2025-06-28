@@ -44,7 +44,6 @@ let BookingController = class BookingController {
                 const { date, email, phone, vendorId } = req.body;
                 const { userId, role } = req.user;
                 const booking = yield this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
-                console.log('created booking', booking);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     booking,
@@ -85,9 +84,6 @@ let BookingController = class BookingController {
             try {
                 const { bookingId } = req.params;
                 const { status, reason } = req.body;
-                console.log('bookingId', bookingId);
-                console.log('status', status);
-                console.log('reason', reason);
                 const booking = yield this._updateBookingStatusUseCase.execute(bookingId, status, reason);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
@@ -127,9 +123,6 @@ let BookingController = class BookingController {
             try {
                 const { bookingId } = req.params;
                 const { selectedDate, rescheduleReason } = req.body;
-                console.log('bookingId', bookingId);
-                console.log('selectedDate', selectedDate);
-                console.log('rescheduleReason', rescheduleReason);
                 const booking = yield this._rescheduleBookingUseCase.execute(bookingId, selectedDate, rescheduleReason);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
@@ -150,8 +143,6 @@ let BookingController = class BookingController {
             try {
                 const { bookingId } = req.params;
                 const { status } = req.body;
-                console.log('bookingId', bookingId);
-                console.log('status', status);
                 const booking = yield this._rescheduleBookingUseCase.approveOrRejectRescheduleBooking(bookingId, status);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,

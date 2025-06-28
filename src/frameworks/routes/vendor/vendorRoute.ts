@@ -291,7 +291,6 @@ export class VendorRoute {
          this.vendorRoute.post('/vendor/refresh-token',
           decodeToken,
          (req:Request, res:Response) =>{
-         console.log("refreshing Admin",req.body)
           authController.handleTokenRefresh(req, res)
            })
                     

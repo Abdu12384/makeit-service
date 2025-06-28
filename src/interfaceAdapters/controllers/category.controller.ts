@@ -58,7 +58,7 @@ export class CategoryController implements ICategoryController {
 
    async getAllCategories(req:Request,res:Response):Promise<void>{
         try {
-          console.log(req.query)
+
           const {search,page,limit} = req.query
           const {role} = (req as CustomRequest).user 
            const pageNumber = Number(page)
@@ -69,7 +69,6 @@ export class CategoryController implements ICategoryController {
               search as string,
               role
             )
-             console.log(categories)
             res.status(HTTP_STATUS.OK).json({
                 success:true,
                 categories,
@@ -90,7 +89,6 @@ export class CategoryController implements ICategoryController {
 
     async updateCategoryStatus(req: Request, res: Response): Promise<void> {
       try {
-        console.log(req.params)
         const {id} = req.params
         const {status} = req.body
         const category = await this._updateStatusCategoryUseCase.execute(

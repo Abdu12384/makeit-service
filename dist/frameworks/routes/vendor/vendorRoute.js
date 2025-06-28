@@ -128,7 +128,6 @@ class VendorRoute {
             resolver_1.authController.logout(req, res);
         });
         this.vendorRoute.post('/vendor/refresh-token', auth_middleware_1.decodeToken, (req, res) => {
-            console.log("refreshing Admin", req.body);
             resolver_1.authController.handleTokenRefresh(req, res);
         });
     }

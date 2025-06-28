@@ -32,7 +32,6 @@ let UpdateVendorStatusUseCase = class UpdateVendorStatusUseCase {
     execute(id, status, message) {
         return __awaiter(this, void 0, void 0, function* () {
             const vendor = yield this._vendorRepository.findOne({ userId: id });
-            console.log("vendor", status, vendor);
             if (status === "rejected") {
                 yield this._sendEmailUseCase.execute(vendor === null || vendor === void 0 ? void 0 : vendor.email, "MakeIt - Application rejected", (0, constants_1.VENDOR_APPLICATION_MAIL_CONTENT)(message, vendor === null || vendor === void 0 ? void 0 : vendor.name, status));
                 yield this._vendorRepository.update({ userId: id }, { vendorStatus: "rejected" });

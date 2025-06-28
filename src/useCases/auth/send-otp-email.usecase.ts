@@ -24,9 +24,9 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
 
 
     async execute(email: string): Promise<void> {
-       console.log(email)
+
         const {exists} = await this._userExitenceService.findUserByEmail(email)
-          console.log('inthe db',exists)
+
         if(exists){
             throw new CustomError(
                ERROR_MESSAGES.EMAIL_EXISTS,
@@ -35,7 +35,7 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
         }
         
         const otp =  this._otpService.generateOtp()
-          console.log(`Generated OTP : ${otp}`)
+
               
             
          await this._otpService.storeOtp(email, otp)
@@ -45,6 +45,6 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
             "MAKEIT - Verify Your Email",
              otp
             )
-          console.log(`OTP sent to : ${email}`)
+
     }
 }

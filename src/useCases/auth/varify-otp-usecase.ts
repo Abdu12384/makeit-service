@@ -17,7 +17,6 @@ export class VarifyOtpUseCase implements IVerifyOtpEmailUseCase{
      ) {}
 
      async execute(email: string, otp: string): Promise<boolean> {
-         console.log('working');
          
        const result = await this._otpService.varifyOtp(email,otp)
        if (result === "invalid") {

@@ -82,7 +82,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
               vendor.bookedDates.splice(oldIndex, 1);
             }
           }
-          
+
           await this._vendorRepository.vendorSave(vendor)
 
 
@@ -213,7 +213,6 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
           );
         }
 
-        console.log("booking",booking)
         await this._bookingRepository.update(
           {bookingId},
           booking

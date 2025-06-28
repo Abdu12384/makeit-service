@@ -31,7 +31,6 @@ export class AddServiceUseCase implements IAddServiceUseCase{
                HTTP_STATUS.CONFLICT
             )
          }   
-         console.log('service added',data)  
          
          const serviceId = generateUniqueId("service")  
 

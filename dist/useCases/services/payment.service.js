@@ -32,7 +32,6 @@ let PaymentService = class PaymentService {
     }
     createPaymentIntent(amount, purpose, metadata) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(metadata);
             try {
                 const paymentIntent = yield this.stripe.paymentIntents.create({
                     amount: Math.round(amount * 100),

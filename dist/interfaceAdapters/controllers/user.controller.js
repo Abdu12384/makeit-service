@@ -130,7 +130,6 @@ let UserController = class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = req.body;
-                console.log(data);
                 const { userId, role } = req.user;
                 const updatedUser = yield this._updateUserDetailsUseCase.execute(userId, role, data);
                 if (!updatedUser) {

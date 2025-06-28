@@ -40,7 +40,6 @@ let AddServiceUseCase = class AddServiceUseCase {
             if (isServiceExisting) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.SERVICE_EXISTS, constants_1.HTTP_STATUS.CONFLICT);
             }
-            console.log('service added', data);
             const serviceId = (0, unique_uuid_helper_1.generateUniqueId)("service");
             yield this._serviceRepository.save(Object.assign(Object.assign({}, data), { serviceId }));
         });

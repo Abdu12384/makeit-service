@@ -28,7 +28,6 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase{
           if(userType){
             filter.role = userType
           }
-      console.log('userType',userType)
           if(searchTerm){
              filter.$or=[
                {name:{$regex: searchTerm, $options:"i"}},

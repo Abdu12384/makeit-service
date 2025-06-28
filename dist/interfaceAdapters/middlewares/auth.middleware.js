@@ -20,7 +20,6 @@ const tokenServiec = new jwt_service_1.JWTService();
 const verifyAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = extractToken(req);
-        console.log('verify first ', token);
         if (!token) {
             res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
                 success: false,
@@ -47,13 +46,11 @@ const verifyAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         if (error.name === "TokenExpiredError") {
-            console.log(error.name);
             res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
                 message: constants_1.ERROR_MESSAGES.TOKEN_EXPIRED
             });
             return;
         }
-        console.log("Invalid token response sent");
         res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
             message: constants_1.ERROR_MESSAGES.INVALID_TOKEN
         });
@@ -67,7 +64,6 @@ exports.verifyAuth = verifyAuth;
 const extractToken = (req) => {
     var _a, _b, _c, _d;
     const userType = req.path.split("/")[1];
-    console.log('user type', userType);
     if (!userType)
         return null;
     return {
@@ -80,7 +76,6 @@ const extractToken = (req) => {
 // ========================================================================
 const isBlacklisted = (token) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Blacklist for tokne", token);
         const result = yield redis_client_1.redisClient.get(token);
         return result !== null;
     }
@@ -114,21 +109,18 @@ const decodeToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const token = extractToken(req);
         if (!token) {
-            console.log("no tokeen");
             res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
                 message: constants_1.ERROR_MESSAGES.UNAUTHORIZED_ACCESS
             });
             return;
         }
         if (yield isBlacklisted(token.access_token)) {
-            console.log("token is black listed");
             res.status(constants_1.HTTP_STATUS.FORBIDDEN).json({
                 message: constants_1.ERROR_MESSAGES.TOKEN_BLACKLISTED,
             });
             return;
         }
         const user = tokenServiec.decodeAccessToken(token === null || token === void 0 ? void 0 : token.access_token);
-        console.log(`Decoded`, user);
         req.user = {
             userId: user === null || user === void 0 ? void 0 : user.userId,
             email: user === null || user === void 0 ? void 0 : user.email,

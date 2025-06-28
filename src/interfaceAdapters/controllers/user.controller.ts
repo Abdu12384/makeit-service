@@ -152,7 +152,6 @@ async refreshSession(req: Request, res: Response): Promise<void> {
   async updateUserDetails(req: Request, res: Response): Promise<void> {
      try {
        const data = req.body
-       console.log(data)
        const {userId, role} = (req as CustomRequest).user;
        const updatedUser = await this._updateUserDetailsUseCase.execute(
          userId,

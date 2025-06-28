@@ -39,10 +39,8 @@ let BookingAutoCancelController = BookingAutoCancelController_1 = class BookingA
     }
     static schedule() {
         node_cron_1.default.schedule("0 * * * *", () => __awaiter(this, void 0, void 0, function* () {
-            console.log("[CronJob] Running auto cancel booking...");
             const controller = tsyringe_1.container.resolve(BookingAutoCancelController_1);
             yield controller.execute();
-            console.log("[CronJob] Booking auto cancel executed.");
         }));
     }
 };

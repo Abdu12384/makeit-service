@@ -39,7 +39,6 @@ export const verifyAuth = async (
 ) => {
      try {
         const token = extractToken(req)
-        console.log('verify first ',token)
         if(!token){
           res.status(HTTP_STATUS.UNAUTHORIZED).json({
              success: false,
@@ -72,14 +71,12 @@ export const verifyAuth = async (
         next()
      } catch (error: any) {
        if(error.name === "TokenExpiredError"){
-         console.log(error.name)
          res.status(HTTP_STATUS.UNAUTHORIZED).json({
           message: ERROR_MESSAGES.TOKEN_EXPIRED
          })
          return
        } 
 
-       console.log("Invalid token response sent")
        res.status(HTTP_STATUS.UNAUTHORIZED).json({
          message: ERROR_MESSAGES.INVALID_TOKEN
        })
@@ -98,7 +95,6 @@ export const verifyAuth = async (
 // ========================================================================
  const extractToken = (req: Request): {access_token:string; refresh_token:string} | null =>{
      const userType = req.path.split("/")[1];
-      console.log('user type',userType)
      if(!userType) return null
 
      return{
@@ -124,7 +120,6 @@ export const verifyAuth = async (
 // ========================================================================
 const isBlacklisted = async (token: string): Promise<boolean> =>{
    try {
-      console.log("Blacklist for tokne", token)
       const result = await redisClient.get(token)
       return result !== null
    } catch (error) {
@@ -173,7 +168,6 @@ export const decodeToken = async (req: Request, res: Response, next:NextFunction
         const token = extractToken(req)
 
         if(!token){
-           console.log("no tokeen")
            res.status(HTTP_STATUS.UNAUTHORIZED).json({
              message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS
            })
@@ -181,7 +175,6 @@ export const decodeToken = async (req: Request, res: Response, next:NextFunction
         }
 
         if(await isBlacklisted(token.access_token)){
-           console.log("token is black listed")
            res.status(HTTP_STATUS.FORBIDDEN).json({
             message: ERROR_MESSAGES.TOKEN_BLACKLISTED,
            })
@@ -189,7 +182,6 @@ export const decodeToken = async (req: Request, res: Response, next:NextFunction
         }
 
         const user = tokenServiec.decodeAccessToken(token?.access_token);
-        console.log(`Decoded`,user);
          (req as CustomRequest).user = {
             userId: user?.userId,
             email: user?.email,

@@ -22,7 +22,6 @@ export class GetAllBookingUseCase implements IGetAllBookingUseCase{
           const filter: Record<string,any> = {};
 
           if (role === "vendor"&& userId ) {
-            console.log("vendorId", userId)
             filter.vendorId = userId;
           }else if(role === "client" && userId){
             filter.clientId = userId
@@ -32,7 +31,6 @@ export class GetAllBookingUseCase implements IGetAllBookingUseCase{
           const sort = { createdAt: -1 as -1 };  
 
           const {items , total} = await this._bookingRepository.findAllWithVendorClient(filter,skip,limit,sort)
-          console.log("items", items)
           const response = {
             bookings: items,
             total: Math.ceil(total / validPageSize)

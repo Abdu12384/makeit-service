@@ -22,7 +22,7 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
 
     async execute(userId: string, currentPassword: string, newPassword: string, role: string): Promise<void> {
 
-       console.log('userId',userId)
+      console.log("🚀 ~ ChangePasswordUseCase ~ execute ~ role:", currentPassword,newPassword)
              let repo;
              let idField;
              if(role === "client"){
@@ -39,7 +39,6 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
              }
 
        const user = await repo.findOne({userId});
-       console.log('user',user)
        if (!user) {
         throw new CustomError(
           ERROR_MESSAGES.USER_NOT_FOUND,
@@ -48,6 +47,7 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
       }
       
        const isPasswordValid = await this._passwordHasher.compare(currentPassword, user?.password);
+       console.log('[ioioioioiopiopippo=rs')
 
        if (!isPasswordValid) {
            throw new CustomError(

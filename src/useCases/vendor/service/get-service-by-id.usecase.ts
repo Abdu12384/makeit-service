@@ -26,10 +26,8 @@ export class GetServiceByIdUseCase implements IGetServiceByIdUseCase {
 
      const service = await this._serviceRepository.findOne({ serviceId })
 
-     console.log('service',service)
      if(service){
       const vendor = await this._vendorRepository.findOne({ userId: service.vendorId })
-      console.log('vendor',vendor)
       return {
         service,
         vendor

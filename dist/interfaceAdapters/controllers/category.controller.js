@@ -57,13 +57,11 @@ let CategoryController = class CategoryController {
     getAllCategories(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(req.query);
                 const { search, page, limit } = req.query;
                 const { role } = req.user;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
                 const categories = yield this._getAllCategoriesUseCase.execute(pageNumber, pageSize, search, role);
-                console.log(categories);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     categories,
@@ -80,7 +78,6 @@ let CategoryController = class CategoryController {
     updateCategoryStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(req.params);
                 const { id } = req.params;
                 const { status } = req.body;
                 const category = yield this._updateStatusCategoryUseCase.execute(id, status);

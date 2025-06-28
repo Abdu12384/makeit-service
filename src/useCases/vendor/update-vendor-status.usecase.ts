@@ -18,7 +18,6 @@ export class UpdateVendorStatusUseCase implements IUpdateVendorStatusUseCase{
      
      async execute(id: string, status: statusTypes, message?: string): Promise<void> {
          const vendor = await this._vendorRepository.findOne({userId: id})
-         console.log("vendor", status, vendor)
           if(status === "rejected"){
              await this._sendEmailUseCase.execute(
               vendor?.email as string,

@@ -20,7 +20,6 @@ export class GetAllCategoryUseCase implements IGetCategoryUseCase{
     const validLimit = Math.max(1, pageSize || 10);
     const skip = (validPage - 1) * validLimit;
 
-    console.log(validPage,validLimit,skip)
   
     const filter: any = {};
     if (search) {

@@ -32,7 +32,7 @@ export class ChatUseCase implements IChatUseCase {
   }): Promise<string> {
     const { senderId, senderModel, receiverId, receiverModel } = data;
 
-console.log("startChat-------------------------------------------", data);
+
     if (!senderId || !senderModel || !receiverId || !receiverModel) {
       throw new Error("All fields are required");
     }
@@ -63,7 +63,6 @@ console.log("startChat-------------------------------------------", data);
   }): Promise<IMessageEntity> {
     const { chatId, senderId, senderModel, messageContent } = data;
 
-    console.log("sendMessage-------------------------------------------", data);
     if (!chatId || !senderId || !senderModel || !messageContent) {
       throw new Error("Chat ID, sender ID, sender model, and message content are required");
     }
@@ -73,7 +72,7 @@ console.log("startChat-------------------------------------------", data);
     if (!chat || (chat.senderId !== senderId && chat.receiverId !== senderId)) {
       throw new Error("Unauthorized to send message in this chat");
     }
-    console.log("chat-------------------------------------------", chat);
+
 
 
     const messageId = generateUniqueId("message")
@@ -97,7 +96,7 @@ console.log("startChat-------------------------------------------", data);
 
     const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
     const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
-    console.log("receiverModel-------------------------------------------", receiverModel)
+
     const receiver = await this.findUserById(receiverId, receiverModel);
 
     

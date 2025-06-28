@@ -31,10 +31,8 @@ let GetServiceByIdUseCase = class GetServiceByIdUseCase {
     execute(serviceId) {
         return __awaiter(this, void 0, void 0, function* () {
             const service = yield this._serviceRepository.findOne({ serviceId });
-            console.log('service', service);
             if (service) {
                 const vendor = yield this._vendorRepository.findOne({ userId: service.vendorId });
-                console.log('vendor', vendor);
                 return {
                     service,
                     vendor

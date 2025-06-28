@@ -59,9 +59,7 @@ let AuthController = class AuthController {
     sendOtp(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('otpsend', req.body);
                 const { email } = req.body;
-                console.log('otp sending....');
                 yield this._sendOtpEmailUseCase.execute(email);
                 res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
             }
@@ -77,12 +75,9 @@ let AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { formdata, otpString } = req.body;
-                console.log('varifying...', formdata, otpString);
                 yield this._varifyOtpUseCase.execute(formdata.email, otpString);
                 const { role } = formdata;
-                console.log(role);
                 const schema = user_signup_validation_schema_1.userSchemas[role];
-                console.log(schema);
                 if (!schema) {
                     res.status(constants_1.HTTP_STATUS.BAD_REQUEST).json({
                         success: true,
@@ -106,7 +101,6 @@ let AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = req.body;
-                console.log('user data', data);
                 // const validatedData = loginSchema.parse(data)
                 // if(!validatedData){
                 //   res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -170,7 +164,6 @@ let AuthController = class AuthController {
                 yield this._revokeRefreshTokenUseCase.execute(req.user.refresh_token);
                 yield this._clearFCMTokenUseCase.execute(req.user.userId, req.user.role);
                 const user = req.user;
-                console.log(user, 'logout user');
                 const accessTokenName = `${user.role}_access_token`;
                 const refreshTokenName = `${user.role}_refresh_token`;
                 (0, cookie_helper_1.clearAuthCookies)(res, accessTokenName, refreshTokenName);
@@ -227,7 +220,6 @@ let AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { password, token } = req.body;
-                console.log('token', token, password);
                 yield this._resetPasswordUseCase.execute(token, password);
                 res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS);
             }

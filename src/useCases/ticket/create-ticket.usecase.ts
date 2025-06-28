@@ -29,10 +29,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
    ){}
 
    async execute(ticket:ITicketEntity, paymentIntentId: string, totalAmount: number, totalCount: number, vendorId: string,clientId:string,eventId:string,email:string,phone:string): Promise<{ stripeClientId: string, createdTicket: ITicketEntity }> {
-    console.log('clientId her',clientId)
-    console.log("vendorId ",vendorId)
       const eventDetails = await this._eventRepository.findOne({eventId})
-      console.log("eventDetails",eventDetails)
       if(!eventDetails){throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)}
     if(eventDetails.status === "cancelled") throw new CustomError("Event cancelled",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails.status === "completed") throw new CustomError("Event already completed",HTTP_STATUS.FORBIDDEN) 
@@ -45,9 +42,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       const qrCode = await this._qrService.generateQRCode(qrLink)
       if(!qrCode){throw new CustomError("QR Code generation failed",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
       const clientStripeId = await this._stripeService.createPaymentIntent(totalAmount,"ticket",{ticket:ticket})
-      console.log('clientStripeId',clientStripeId)
       if(!clientStripeId){throw new CustomError("Error while creating stripe client id",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
-      console.log('clienId',clientId)
       const paymentDetails = {
         amount: totalAmount,
         currency: "INR",
@@ -63,7 +58,6 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
 
       let attendeesCount = eventDetails?.ticketPurchased || 0
       attendeesCount += totalCount
-       console.log('attendeesCount',attendeesCount)
 
        let currentAttendees = eventDetails.attendees || []
         if (!currentAttendees.includes(clientId)) {
@@ -79,7 +73,6 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         {eventId:eventDetails.eventId},
         eventUpdate
       )
-       console.log('updatedEvent',updatedEvent)
 
       const ogTicket = {
         email,
@@ -95,7 +88,6 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         paymentTransactionId: paymentDocument.paymentId,
         vendorId: vendorId,
    }
-   console.log('ogTicket',ogTicket)
    const createdTicket = await this._ticketRepository.save(ogTicket)
    if(!createdTicket){throw new CustomError("Error while saving ticket details",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
    return {stripeClientId: clientStripeId,createdTicket}

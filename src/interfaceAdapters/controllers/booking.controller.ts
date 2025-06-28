@@ -14,8 +14,6 @@ import { IGetVendorBookedDatesUseCase } from "../../domain/interface/useCaseInte
 
 
 
-
-
 @injectable()
 export class BookingController implements IBookingController{
     constructor(
@@ -58,7 +56,6 @@ export class BookingController implements IBookingController{
             userId,
          )
 
-         console.log('created booking',booking)
          res.status(HTTP_STATUS.OK).json({
             success:true,
             booking,
@@ -109,9 +106,6 @@ export class BookingController implements IBookingController{
         try {
             const {bookingId} = req.params
             const {status,reason} = req.body
-            console.log('bookingId',bookingId)
-            console.log('status',status)
-            console.log('reason',reason)
             const booking = await this._updateBookingStatusUseCase.execute(
                 bookingId,
                 status,
@@ -158,9 +152,6 @@ export class BookingController implements IBookingController{
         try {
             const {bookingId} = req.params
             const {selectedDate,rescheduleReason} = req.body
-            console.log('bookingId',bookingId)
-            console.log('selectedDate',selectedDate)
-            console.log('rescheduleReason',rescheduleReason)
             const booking = await this._rescheduleBookingUseCase.execute(
                 bookingId,
                 selectedDate,
@@ -184,8 +175,6 @@ export class BookingController implements IBookingController{
         try {
             const {bookingId} = req.params
             const {status} = req.body
-            console.log('bookingId',bookingId)
-            console.log('status',status)
             const booking = await this._rescheduleBookingUseCase.approveOrRejectRescheduleBooking(
                 bookingId,
                 status,

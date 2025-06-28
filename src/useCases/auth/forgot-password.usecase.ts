@@ -48,7 +48,6 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase{
         user.role
         )
     
-        console.log('token',token)
      const resetLink = `${config.ORIGIN}/reset-password?token=${token.accessToken}`
 
      const subject = "Reset Password"

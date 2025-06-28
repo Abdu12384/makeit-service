@@ -59,23 +59,23 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase{
            )
         }
 
+
         const hashedPassword = await this._passwordHasher.hash(password)
 
-        const isPasswordSame = await this._passwordHasher.compare(password, hashedPassword)
+        // const isPasswordSame = await this._passwordHasher.compare(password, hashedPassword)
 
-        if(isPasswordSame){
-          throw new CustomError(
-            ERROR_MESSAGES.PASSWORD_SAME,
-            HTTP_STATUS.BAD_REQUEST
-          )
-        }
+        // if(isPasswordSame){
+        //   throw new CustomError(
+        //     ERROR_MESSAGES.PASSWORD_SAME,
+        //     HTTP_STATUS.BAD_REQUEST
+        //   )
+        // }
 
         const user = await repository.update(
           {userId},
           {password: hashedPassword}
         )
 
-        console.log('user',user)
 
         if(!user){
             throw new CustomError(

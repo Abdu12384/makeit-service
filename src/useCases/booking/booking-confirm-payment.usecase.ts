@@ -22,7 +22,7 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
 
     const paymentIntent = await this._stripeService.confirmPayment(paymentIntentId);
     if (!paymentIntent) throw new Error("Failed to confirm Stripe payment");
-    console.log("paymentIntent",paymentIntent)
+
 
     const existingBooking = await this._bookingRepository.findOne({bookingId:booking.bookingId})
       if(!existingBooking){
@@ -30,9 +30,9 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
       }
 
     const paidAmount = paymentIntent.amount / 100;
-    console.log("paidAmount",paidAmount)
+
     const balanceAmount = existingBooking.balanceAmount ?? 0;
-    console.log("balanceAmount",balanceAmount)
+
 
     if (paymentIntent.status === "succeeded") {
             if (balanceAmount > 0 && paidAmount >= balanceAmount) {
@@ -42,7 +42,7 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
               );
             } else {
               const newBalance = existingBooking?.balanceAmount 
-              console.log("newBalance",newBalance)
+
               await this._bookingRepository.update(
                 { bookingId: booking.bookingId },
                 { balanceAmount: newBalance! > 0 ? newBalance : 0 }

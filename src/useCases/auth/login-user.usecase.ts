@@ -85,7 +85,6 @@ export class LoginUserUseCase implements ILoginUserUseCase{
             user.password,
             userData.password
            )
-           console.log('comaprison',user.password, isPasswordMatch)
            if(!isPasswordMatch){
              throw new CustomError(
                ERROR_MESSAGES.INVALID_CREDENTIALS,

@@ -42,7 +42,6 @@ let VendorCantroller = class VendorCantroller {
                 const forTypeString = typeof forType === "string" ? forType : "non-active";
                 const searchTermString = typeof search === "string" ? search : "";
                 const { vendor, total } = yield this._getAllVendorUseCase.execute(forTypeString, pageNumber, pageSize, searchTermString);
-                console.log(vendor, total);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     vendor,

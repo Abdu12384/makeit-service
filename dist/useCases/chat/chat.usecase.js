@@ -35,7 +35,6 @@ let ChatUseCase = class ChatUseCase {
     startChat(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const { senderId, senderModel, receiverId, receiverModel } = data;
-            console.log("startChat-------------------------------------------", data);
             if (!senderId || !senderModel || !receiverId || !receiverModel) {
                 throw new Error("All fields are required");
             }
@@ -51,7 +50,6 @@ let ChatUseCase = class ChatUseCase {
     sendMessage(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const { chatId, senderId, senderModel, messageContent } = data;
-            console.log("sendMessage-------------------------------------------", data);
             if (!chatId || !senderId || !senderModel || !messageContent) {
                 throw new Error("Chat ID, sender ID, sender model, and message content are required");
             }
@@ -59,7 +57,6 @@ let ChatUseCase = class ChatUseCase {
             if (!chat || (chat.senderId !== senderId && chat.receiverId !== senderId)) {
                 throw new Error("Unauthorized to send message in this chat");
             }
-            console.log("chat-------------------------------------------", chat);
             const messageId = (0, unique_uuid_helper_1.generateUniqueId)("message");
             const sendedTime = new Date();
             const newMessage = yield this.chatRepository.saveMessage({
@@ -73,7 +70,6 @@ let ChatUseCase = class ChatUseCase {
             yield this.chatRepository.updateChatLastMessage(chatId, messageContent, sendedTime.toISOString());
             const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
             const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
-            console.log("receiverModel-------------------------------------------", receiverModel);
             const receiver = yield this.findUserById(receiverId, receiverModel);
             yield this.pushNotificationService.sendNotification(receiverId, "New Message", "You have a new message", "new_message", receiverModel);
             return newMessage;

@@ -74,7 +74,6 @@ let ServiceController = class ServiceController {
                 const userId = user === null || user === void 0 ? void 0 : user.userId;
                 const role = user === null || user === void 0 ? void 0 : user.role;
                 const services = yield this._getAllServiceUseCase.execute(pageNumber, pageSize, search, role, userId);
-                console.log('services', services);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     services,

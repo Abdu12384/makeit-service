@@ -32,7 +32,6 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
             const validPageNumber = Math.max(1, pageNumber || 1);
             const validPageSize = Math.max(1, pageSize || 10);
             const skip = (validPageNumber - 1) * validPageSize;
-            console.log('role', role);
             let filter = {};
             if (role !== "vendor") {
                 filter.status = "active";
@@ -40,7 +39,6 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
             if (search) {
                 filter.serviceTitle = { $regex: search, $options: "i" };
             }
-            console.log('filter', filter);
             if (vendorId) {
                 filter.vendorId = vendorId;
             }

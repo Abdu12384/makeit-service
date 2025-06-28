@@ -33,17 +33,13 @@ let sendOtpEmailUseCase = class sendOtpEmailUseCase {
     }
     execute(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(email);
             const { exists } = yield this._userExitenceService.findUserByEmail(email);
-            console.log('inthe db', exists);
             if (exists) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.EMAIL_EXISTS, constants_1.HTTP_STATUS.CONFLICT);
             }
             const otp = this._otpService.generateOtp();
-            console.log(`Generated OTP : ${otp}`);
             yield this._otpService.storeOtp(email, otp);
             yield this._emailService.sendOtpEmail(email, "MAKEIT - Verify Your Email", otp);
-            console.log(`OTP sent to : ${email}`);
         });
     }
 };

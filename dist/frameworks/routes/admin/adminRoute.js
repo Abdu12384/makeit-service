@@ -32,7 +32,6 @@ class AdminRoute {
          *  Session  Routes
         * ========================== */
         this.adminRoute.post('/admin/refresh-token', auth_middleware_1.decodeToken, (req, res) => {
-            console.log("refreshing Admin", req.body);
             resolver_1.authController.handleTokenRefresh(req, res);
         });
         this.adminRoute.get("/admin/refresh-session", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
@@ -66,8 +65,7 @@ class AdminRoute {
             resolver_1.walletController.getWalletById(req, res);
         });
         this.adminRoute.get('/admin/events', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
-            console.log(req.body),
-                resolver_1.eventController.getAllEvents(req, res);
+            resolver_1.eventController.getAllEvents(req, res);
         });
         this.adminRoute.get('/admin/bookings', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.bookingController.getAllBookings(req, res);

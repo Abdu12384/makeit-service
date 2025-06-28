@@ -34,7 +34,6 @@ let OtpService = class OtpService {
     // ===================== Save OTP ===========================//
     storeOtp(email, otp) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('storing otp');
             const expiresAt = new Date();
             expiresAt.setMinutes(expiresAt.getMinutes() + 2);
             yield this.otpRepository.deleteOtp(email);

@@ -24,6 +24,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 const notification_1 = require("../../shared/dtos/notification");
 let CreateBookingUseCase = class CreateBookingUseCase {
     constructor(_bookingRepository, _pushNotificationService) {
@@ -35,15 +37,6 @@ let CreateBookingUseCase = class CreateBookingUseCase {
             const bookingId = (0, unique_uuid_helper_1.generateUniqueId)("booking");
             const bookingsDetails = yield this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
             const bookedDate = bookingsDetails === null || bookingsDetails === void 0 ? void 0 : bookingsDetails.date;
-            console.log("bookeddate", bookedDate);
-            // if(bookedDate && bookingsDetails.vendorApproval === "Approved"){
-            //   if (Array.isArray(bookedDate) && bookedDate.length > 0) {
-            //     throw new CustomError(
-            //       `${new Date(bookedDate[0]).toDateString()} is already booked. Please select another date.`,
-            //       HTTP_STATUS.BAD_REQUEST
-            //     );
-            //   }
-            // }
             const booking = yield this._bookingRepository.save({
                 bookingId,
                 clientId: userId,
@@ -53,6 +46,14 @@ let CreateBookingUseCase = class CreateBookingUseCase {
                 vendorId,
                 date: [date],
             });
+            const existingBooking = yield this._bookingRepository.findOne({
+                clientId: userId,
+                serviceId: serviceId,
+                date: { $in: [date] },
+            });
+            if (existingBooking) {
+                throw new custom_error_1.CustomError("You have already booked this service for this date.", constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
             yield this._pushNotificationService.sendNotification(vendorId, notification_1.NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
         });
     }

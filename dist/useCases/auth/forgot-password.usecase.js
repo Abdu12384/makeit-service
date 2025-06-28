@@ -39,7 +39,6 @@ let ForgotPasswordUseCase = class ForgotPasswordUseCase {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             }
             const token = yield this._generateTokenUseCase.execute(user.userId, user.email, user.role);
-            console.log('token', token);
             const resetLink = `${config_1.config.ORIGIN}/reset-password?token=${token.accessToken}`;
             const subject = "Reset Password";
             const content = (0, constants_1.RESET_PASSWORD_MAIL_CONTENT)(resetLink);

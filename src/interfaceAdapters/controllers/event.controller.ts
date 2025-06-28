@@ -55,7 +55,6 @@ export class EventController implements IEventController{
         data,
         userId
       )
-        console.log(data)
         res.status(HTTP_STATUS.OK).json({
           success:true,
           message:"Event Created"
@@ -180,7 +179,6 @@ export class EventController implements IEventController{
       try {
         const {eventId} = req.params
         const {ticketCount} = req.query
-        console.log('ticketCount',ticketCount)
         const {userId} = (req as CustomRequest).user
         const event = await this._checkEventBookingAvliblityUseCase.execute(
           eventId,

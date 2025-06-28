@@ -33,7 +33,6 @@ let GenerateTokenUseCase = class GenerateTokenUseCase {
             const payload = { email, userId, role };
             const accessToken = this._tokenService.generateAccessToken(payload);
             const refreshToken = this._tokenService.generateRefreshToken(payload);
-            console.log('herer');
             yield this._refreshTokenRepository.save({
                 token: refreshToken,
                 userType: role,

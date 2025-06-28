@@ -49,9 +49,7 @@ let GetWalletByIdUseCase = class GetWalletByIdUseCase {
                 };
                 wallet = yield this.walletRepository.save(newWallet);
             }
-            console.log('wallet', wallet);
             const { items, total } = yield this.transactionRepository.findAll({ walletId: wallet.walletId }, skip, limit, sort);
-            console.log('transaction', items);
             const response = {
                 wallet,
                 transaction: items,

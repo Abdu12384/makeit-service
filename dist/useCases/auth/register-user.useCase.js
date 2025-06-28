@@ -35,7 +35,6 @@ let RegisterClientUseCase = class RegisterClientUseCase {
     }
     createUsers(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('useCase', user);
             const { role, email, password } = user;
             const { exists } = yield this._emailExistenService.findUserByEmail(email);
             if (exists) {

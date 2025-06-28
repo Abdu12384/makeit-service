@@ -26,15 +26,7 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
       const bookingsDetails = await this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId,date)
      
       const bookedDate = bookingsDetails?.date
-      console.log("bookeddate",bookedDate)
-      // if(bookedDate && bookingsDetails.vendorApproval === "Approved"){
-      //   if (Array.isArray(bookedDate) && bookedDate.length > 0) {
-      //     throw new CustomError(
-      //       `${new Date(bookedDate[0]).toDateString()} is already booked. Please select another date.`,
-      //       HTTP_STATUS.BAD_REQUEST
-      //     );
-      //   }
-      // }
+
       const booking = await this._bookingRepository.save({
         bookingId,
         clientId: userId,
@@ -44,6 +36,19 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
         vendorId,
         date:[date],
       })
+
+      const existingBooking = await this._bookingRepository.findOne({
+        clientId: userId,
+        serviceId: serviceId,
+        date: { $in: [date] }, 
+      });
+      
+      if (existingBooking) {
+        throw new CustomError(
+          "You have already booked this service for this date.",
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
 
       await this._pushNotificationService.sendNotification(
         vendorId,

@@ -38,7 +38,6 @@ let ReviewController = class ReviewController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { targetId, targetType, comment, rating } = req.body;
-                console.log(req.body);
                 const { userId } = req.user;
                 if (!userId) {
                     throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.MISSING_PARAMETERS, constants_1.HTTP_STATUS.BAD_REQUEST);

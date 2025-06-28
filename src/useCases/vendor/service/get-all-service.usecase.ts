@@ -20,7 +20,6 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
       const validPageSize = Math.max(1, pageSize || 10);
       const skip = (validPageNumber - 1) * validPageSize; 
 
-      console.log('role',role)
 
       let filter: any = {};
 
@@ -32,7 +31,6 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
      if (search) {
        filter.serviceTitle = { $regex: search, $options: "i" };
       }
-      console.log('filter',filter)
       if (vendorId) {
         filter.vendorId = vendorId;
       } 

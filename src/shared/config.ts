@@ -20,7 +20,6 @@ async function initializeFirebase() {
       firebaseAdmin.initializeApp({
         credential: firebaseAdmin.credential.cert(serviceAccount),
       });
-      console.log("✅ Firebase initialized");
 
       // ✅ Set messaging only after init
       messagingInstance = firebaseAdmin.messaging();

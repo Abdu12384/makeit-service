@@ -50,7 +50,6 @@ class ClientRoute {
             resolver_1.serviceController.getServiceById(req, res);
         });
         this.clientRoute.put("/client/profile", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
-            console.log('client profile');
             resolver_1.userController.updateUserDetails(req, res);
         });
         /** ==========================
@@ -132,7 +131,6 @@ class ClientRoute {
             resolver_1.authController.logout(req, res);
         });
         this.clientRoute.post("/client/refresh-token", auth_middleware_1.decodeToken, (req, res) => {
-            console.log("refreshing client", req.body);
             resolver_1.authController.handleTokenRefresh(req, res);
         });
     }

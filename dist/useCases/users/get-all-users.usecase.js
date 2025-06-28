@@ -36,7 +36,6 @@ let GetAllUserUseCase = class GetAllUserUseCase {
             if (userType) {
                 filter.role = userType;
             }
-            console.log('userType', userType);
             if (searchTerm) {
                 filter.$or = [
                     { name: { $regex: searchTerm, $options: "i" } },

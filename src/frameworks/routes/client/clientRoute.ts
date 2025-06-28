@@ -88,7 +88,6 @@ export class ClientRoute {
           verifyAuth,
           blockStatusMiddleware.checkStatus as RequestHandler,
           (req: Request, res:Response) =>{
-            console.log('client profile')
             userController.updateUserDetails(req,res)
           }   
         )
@@ -288,7 +287,6 @@ export class ClientRoute {
           this.clientRoute.post( "/client/refresh-token",
             decodeToken,
             (req: Request, res: Response) => {
-              console.log("refreshing client", req.body);
               authController.handleTokenRefresh(req, res);
             }
           )

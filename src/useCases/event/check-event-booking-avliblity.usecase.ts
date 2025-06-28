@@ -27,11 +27,10 @@ export class CheckEventBookingAvliblityUseCase implements ICheckEventBookingAvli
 
       const ticket = await this._ticketRepository.findOne({eventId,clientId:userId})
 
-      console.log(ticket)
       
 
         if(ticket?.ticketCount! + ticketCount > event.maxTicketsPerUser){
-            throw new CustomError(`You have already purchased the maximum allowed tickets. You can only book ${event.maxTicketsPerUser - ticket?.ticketCount!}`,HTTP_STATUS.BAD_REQUEST)
+            throw new CustomError(`You have already purchased the maximum allowed tickets.`,HTTP_STATUS.BAD_REQUEST)
         }
 
         if(event.totalTicket === event.ticketPurchased){

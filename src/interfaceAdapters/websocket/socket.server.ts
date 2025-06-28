@@ -27,7 +27,6 @@ export class SocketConfig {
 
      private initializeSockets():void{
           this.io.on("connect",(socket)=>{
-               console.log("a user connected: ",socket.id)
 
 
 //==========================================================
@@ -67,11 +66,9 @@ export class SocketConfig {
 
         socket.on("join-room", async (data: { roomId: string; userId: string }, response) => {
         try {
-          console.log("join-room", data);
           await this._chatUseCase.markMessagesAsSeen(data.roomId, data.userId);
           socket.join(data.roomId);
           socket.join(data.userId);
-          console.log(`user ${socket.id} joined room: ${data.roomId}`);
           socket.to(data.roomId).emit("user-joined", { userId: data.userId });
           response({ status: "success", message: "Joined room successfully" });
         } catch (error: any) {
@@ -97,7 +94,6 @@ export class SocketConfig {
                 senderModel: data.senderModel,
                 messageContent: data.message,
               });
-              console.log("chatId -------------------------------------------",data.chatId)
     
               this.io.to(data.chatId).emit("receive-message", message);
     
