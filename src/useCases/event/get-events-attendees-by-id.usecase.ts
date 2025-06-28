@@ -37,7 +37,9 @@ export class GetEventsAttendeesByIdUseCase implements IGetEventsAttendeesByIdUse
 
       const enrichedAttendees = attendees.map((attendee: any) => {
         const userId = typeof attendee === 'string' ? attendee : attendee.userId
+        console.log('userIddfdfd=--=-=-=-=-=---',userId)
         const userTicket = tickets.items.find((ticket: any) => ticket.clientId === userId)
+        console.log('userTikc\\\\\\\\\=--=-=-=-=-=---',userTicket)
   
         return {
           ...attendee,

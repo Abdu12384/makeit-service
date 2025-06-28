@@ -97,10 +97,8 @@ export class EventRepository extends BaseRepository<IEventModel> implements IEve
       }
     ])
   
-    return result[0]?.attendees || []
+    return (result[0]?.attendees || []).reverse()
   }
-
-
   
 }
     

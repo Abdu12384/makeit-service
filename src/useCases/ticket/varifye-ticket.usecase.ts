@@ -33,13 +33,15 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
            if(!event) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
           if(!ticket) throw new CustomError("Ticket not found",HTTP_STATUS.NOT_FOUND)
           if(ticket.eventId !== eventId) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
-
+          if(ticket.checkedIn === "cancelled") throw new CustomError("Ticket already cancelled",HTTP_STATUS.FORBIDDEN)
           if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)
           
 
           ticket.ticketStatus = "used"
           ticket.checkedIn = "checked_in"
-          event.checkedInCount! += ticket.ticketCount
+
+          event.checkedInCount = event.checkedInCount ?? 0  // initialize if undefined
+          event.checkedInCount!  += ticket.ticketCount
           
           const updatedTicket = await this._ticketRepository.update(
             {ticketId},

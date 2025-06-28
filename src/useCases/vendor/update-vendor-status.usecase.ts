@@ -26,7 +26,7 @@ export class UpdateVendorStatusUseCase implements IUpdateVendorStatusUseCase{
              )
            await this._vendorRepository.update({userId: id}, {vendorStatus: "rejected"})
           }else{
-            await this._vendorRepository.update({userId: id}, {vendorStatus: "approved"})
+            await this._vendorRepository.update({userId: id}, {vendorStatus: "approved",status:"active"})
             await this._sendEmailUseCase.execute(
               vendor?.email as string,
               "MakeIt - Application approved",
