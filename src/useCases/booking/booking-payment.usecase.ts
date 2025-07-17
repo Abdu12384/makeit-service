@@ -10,10 +10,12 @@ import { ITransactionsEntity } from "../../domain/entities/transaction.entity"
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface"
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface"
 import { CustomError } from "../../domain/utils/custom.error"
-import { HTTP_STATUS } from "../../shared/constants"
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants"
 import { NotificationType } from "../../shared/dtos/notification"
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
+import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface"
+import { config } from "../../shared/config"
 
 
 
@@ -27,7 +29,8 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository,
         @inject("ITransactionRepository") private _transactionRepository: ITransactionRepository,
         @inject("IWalletRepository") private _walletRepository: IWalletRepository,
-        @inject("IPushNotificationService") private _pushNotificationService: IPushNotificationService
+        @inject("IPushNotificationService") private _pushNotificationService: IPushNotificationService,
+        @inject("IRedisTokenRepository") private _redisTokenRepository: IRedisTokenRepository
     ){}
 
     async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:any,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
@@ -35,12 +38,24 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         let vendor = await this._vendorRepository.findOne({vendorId:booking?.vendorId})
 
         let serviceId = booking?.serviceId || bookingDetails.serviceId;
+
+                const isLocked = await this._redisTokenRepository.isEventLocked(clientId, serviceId);
+                if (isLocked) {
+                  throw new CustomError(
+                   ERROR_MESSAGES.BOOKING_LOCKED  , 
+                    HTTP_STATUS.TOO_MANY_REQUESTS);
+                 }
+        
+                await this._redisTokenRepository.setEventLock(clientId, serviceId, 600);
+
+
         const service = await this._serviceRepository.findOne({ serviceId });
         const totalAmount = service?.servicePrice!;
         const advanceAmount = Math.round(totalAmount * 0.3);
         const balanceAmount = totalAmount - advanceAmount;
       
         let amountToPay: number;
+        let vendorShare: number;
       
         if (!booking) {
           // New booking → pay advance
@@ -59,6 +74,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
             balanceAmount: balanceAmount,
           });
           amountToPay = advanceAmount;
+          vendorShare = advanceAmount;
         } else {
           if (booking.paymentStatus === "Successfull") {
             throw new Error("This booking is already fully paid.");
@@ -67,6 +83,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           if (booking.paymentStatus === "Pending") {
             // First advance payment for existing booking
             amountToPay = advanceAmount;
+            vendorShare = amountToPay
       
             await this._bookingRepository.updateOne(
               { bookingId: booking.bookingId },
@@ -108,8 +125,27 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
             if (!booking.balanceAmount || booking.balanceAmount <= 0) {
               throw new Error("No balance amount available to pay.");
             }
-      
+            
+            const fullBalannceAmount = booking.balanceAmount;
+            const platformFee = Math.round(fullBalannceAmount * 0.1);
+            let adminId = config.adminId
+
+            let adminWallet = await this._walletRepository.findOne({userId:adminId})
+            
             amountToPay = booking.balanceAmount;
+            vendorShare = fullBalannceAmount - platformFee;
+
+            const adminCommission: ITransactionsEntity = {
+              amount: platformFee,
+              currency: "INR",
+              paymentStatus: "credit",
+              paymentType: "adminCommission",
+              walletId:adminWallet?.walletId!,
+              relatedTitle:`Admin Commission from Service Booking: ${service?.serviceTitle || "a service"}`,
+            }
+
+            const adminCommissionTransaction = await this._transactionRepository.save(adminCommission)
+            const addMoneyToAdminWallet = await this._walletRepository.updateWallet(adminWallet?.walletId!,platformFee)
       
             await this._bookingRepository.updateOne(
               { bookingId: booking.bookingId },
@@ -132,34 +168,21 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         );
 
       const wallet = await this._walletRepository.findOne({userId:booking.vendorId})
-
       if(!wallet){throw new CustomError("Wallet not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
 
         const vendorTransactionDetails : ITransactionsEntity = {
-          amount: amountToPay,
+          amount: vendorShare,
           currency: "INR",
           paymentStatus: "credit",
-          paymentType: "advancePayment",
+          paymentType: "serviceBooking",
           walletId:wallet?.walletId,
+          relatedTitle:`Service Booking: ${service?.serviceTitle || "a service"}`,
         }
 
         const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
-        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(booking.vendorId,amountToPay)
+        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(booking.vendorId,vendorShare)
         
-      
-        const payment = await this._paymentRepository.save({
-          clientId: booking.clientId,
-          receiverId: booking.vendorId,
-          bookingId: booking.bookingId,
-          amount: amountToPay,
-          currency: "INR",
-          purpose: "serviceBooking",
-          status: "pending",
-          paymentId: paymentIntentId,
-        });
-      
-
-
+  
         await this._pushNotificationService.sendNotification(
           booking.clientId,
           "Booking Confirmed",

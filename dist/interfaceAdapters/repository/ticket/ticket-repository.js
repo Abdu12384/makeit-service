@@ -26,12 +26,16 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
     constructor() {
         super(ticket_model_1.ticketModel);
     }
-    getAllTicketsById(userId, skip, limit, sort) {
+    getAllTicketsById(filter, skip, limit, sort) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
+            const mongoSort = {};
+            for (const key in sort) {
+                mongoSort[key] = sort[key] === "asc" ? 1 : -1;
+            }
             const pipeline = [
                 {
-                    $match: { clientId: userId }
+                    $match: filter
                 },
                 {
                     $lookup: {
@@ -91,7 +95,7 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
                 }
             ];
             const countPipeline = [
-                { $match: { clientId: userId } },
+                { $match: filter },
                 { $count: "total" }
             ];
             const [items, countResult] = yield Promise.all([
@@ -161,6 +165,61 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
             ];
             const result = yield this.model.aggregate(pipeline);
             return result[0];
+        });
+    }
+    findAllWithClientDetails(eventId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.model.aggregate([
+                {
+                    $match: { eventId: eventId }
+                },
+                {
+                    $lookup: {
+                        from: "clients", // client collection name
+                        localField: "clientId", // field in ticket
+                        foreignField: "userId", // field in client
+                        as: "client"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$client",
+                        preserveNullAndEmptyArrays: true // optional
+                    }
+                },
+                {
+                    $project: {
+                        eventId: 1,
+                        clientId: 1,
+                        ticketId: 1,
+                        vendorId: 1,
+                        ticketPrice: 1,
+                        ticketCount: 1,
+                        ticketPurchased: 1,
+                        qrCodeLink: 1,
+                        ticketStatus: 1,
+                        totalAmount: 1,
+                        paymentStatus: 1,
+                        checkedIn: 1,
+                        email: 1,
+                        phone: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        client: {
+                            _id: 1,
+                            userId: 1,
+                            name: 1,
+                            email: 1,
+                            phone: 1,
+                            profileImage: 1
+                        }
+                    }
+                },
+                {
+                    $sort: { createdAt: -1 } // optional, latest ticket first
+                }
+            ]);
+            return result;
         });
     }
 };

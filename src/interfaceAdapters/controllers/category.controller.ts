@@ -45,7 +45,7 @@ export class CategoryController implements ICategoryController {
                 message:SUCCESS_MESSAGES.CREATED
               })
         } catch (error) {
-            handleErrorResponse(res,error)
+            handleErrorResponse(req,res,error)
         }
    }
 
@@ -74,7 +74,7 @@ export class CategoryController implements ICategoryController {
                 categories,
             })
         } catch (error) {
-            handleErrorResponse(res,error)
+            handleErrorResponse(req,res,error)
         }
    }
 
@@ -101,7 +101,7 @@ export class CategoryController implements ICategoryController {
           message:SUCCESS_MESSAGES.UPDATE_SUCCESS
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -131,7 +131,7 @@ export class CategoryController implements ICategoryController {
           message:SUCCESS_MESSAGES.UPDATE_SUCCESS
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     } 
 

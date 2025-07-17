@@ -27,7 +27,7 @@ export class NotificationController implements INotificationController{
       const notifications = await this._notificationUseCase.execute(userId);
       res.status(HTTP_STATUS.OK).json(notifications);
     } catch (error) {
-      handleErrorResponse(res, error);
+      handleErrorResponse(req,res,error);
     }
   }
 
@@ -38,7 +38,7 @@ export class NotificationController implements INotificationController{
       const notification = await this._updateNotificationReadUseCase.execute(userId);
       res.status(HTTP_STATUS.OK).json(notification);
     } catch (error) {
-      handleErrorResponse(res, error);
+      handleErrorResponse(req,res,error);
     }
   }
 

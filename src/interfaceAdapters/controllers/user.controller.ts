@@ -81,7 +81,7 @@ async getAllUsers(req: Request, res: Response): Promise<void> {
                   currentPages: pageNumber
                 })
             } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
            }
 }
 
@@ -108,7 +108,7 @@ async getAllUsers(req: Request, res: Response): Promise<void> {
           message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
         })
      } catch (error) {
-       handleErrorResponse(res, error)
+       handleErrorResponse(req,res, error)
      }
  }
 
@@ -136,7 +136,7 @@ async refreshSession(req: Request, res: Response): Promise<void> {
          user: user,
       });
    } catch (error) {
-      handleErrorResponse(res, error);
+      handleErrorResponse(req,res, error);
    }
 }
 
@@ -172,7 +172,7 @@ async refreshSession(req: Request, res: Response): Promise<void> {
        user: userWithoutPassword,
    })
      } catch (error) {
-       handleErrorResponse(res,error)      
+       handleErrorResponse(req,res,error)      
      }
   }
 
@@ -201,7 +201,7 @@ async changePassword(req: Request, res: Response): Promise<void> {
        message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
    })
      } catch (error) {
-       handleErrorResponse(res,error)      
+       handleErrorResponse(req,res,error)      
      }
    }
 
@@ -225,7 +225,7 @@ async saveFCMToken(req: Request, res: Response): Promise<void> {
        message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
    })
      } catch (error) {
-       handleErrorResponse(res,error)      
+       handleErrorResponse(req,res,error)      
      }
    }
 }

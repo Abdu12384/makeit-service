@@ -34,7 +34,7 @@ export class UpdateUserDetailsUseCase implements IUpdateUserDetailsUseCase{
 
 
 
-  async execute(userId: string, role: string, userDetails: Record<string, any>): Promise<IAdminEntity | IClientEntity | IVendorEntity | null> {
+  async execute(userId: string, role: string, userDetails: IAdminEntity | IClientEntity | IVendorEntity): Promise<IAdminEntity | IClientEntity | IVendorEntity | null> {
      let repository; 
       
       if(role === "client"){

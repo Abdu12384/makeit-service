@@ -26,7 +26,10 @@ export const transactionSchema = new Schema<ITransactionModel>({
         type: String,
         ref: 'wallet',
         required: true
-    }
+    },
+    relatedTitle: { 
+        type: String
+     }
 }, {
     timestamps: true
 })

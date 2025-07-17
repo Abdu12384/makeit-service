@@ -24,6 +24,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetWalletByIdUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
+const wallet_dto_1 = require("../../shared/dtos/wallet.dto");
+const class_transformer_1 = require("class-transformer");
+const transaction_dto_1 = require("../../shared/dtos/transaction.dto");
 let GetWalletByIdUseCase = class GetWalletByIdUseCase {
     constructor(walletRepository, transactionRepository) {
         this.walletRepository = walletRepository;
@@ -49,10 +52,12 @@ let GetWalletByIdUseCase = class GetWalletByIdUseCase {
                 };
                 wallet = yield this.walletRepository.save(newWallet);
             }
+            const walletDto = (0, class_transformer_1.plainToInstance)(wallet_dto_1.WalletDTO, wallet, { excludeExtraneousValues: true });
             const { items, total } = yield this.transactionRepository.findAll({ walletId: wallet.walletId }, skip, limit, sort);
+            const transactions = (0, class_transformer_1.plainToInstance)(transaction_dto_1.TransactionDTO, items, { excludeExtraneousValues: true });
             const response = {
-                wallet,
-                transaction: items,
+                wallet: walletDto,
+                transaction: transactions,
                 total: Math.ceil(total / validPageSize)
             };
             return response;

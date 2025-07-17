@@ -24,10 +24,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfirmPaymentUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
-    constructor(_bookingRepository, _stripeService, _paymentRepository) {
+    constructor(_bookingRepository, _stripeService, _paymentRepository, _redisTokenRepository) {
         this._bookingRepository = _bookingRepository;
         this._stripeService = _stripeService;
         this._paymentRepository = _paymentRepository;
+        this._redisTokenRepository = _redisTokenRepository;
     }
     confirmPayment(paymentIntentId, booking) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -55,6 +56,7 @@ let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
                 yield this._paymentRepository.update({ bookingId: booking.bookingId }, { status: "failed" });
                 throw new Error("Stripe payment not successful");
             }
+            yield this._redisTokenRepository.deleteEventLock(booking.clientId, booking.serviceId);
         });
     }
 };
@@ -64,6 +66,7 @@ exports.ConfirmPaymentUseCase = ConfirmPaymentUseCase = __decorate([
     __param(0, (0, tsyringe_1.inject)("IBookingRepository")),
     __param(1, (0, tsyringe_1.inject)("IPaymentService")),
     __param(2, (0, tsyringe_1.inject)("IPaymentRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, (0, tsyringe_1.inject)("IRedisTokenRepository")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], ConfirmPaymentUseCase);
 //# sourceMappingURL=booking-confirm-payment.usecase.js.map

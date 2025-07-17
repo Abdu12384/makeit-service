@@ -3,6 +3,9 @@ import { IUserExistenceService } from "../../domain/interface/servicesInterface/
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { IAdminEntity } from "../../domain/entities/admin.entity";
+import { IVendorEntity } from "../../domain/entities/vendor.entity";
+import { IClientEntity } from "../../domain/entities/client.entity";
 
 
 
@@ -24,7 +27,7 @@ export class UserExistenceService implements IUserExistenceService {
 
   async findUserByEmail(email: string): Promise<{
     exists: boolean;
-    user: any | null;
+    user: IClientEntity | IVendorEntity | IAdminEntity | null;
     role: 'client' | 'vendor' | 'admin' | null;
   }> {
     const [client, admin, vendor] = await Promise.all([

@@ -36,17 +36,10 @@ class ClientRoute {
         /** ==========================
          *  Client Service Management Routes
         * ========================== */
-        this.clientRoute.get("/client/services", 
-        // verifyAuth,
-        // authorizeRole(["client"])
-        // blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.get("/client/services", (req, res) => {
             resolver_1.serviceController.getAllServices(req, res);
         });
-        this.clientRoute.get("/client/services/:serviceId", 
-        // verifyAuth,
-        // blockStatusMiddleware.checkStatus as RequestHandler,
-        (req, res) => {
+        this.clientRoute.get("/client/services/:serviceId", (req, res) => {
             resolver_1.serviceController.getServiceById(req, res);
         });
         this.clientRoute.put("/client/profile", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
@@ -84,6 +77,10 @@ class ClientRoute {
         });
         this.clientRoute.get("/client/events/:eventId/check-booking", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.eventController.checkEventBookingAvailability(req, res);
+        });
+        this.clientRoute.get("/client/nearby", (req, res) => {
+            resolver_1.eventController.getAllEventsByLocation(req, res);
+            console.log('working loaction route');
         });
         /** ==========================
          *  Client Ticket  Routes

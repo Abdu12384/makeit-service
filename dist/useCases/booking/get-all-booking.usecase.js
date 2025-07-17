@@ -27,7 +27,7 @@ let GetAllBookingUseCase = class GetAllBookingUseCase {
     constructor(_bookingRepository) {
         this._bookingRepository = _bookingRepository;
     }
-    execute(pageNumber, pageSize, role, userId) {
+    execute(pageNumber, pageSize, status, role, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const validPageNumber = Math.max(1, pageNumber || 1);
             const validPageSize = Math.max(1, pageSize || 10);
@@ -39,12 +39,34 @@ let GetAllBookingUseCase = class GetAllBookingUseCase {
             else if (role === "client" && userId) {
                 filter.clientId = userId;
             }
+            if (status === "pending") {
+                filter.status = "Pending";
+            }
+            else if (status === "completed") {
+                filter.status = "Completed";
+            }
+            else if (status === "rescheduled") {
+                filter.status = "Rescheduled";
+            }
+            else if (status === "cancelled") {
+                filter.status = "Cancelled";
+            }
+            else if (status === "confirmed") {
+                filter.status = "Confirmed";
+            }
+            else if (status === "rejected") {
+                filter.vendorApproval = "Rejected";
+            }
+            else if (status === "approved") {
+                filter.$and = [{ status: "Pending" }, { vendorApproval: "Approved" }];
+            }
             const limit = validPageSize;
             const sort = { createdAt: -1 };
+            console.log(status);
             const { items, total } = yield this._bookingRepository.findAllWithVendorClient(filter, skip, limit, sort);
             const response = {
                 bookings: items,
-                total: Math.ceil(total / validPageSize)
+                total: Math.ceil(total / validPageSize),
             };
             return response;
         });

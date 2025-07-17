@@ -42,7 +42,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
             if (!booking) {
                 throw new Error("Booking not found");
             }
-            if (status === "Cancelled" || booking.paymentStatus === "AdvancePaid") {
+            if (status === "Cancelled" && booking.paymentStatus === "AdvancePaid") {
                 const service = yield this._serviceRepository.findOne({ serviceId: booking.serviceId });
                 if (!service)
                     throw new Error("Service not found");
@@ -81,6 +81,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                         paymentStatus: "credit",
                         paymentType: "refund",
                         walletId: clientWallet === null || clientWallet === void 0 ? void 0 : clientWallet.walletId,
+                        relatedTitle: `Refund from: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a transaction"}`
                     };
                     const vendorTransaction = {
                         amount: refundAmount,
@@ -88,6 +89,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                         paymentStatus: "debit",
                         paymentType: "refund",
                         walletId: vendorWallet === null || vendorWallet === void 0 ? void 0 : vendorWallet.walletId,
+                        relatedTitle: `Refund from: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a transaction"}`
                     };
                     yield this._transactionRepository.save(clientTransaction);
                     yield this._transactionRepository.save(vendorTransaction);

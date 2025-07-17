@@ -27,17 +27,28 @@ let GetAllTicketsByIdUseCase = class GetAllTicketsByIdUseCase {
     constructor(_ticketRepository) {
         this._ticketRepository = _ticketRepository;
     }
-    execute(userId, pageNumber, pageSize) {
+    execute(userId, pageNumber, pageSize, status) {
         return __awaiter(this, void 0, void 0, function* () {
             const validPageNumber = Math.max(1, pageNumber || 1);
             const validPageSize = Math.max(1, pageSize || 10);
             const skip = (validPageNumber - 1) * validPageSize;
             const limit = validPageSize;
             const sort = { createdAt: -1 };
-            const { items, total } = yield this._ticketRepository.getAllTicketsById(userId, skip, limit, sort);
+            let filter = {
+                clientId: userId,
+            };
+            if (status) {
+                if (status === "unused") {
+                    filter.ticketStatus = { $in: ["unused", "partially_refunded"] };
+                }
+                else {
+                    filter.ticketStatus = status;
+                }
+            }
+            const { items, total } = yield this._ticketRepository.getAllTicketsById(filter, skip, limit, sort);
             const response = {
                 tickets: items,
-                total: Math.ceil(total / validPageSize)
+                total: Math.ceil(total / validPageSize),
             };
             return response;
         });

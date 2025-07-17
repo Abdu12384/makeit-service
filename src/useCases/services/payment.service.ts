@@ -35,7 +35,7 @@ export class PaymentService implements IPaymentService {
         }
 
     }
-    async confirmPayment(paymentIntentId: string): Promise<any> {
+    async confirmPayment(paymentIntentId: string): Promise<Stripe.PaymentIntent> {
         try {
             const paymentIntent = await this.stripe.paymentIntents.retrieve(paymentIntentId)
             // if (paymentIntent.status !== 'succeeded') {

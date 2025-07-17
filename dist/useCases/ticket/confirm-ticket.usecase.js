@@ -27,8 +27,9 @@ const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 const notification_1 = require("../../shared/dtos/notification");
+const config_1 = require("../../shared/config");
 let ConfirmTicketUseCase = class ConfirmTicketUseCase {
-    constructor(_stripeService, _eventRepository, _ticketRepository, _transactionRepository, _paymentRepository, _walletRepository, _pushNotificationService) {
+    constructor(_stripeService, _eventRepository, _ticketRepository, _transactionRepository, _paymentRepository, _walletRepository, _pushNotificationService, _redisTokenRepository) {
         this._stripeService = _stripeService;
         this._eventRepository = _eventRepository;
         this._ticketRepository = _ticketRepository;
@@ -36,6 +37,7 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
         this._paymentRepository = _paymentRepository;
         this._walletRepository = _walletRepository;
         this._pushNotificationService = _pushNotificationService;
+        this._redisTokenRepository = _redisTokenRepository;
     }
     execute(ticket, paymentIntentId, vendorId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -44,16 +46,11 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 throw new custom_error_1.CustomError("Error while confirming payment", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
             const eventDetails = yield this._eventRepository.findOne({ eventId: ticket.eventId });
-            //   if (eventDetails?.ticketPurchased > eventDetails?.totalTicket) {
-            //     throw new CustomError('Ticket full Sold out',HTTP_STATUS.FORBIDDEN)
-            // } else if (eventDetails?.ticketPurchased + ticket.ticketCount > eventDetails?.totalTicket) {
-            //     throw new CustomError('Not enough ticket available',HTTP_STATUS.FORBIDDEN)
-            // }
             const paymentDetails = yield this._paymentRepository.update({ paymentId: paymentIntentId }, { status: "success" });
             const newTicketPurchased = ((eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) || 0) + ticket.ticketCount;
             const updateTicketCount = yield this._eventRepository.update({ eventId: ticket.eventId }, { ticketPurchased: newTicketPurchased });
             const updatedTicket = yield this._ticketRepository.update({ ticketId: ticket.ticketId }, { paymentStatus: "successfull" });
-            const adminId = process.env.ADMIN_ID;
+            const adminId = config_1.config.adminId;
             if (!adminId)
                 throw new custom_error_1.CustomError("Admin ID not found", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             const adminCommission = ticket.totalAmount * 0.1;
@@ -62,14 +59,13 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
             if (!adminWalletId) {
                 throw new custom_error_1.CustomError("Admin wallet not found", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
-            //  const adminWallet = await this._walletRepository.findOne({walletId:adminId})
-            //  if(!adminWallet){throw new CustomError("Admin wallet not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
             const adminTransaction = {
                 amount: adminCommission,
                 currency: "INR",
                 paymentStatus: "credit",
                 paymentType: "adminCommission",
                 walletId: adminWalletId === null || adminWalletId === void 0 ? void 0 : adminWalletId.walletId,
+                relatedTitle: `Admin Commission from Ticket Booking: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "a transaction"}`
             };
             const transaction = yield this._transactionRepository.save(adminTransaction);
             const adminWalletAddMoney = yield this._walletRepository.updateWallet(adminId, adminCommission);
@@ -98,11 +94,13 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 paymentStatus: "credit",
                 paymentType: "ticketBooking",
                 walletId: vendorWalletId,
+                relatedTitle: `Ticket: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"}`
             };
             const vendorTransaction = yield this._transactionRepository.save(vendorTransactionDetails);
             const addMoneyToVendorWallet = yield this._walletRepository.updateWallet(vendorId, vendorPrice);
             yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been confirmed.`, notification_1.NotificationType.TICKET_BOOKING, "client");
             yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
+            yield this._redisTokenRepository.deleteEventLock(ticket.clientId, ticket.eventId);
             return updatedTicket;
         });
     }
@@ -117,6 +115,7 @@ exports.ConfirmTicketUseCase = ConfirmTicketUseCase = __decorate([
     __param(4, (0, tsyringe_1.inject)("IPaymentRepository")),
     __param(5, (0, tsyringe_1.inject)("IWalletRepository")),
     __param(6, (0, tsyringe_1.inject)("IPushNotificationService")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object])
+    __param(7, (0, tsyringe_1.inject)("IRedisTokenRepository")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
 ], ConfirmTicketUseCase);
 //# sourceMappingURL=confirm-ticket.usecase.js.map

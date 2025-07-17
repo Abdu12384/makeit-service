@@ -22,10 +22,22 @@ exports.eventSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now
     },
-    date: [{
-            type: Date,
-            required: true
-        }],
+    date: [
+        {
+            date: {
+                type: Date,
+                required: true,
+            },
+            startTime: {
+                type: String,
+                required: true,
+            },
+            endTime: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
     description: {
         type: String,
         required: true
@@ -63,7 +75,7 @@ exports.eventSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: ["upcoming", "completed", "cancelled"]
+        enum: ["upcoming", "completed", "cancelled", "ongoing"]
     },
     maxTicketsPerUser: {
         type: Number,

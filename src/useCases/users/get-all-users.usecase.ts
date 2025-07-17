@@ -5,8 +5,8 @@ import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/u
 import { IPaginatedUsers } from "../../domain/entities/paginated/paginated-users.entity";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
-
-
+import { plainToInstance } from "class-transformer";
+import { UserDto } from "../../shared/dtos/client.dto";
 
 
 
@@ -23,8 +23,8 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase{
 
       ){}
 
-      async execute(userType: string, pageNumber: number, pageSize: number, searchTerm: string): Promise<IPaginatedUsers> {
-          let filter: any = {}
+      async execute(userType: string, pageNumber: number, pageSize: number, searchTerm: string): Promise<{users: UserDto[], total: number}> {
+          let filter: Record<string, unknown> = {}
           if(userType){
             filter.role = userType
           }
@@ -58,13 +58,12 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase{
 
        const {items , total} = await repo.findAll(filter,skip,limit,sort);
 
+       const users: UserDto[] = plainToInstance(UserDto, items as [], { excludeExtraneousValues: true }); 
 
-       const response: IPaginatedUsers = {
-         users: items,
+       const response = {
+         users: users,
          total: Math.ceil(total / validPageSize)
        }
-
        return response
-
       }
 }

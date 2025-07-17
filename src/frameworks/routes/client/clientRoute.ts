@@ -68,17 +68,12 @@ export class ClientRoute {
         * ========================== */
 
         this.clientRoute.get("/client/services",
-          // verifyAuth,
-          // authorizeRole(["client"])
-          // blockStatusMiddleware.checkStatus as RequestHandler,
           (req: Request, res:Response) =>{
             serviceController.getAllServices(req,res)
           })
 
 
           this.clientRoute.get("/client/services/:serviceId",
-          // verifyAuth,
-          // blockStatusMiddleware.checkStatus as RequestHandler,
           (req: Request, res:Response) =>{
             serviceController.getServiceById(req,res)
           })  
@@ -173,8 +168,11 @@ export class ClientRoute {
          eventController.checkEventBookingAvailability(req,res)
        })
 
-
-
+       this.clientRoute.get("/client/nearby",
+       (req: Request, res:Response) =>{
+         eventController.getAllEventsByLocation(req,res)
+         console.log('working loaction route')
+       })
 
 
       /** ==========================

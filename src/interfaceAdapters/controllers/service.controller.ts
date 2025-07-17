@@ -60,7 +60,7 @@ export class ServiceController implements IServiceController {
          })
 
        } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
        }        
     }
 
@@ -95,7 +95,7 @@ async getAllServices(req: Request, res: Response): Promise<void> {
            services,
         })
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
 }
 
@@ -128,7 +128,7 @@ async editService(req: Request, res: Response): Promise<void> {
            service,
         })
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
 }
 
@@ -165,7 +165,7 @@ async editService(req: Request, res: Response): Promise<void> {
            service,
         })
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
    }
 
@@ -196,8 +196,8 @@ async blockService(req: Request, res: Response): Promise<void> {
            message:SUCCESS_MESSAGES.UPDATE_SUCCESS,
            service,
         })
-      } catch (error) {
-        handleErrorResponse(res, error)
+      } catch (error) { 
+        handleErrorResponse(req,res, error)
       }
    }
 
@@ -215,7 +215,7 @@ async getServiceById(req: Request, res: Response): Promise<void> {
            service,
         })
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }  
     }
 

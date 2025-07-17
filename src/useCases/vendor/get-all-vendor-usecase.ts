@@ -2,6 +2,8 @@ import { inject, injectable } from "tsyringe";
 import { IGetAllVendorUseCase } from "../../domain/interface/useCaseInterface/vendor/get-all-vendor-usecase.interface";
 import { IPaginatedVendor } from "../../domain/entities/paginated/paginated-vendor.entity";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
+import { plainToInstance } from "class-transformer";
+import { VendorDTO } from "../../shared/dtos/vendor.dto";
 
 
 
@@ -17,7 +19,7 @@ export class GetAllVendorUseCase implements IGetAllVendorUseCase {
      ){}
 
      async execute(forType: string, pageNumber: number, pageSize: number, searchTerm: string): Promise<IPaginatedVendor> {
-         let filter: any = {}
+         let filter: Record<string, unknown> = {}
          if(searchTerm) {
            filter.$or =[
               {name:{$regex: searchTerm, $options:"i"}},
@@ -40,11 +42,15 @@ export class GetAllVendorUseCase implements IGetAllVendorUseCase {
             skip,
             limit
          )
+         const vendors = plainToInstance(VendorDTO, items as [], { excludeExtraneousValues: true }); 
 
          const response : IPaginatedVendor ={
-           vendor: items,
+           vendor: vendors,
            total: Math.ceil(total / validPageSize)
          }
+
+
+
          return response
      }
 

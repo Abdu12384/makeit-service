@@ -38,7 +38,7 @@ let NotificationController = class NotificationController {
                 res.status(constants_1.HTTP_STATUS.OK).json(notifications);
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -50,7 +50,7 @@ let NotificationController = class NotificationController {
                 res.status(constants_1.HTTP_STATUS.OK).json(notification);
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

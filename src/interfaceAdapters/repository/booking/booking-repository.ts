@@ -3,6 +3,7 @@ import { IBookingRepository } from "../../../domain/interface/repositoryInterfac
 import { BookingModel, IBookingModel } from "../../../frameworks/database/mongodb/model/booking.model";
 import { BaseRepository } from "../base.repository";
 import { FilterType, SortType } from "../../../shared/constants";
+import { FilterQuery } from "mongoose";
 
 
 @injectable()
@@ -11,7 +12,7 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
         super(BookingModel)
     }
 
-    async findAllWithVendorClient(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items: any[], total: number }> {
+    async findAllWithVendorClient(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items:IBookingModel[], total: number }> {
 
       const pipeline: any[] = [
           { $match: filter },
@@ -143,10 +144,8 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
   }
 
   // base.repository.ts
-async updateOne(filter: any, updateData: any): Promise<void> {
+async updateOne(filter: FilterQuery<IBookingModel>, updateData: IBookingModel): Promise<void> {
     await this.model.updateOne(filter, updateData).exec();
   }
   
-  
-
 }

@@ -5,6 +5,7 @@ import { CustomError } from "../../domain/utils/custom.error"
 import { ERROR_MESSAGES } from "../../shared/constants"
 import { HTTP_STATUS } from "../../shared/constants"
 import { IEventEntity } from "../../domain/entities/event.entity"
+import { IVendorEntity } from "../../domain/entities/vendor.entity"
 
 
 
@@ -19,7 +20,7 @@ export class GetEventByIdUseCase implements IGetEventByIdUseCase{
       private _eventRepository: IEventRepository
     ){}
 
-    async execute(eventId: string): Promise<any> {
+    async execute(eventId: string): Promise<IEventEntity| IVendorEntity> {
         const event = await this._eventRepository.findWithAggregation(eventId)
         if(!event){
             throw new CustomError(

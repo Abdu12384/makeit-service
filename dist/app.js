@@ -41,7 +41,6 @@ const express_1 = __importStar(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const morgan_1 = __importDefault(require("morgan"));
 const dbConnect_1 = require("./frameworks/database/connection/dbConnect");
 const http_1 = require("http");
 require("reflect-metadata");
@@ -52,6 +51,7 @@ const adminRoute_1 = require("./frameworks/routes/admin/adminRoute");
 const vendorRoute_1 = require("./frameworks/routes/vendor/vendorRoute");
 const socket_server_1 = require("./interfaceAdapters/websocket/socket.server");
 const tsyringe_1 = require("tsyringe");
+const morgan_logger_1 = __importDefault(require("./shared/utils/morgan.logger"));
 class App {
     constructor() {
         dotenv_1.default.config();
@@ -75,7 +75,8 @@ class App {
         this.app.use((0, cookie_parser_1.default)());
         this.app.use(express_1.default.json());
         this.app.use((0, express_1.urlencoded)({ extended: true }));
-        this.app.use((0, morgan_1.default)('dev'));
+        // this.app.use(morgan('dev'))
+        this.app.use(morgan_logger_1.default);
     }
     setRoutes() {
         this.app.use('/auth', new authRoute_1.AuthRoute().authRoute);

@@ -35,7 +35,9 @@ let CancelTicketUseCase = class CancelTicketUseCase {
     }
     execute(ticketId, cancelCount) {
         return __awaiter(this, void 0, void 0, function* () {
-            const ticket = yield this._ticketRepository.findOneWithPopulate({ ticketId });
+            const ticket = yield this._ticketRepository.findOneWithPopulate({
+                ticketId,
+            });
             if (!ticket) {
                 throw new custom_error_1.CustomError("Ticket not found", constants_1.HTTP_STATUS.NOT_FOUND);
             }
@@ -54,6 +56,9 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             const vendorShare = cancelAmount * 0.29;
             // Refundable to client
             const clientRefund = cancelAmount - platformFee - vendorShare;
+            const eventDetails = yield this._eventRepository.findOne({
+                eventId: ticket.eventId,
+            });
             /** Step 1: Refund to client */
             const clientWallet = yield this._walletRepository.updateWallet(ticket.clientId, clientRefund);
             if (!clientWallet) {
@@ -65,6 +70,7 @@ let CancelTicketUseCase = class CancelTicketUseCase {
                 paymentStatus: "credit",
                 paymentType: "refund",
                 walletId: clientWallet.walletId,
+                relatedTitle: `Ticket Refund: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"}`
             };
             const savedClientTx = yield this._transactionRepository.save(clientTransaction);
             if (!savedClientTx) {
@@ -82,6 +88,7 @@ let CancelTicketUseCase = class CancelTicketUseCase {
                 paymentStatus: "debit",
                 paymentType: "refund",
                 walletId: vendorWallet.walletId,
+                relatedTitle: `Refund for: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"}`,
             };
             const savedVendorTx = yield this._transactionRepository.save(vendorTransaction);
             if (!savedVendorTx) {
@@ -90,8 +97,11 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             ticket.totalAmount = ticket.totalAmount - cancelAmount;
             ticket.ticketCount = totalCount - cancelCount;
             if (ticket.ticketCount === 0) {
-                ticket.ticketStatus = "refunded";
+                ticket.ticketStatus = "cancelled";
                 ticket.checkedIn = "cancelled";
+                if ((eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.attendees) && Array.isArray(eventDetails.attendees)) {
+                    eventDetails.attendees = eventDetails.attendees.filter((attendeeId) => attendeeId !== ticket.clientId);
+                }
             }
             else {
                 ticket.ticketStatus = "partially_refunded";
@@ -102,15 +112,15 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             ticket.cancellationHistory.push({
                 count: cancelCount,
                 amount: cancelAmount,
-                date: new Date()
+                date: new Date(),
             });
-            const eventDetails = yield this._eventRepository.findOne({ eventId: ticket.eventId });
             if (!eventDetails) {
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             }
             eventDetails.ticketPurchased = Math.max(0, eventDetails.ticketPurchased - cancelCount);
             eventDetails.attendeesCount = Math.max(0, eventDetails.attendeesCount - cancelCount);
-            eventDetails.checkedInCount = Math.max(0, eventDetails.checkedInCount - cancelCount) || 0;
+            eventDetails.checkedInCount =
+                Math.max(0, eventDetails.checkedInCount - cancelCount) || 0;
             yield this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
             yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Cancelled", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been cancelled.`, notification_1.NotificationType.TICKET_BOOKING, "client");
             yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");

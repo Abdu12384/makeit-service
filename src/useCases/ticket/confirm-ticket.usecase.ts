@@ -13,6 +13,8 @@ import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/
 import { ITicketEntity } from "../../domain/entities/ticket.entity";
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
 import { NotificationType } from "../../shared/dtos/notification";
+import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface";
+import { config } from "../../shared/config";
 
 
 
@@ -40,26 +42,23 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
         @inject("IWalletRepository")
         private _walletRepository: IWalletRepository,
         @inject("IPushNotificationService")
-        private _pushNotificationService: IPushNotificationService
+        private _pushNotificationService: IPushNotificationService,
+        @inject("IRedisTokenRepository")
+        private _redisTokenRepository: IRedisTokenRepository
     ){}
 
-    async execute(ticket:ITicketEntity, paymentIntentId: string, vendorId: string): Promise<any> {
+    async execute(ticket:ITicketEntity, paymentIntentId: string, vendorId: string): Promise<ITicketEntity | null> {
         const confirmPayment = await this._stripeService.confirmPayment(paymentIntentId)
         if(!confirmPayment){throw new CustomError("Error while confirming payment",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
 
         const eventDetails = await this._eventRepository.findOne({eventId:ticket.eventId})
-      //   if (eventDetails?.ticketPurchased > eventDetails?.totalTicket) {
-      //     throw new CustomError('Ticket full Sold out',HTTP_STATUS.FORBIDDEN)
-      // } else if (eventDetails?.ticketPurchased + ticket.ticketCount > eventDetails?.totalTicket) {
-      //     throw new CustomError('Not enough ticket available',HTTP_STATUS.FORBIDDEN)
-      // }
        
       const paymentDetails = await this._paymentRepository.update({paymentId:paymentIntentId},{status:"success"})
       
       const newTicketPurchased = (eventDetails?.ticketPurchased || 0) + ticket.ticketCount
       const updateTicketCount = await this._eventRepository.update({eventId:ticket.eventId},{ticketPurchased:newTicketPurchased})
       const updatedTicket = await this._ticketRepository.update({ticketId:ticket.ticketId},{paymentStatus:"successfull"})
-      const adminId = process.env.ADMIN_ID
+      const adminId = config.adminId
 
       if(!adminId) throw new CustomError("Admin ID not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)
        const adminCommission = ticket.totalAmount * 0.1
@@ -67,8 +66,6 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
 
          const adminWalletId = await this._walletRepository.findOne({userId:adminId})
          if(!adminWalletId){throw new CustomError("Admin wallet not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
-      //  const adminWallet = await this._walletRepository.findOne({walletId:adminId})
-      //  if(!adminWallet){throw new CustomError("Admin wallet not found",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
       
        const adminTransaction : ITransactionsEntity = {
          amount: adminCommission,
@@ -76,6 +73,7 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
          paymentStatus: "credit",
          paymentType: "adminCommission",
          walletId:adminWalletId?.walletId,
+         relatedTitle:  `Admin Commission from Ticket Booking: ${eventDetails?.title || "a transaction"}`
        }
 
        const transaction = await this._transactionRepository.save(adminTransaction)
@@ -106,6 +104,7 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
          paymentStatus: "credit",
          paymentType:"ticketBooking",
          walletId: vendorWalletId,
+         relatedTitle: `Ticket: ${eventDetails?.title || "an event"}`
        }
        const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(vendorId,vendorPrice)
@@ -127,7 +126,8 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
         "vendor"
       );
       
-
+      await this._redisTokenRepository.deleteEventLock(ticket.clientId, ticket.eventId);
+      
       return  updatedTicket
     }
 }

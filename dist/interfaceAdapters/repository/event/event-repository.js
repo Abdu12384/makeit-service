@@ -115,6 +115,24 @@ let EventRepository = class EventRepository extends base_repository_1.BaseReposi
             return (((_a = result[0]) === null || _a === void 0 ? void 0 : _a.attendees) || []).reverse();
         });
     }
+    findAllByLocation(params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { lat, lng, radius } = params;
+            const result = yield this.model.find({
+                location: {
+                    $nearSphere: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [lng, lat],
+                        },
+                        $maxDistance: radius * 1000,
+                    },
+                },
+                isActive: true
+            });
+            return result;
+        });
+    }
 };
 exports.EventRepository = EventRepository;
 exports.EventRepository = EventRepository = __decorate([

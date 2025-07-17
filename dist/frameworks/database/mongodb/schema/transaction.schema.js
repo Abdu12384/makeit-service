@@ -27,6 +27,9 @@ exports.transactionSchema = new mongoose_1.Schema({
         type: String,
         ref: 'wallet',
         required: true
+    },
+    relatedTitle: {
+        type: String
     }
 }, {
     timestamps: true

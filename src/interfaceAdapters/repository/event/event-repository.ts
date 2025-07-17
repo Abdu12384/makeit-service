@@ -99,6 +99,26 @@ export class EventRepository extends BaseRepository<IEventModel> implements IEve
   
     return (result[0]?.attendees || []).reverse()
   }
+
+
+  async findAllByLocation(params: { lat: number, lng: number, radius: number }): Promise<IEventEntity[]> {
+    const { lat, lng, radius } = params;
   
+    const result = await this.model.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [lng, lat], 
+          },
+          $maxDistance: radius * 1000, 
+        },
+      },
+      isActive: true 
+    });
+  
+    return result;
+  }
+
 }
     

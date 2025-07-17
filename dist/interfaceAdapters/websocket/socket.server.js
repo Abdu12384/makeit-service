@@ -50,7 +50,12 @@ let SocketConfig = class SocketConfig {
                 }
                 catch (error) {
                     console.error("Error starting chat:", error);
-                    response({ status: "error", message: error.message });
+                    if (error instanceof Error) {
+                        response({ status: "error", message: error.message });
+                    }
+                    else {
+                        response({ status: "error", message: "An unexpected error occurred" });
+                    }
                 }
             }));
             //==========================================================
@@ -61,7 +66,12 @@ let SocketConfig = class SocketConfig {
                 }
                 catch (error) {
                     console.error("Error fetching chats:", error);
-                    response({ status: "error", message: error.message });
+                    if (error instanceof Error) {
+                        response({ status: "error", message: error.message });
+                    }
+                    else {
+                        response({ status: "error", message: "An unexpected error occurred" });
+                    }
                 }
             }));
             //==========================================================
@@ -75,7 +85,12 @@ let SocketConfig = class SocketConfig {
                 }
                 catch (error) {
                     console.error("Error joining room:", error);
-                    response({ status: "error", message: error.message });
+                    if (error instanceof Error) {
+                        response({ status: "error", message: error.message });
+                    }
+                    else {
+                        response({ status: "error", message: "An unexpected error occurred" });
+                    }
                 }
             }));
             //==========================================================
@@ -92,17 +107,24 @@ let SocketConfig = class SocketConfig {
                     if (chat) {
                         const receiverId = chat.senderId === data.senderId ? chat.receiverId : chat.senderId;
                         const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
-                        this.io.to(receiverId).emit("notification", {
-                            type: "new-message",
-                            chatId: data.chatId,
-                            message: "You have a new message",
-                        });
+                        if (receiverId !== data.senderId) {
+                            this.io.to(receiverId).emit("notification", {
+                                type: "new-message",
+                                chatId: data.chatId,
+                                message: "You have a new message",
+                            });
+                        }
                     }
                     response({ status: "success", message: "Message sent successfully" });
                 }
                 catch (error) {
                     console.error("Error sending message:", error);
-                    response({ status: "error", message: error.message });
+                    if (error instanceof Error) {
+                        response({ status: "error", message: error.message });
+                    }
+                    else {
+                        response({ status: "error", message: "An unexpected error occurred" });
+                    }
                 }
             }));
             //==========================================================
@@ -113,7 +135,12 @@ let SocketConfig = class SocketConfig {
                 }
                 catch (error) {
                     console.error("Error fetching messages:", error);
-                    response({ status: "error", message: error.message });
+                    if (error instanceof Error) {
+                        response({ status: "error", message: error.message });
+                    }
+                    else {
+                        response({ status: "error", message: "An unexpected error occurred" });
+                    }
                 }
             }));
             //==========================================================    

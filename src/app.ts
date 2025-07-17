@@ -14,6 +14,7 @@ import { VendorRoute } from './frameworks/routes/vendor/vendorRoute'
 import { SocketConfig } from './interfaceAdapters/websocket/socket.server'
 import { IChatUseCase } from './domain/interface/useCaseInterface/chat/chat-usecaes.interface'
 import { container } from 'tsyringe'
+import morganLogger from './shared/utils/morgan.logger'
 
 export class App {
    private app: Express
@@ -47,7 +48,8 @@ export class App {
         this.app.use(cookie_parser())
         this.app.use(express.json())
         this.app.use(urlencoded({extended:true}))
-        this.app.use(morgan('dev'))
+        // this.app.use(morgan('dev'))
+        this.app.use(morganLogger)
        }
 
       private setRoutes(){

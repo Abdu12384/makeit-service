@@ -44,6 +44,9 @@ export const getMessaging = (): firebaseAdmin.messaging.Messaging => {
 // Other config (as you already have)
 export const config = {
 
+  loggerStatus: process.env.LOGGER_STATUS || "combined",
+  adminId: process.env.ADMIN_ID || "",
+
 	ORIGIN: process.env.ORIGIN,
   server: {
     PORT: process.env.PORT || 5000,

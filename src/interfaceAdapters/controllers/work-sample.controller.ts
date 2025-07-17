@@ -65,7 +65,7 @@ export class WorkSampleController implements IWorkSampleController {
         })
         
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
     }
     
@@ -105,7 +105,7 @@ export class WorkSampleController implements IWorkSampleController {
         })
         
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
         
     }
@@ -144,7 +144,7 @@ export class WorkSampleController implements IWorkSampleController {
         })
         
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
     }
 

@@ -74,6 +74,7 @@ const check_event_booking_avliblity_usecase_1 = require("../../useCases/event/ch
 const block_event_usecase_1 = require("../../useCases/event/block-event-usecase");
 const resedul_booking_usecase_1 = require("../../useCases/booking/resedul-booking.usecase");
 const get_vendor_booked_dates_usecase_1 = require("../../useCases/booking/get-vendor-booked-dates.usecase");
+const get_all_events_by_location_1 = require("../../useCases/event/get-all-events-by-location");
 class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -241,6 +242,9 @@ class UseCaseRegistry {
         });
         tsyringe_1.container.register("IGetVendorBookedDatesUseCase", {
             useClass: get_vendor_booked_dates_usecase_1.GetVendorBookedDatesUseCase
+        });
+        tsyringe_1.container.register("IGetAllEventsByLocationUseCase", {
+            useClass: get_all_events_by_location_1.GetAllEventsByLocationUseCase
         });
         //======================= Register Bycripts =======================//
         tsyringe_1.container.register("IPasswordHasher", {

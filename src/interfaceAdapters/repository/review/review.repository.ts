@@ -2,7 +2,7 @@ import { BaseRepository } from "../base.repository";
 import { IReviewEntity } from "../../../domain/entities/review.entity";
 import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface";
 import { injectable } from "tsyringe";
-import { reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
+import { IReviewModel, reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
 import { FilterType, SortType } from "../../../shared/constants";
 
 

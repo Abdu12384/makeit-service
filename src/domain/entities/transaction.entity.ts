@@ -7,5 +7,8 @@ export interface ITransactionsEntity {
     paymentStatus: "debit" | "credit";
     amount: number;
     date?: Date;
-    paymentType: "refund" | "ticketBooking" | "top-up" | "adminCommission" | "serviceBooking"| "advancePayment"   
+    paymentType: "refund" | "ticketBooking" | "top-up" | "adminCommission" | "serviceBooking"| "advancePayment" 
+    createdAt?: Date;
+    updatedAt?: Date  
+    relatedTitle?: string
 }

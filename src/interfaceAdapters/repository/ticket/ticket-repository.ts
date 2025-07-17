@@ -4,6 +4,7 @@ import { BaseRepository } from "../base.repository";
 import { ITicketModel } from "../../../frameworks/database/mongodb/model/ticket.model";
 import { ITicketRepository } from "../../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
 import { FilterType, SortType } from "../../../shared/constants";
+import { IClientEntity } from "../../../domain/entities/client.entity";
 
 
 
@@ -13,10 +14,15 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         super(ticketModel)
     }
 
-    async getAllTicketsById(userId: string, skip: number, limit: number, sort: SortType): Promise<{ items: ITicketModel[], total: number }> {
+    async getAllTicketsById(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items: ITicketModel[], total: number }> {
+        const mongoSort: Record<string, 1 | -1> = {};
+        for (const key in sort) {
+          mongoSort[key] = sort[key] === "asc" ? 1 : -1;
+        }
+    
         const pipeline: any[] = [
             {
-                $match: { clientId: userId }
+                $match: filter
             },
             {
                 $lookup: {
@@ -77,7 +83,7 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         ]
 
         const countPipeline = [
-            { $match: { clientId: userId } },
+            { $match: filter },
             { $count: "total" }
         ]
 
@@ -149,4 +155,59 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         const result = await this.model.aggregate(pipeline)
         return result[0]
     }
+
+    async findAllWithClientDetails(eventId: string): Promise<IClientEntity[]> {
+        const result = await this.model.aggregate([
+          {
+            $match: { eventId: eventId }
+          },
+          {
+            $lookup: {
+              from: "clients",           // client collection name
+              localField: "clientId",    // field in ticket
+              foreignField: "userId",    // field in client
+              as: "client"
+            }
+          },
+          {
+            $unwind: {
+              path: "$client",
+              preserveNullAndEmptyArrays: true  // optional
+            }
+          },
+          {
+            $project: {
+              eventId: 1,
+              clientId: 1,
+              ticketId: 1,
+              vendorId: 1,
+              ticketPrice: 1,
+              ticketCount: 1,
+              ticketPurchased: 1,
+              qrCodeLink: 1,
+              ticketStatus: 1,
+              totalAmount: 1,
+              paymentStatus: 1,
+              checkedIn: 1,
+              email: 1,
+              phone: 1,
+              createdAt:1,
+              updatedAt:1,
+              client: {
+                _id: 1,
+                userId: 1,
+                name: 1,
+                email: 1,
+                phone: 1,
+                profileImage: 1
+              }
+            }
+          },
+          {
+            $sort: { createdAt: -1 } // optional, latest ticket first
+          }
+        ]);
+      
+        return result;
+      }
 }

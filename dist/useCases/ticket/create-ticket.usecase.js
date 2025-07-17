@@ -27,12 +27,13 @@ const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 let CreateTicketUseCase = class CreateTicketUseCase {
-    constructor(_eventRepository, _qrService, _stripeService, _paymentRepository, _ticketRepository) {
+    constructor(_eventRepository, _qrService, _stripeService, _paymentRepository, _ticketRepository, _redisTokenRepository) {
         this._eventRepository = _eventRepository;
         this._qrService = _qrService;
         this._stripeService = _stripeService;
         this._paymentRepository = _paymentRepository;
         this._ticketRepository = _ticketRepository;
+        this._redisTokenRepository = _redisTokenRepository;
     }
     execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -40,6 +41,11 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             if (!eventDetails) {
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             }
+            const isLocked = yield this._redisTokenRepository.isEventLocked(clientId, eventId);
+            if (isLocked) {
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.EVENT_LOCKED, constants_1.HTTP_STATUS.TOO_MANY_REQUESTS);
+            }
+            yield this._redisTokenRepository.setEventLock(clientId, eventId, 600);
             if (eventDetails.status === "cancelled")
                 throw new custom_error_1.CustomError("Event cancelled", constants_1.HTTP_STATUS.FORBIDDEN);
             if (eventDetails.status === "completed")
@@ -114,6 +120,7 @@ exports.CreateTicketUseCase = CreateTicketUseCase = __decorate([
     __param(2, (0, tsyringe_1.inject)("IPaymentService")),
     __param(3, (0, tsyringe_1.inject)("IPaymentRepository")),
     __param(4, (0, tsyringe_1.inject)("ITicketRepository")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    __param(5, (0, tsyringe_1.inject)("IRedisTokenRepository")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], CreateTicketUseCase);
 //# sourceMappingURL=create-ticket.usecase.js.map

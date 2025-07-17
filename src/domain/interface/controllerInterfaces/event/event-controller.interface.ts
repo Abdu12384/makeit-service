@@ -8,4 +8,5 @@ export interface IEventController{
   getAttendeesById(req:Request,res:Response):Promise<void>
   checkEventBookingAvailability(req:Request,res:Response):Promise<void>
   blockEvent(req:Request,res:Response):Promise<void>
+  getAllEventsByLocation(req:Request,res:Response):Promise<void>
 }

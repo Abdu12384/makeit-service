@@ -1,3 +1,4 @@
+import { UserDto } from "../../../../shared/dtos/client.dto";
 import { IPaginatedUsers } from "../../../entities/paginated/paginated-users.entity";
 
 export interface IGetAllUsersUseCase {
@@ -6,5 +7,5 @@ export interface IGetAllUsersUseCase {
 		pageNumber: number,
 		pageSize: number,
 		searchTerm: string
-	): Promise<IPaginatedUsers>;
+	): Promise<{users: UserDto[], total: number}>;
 }

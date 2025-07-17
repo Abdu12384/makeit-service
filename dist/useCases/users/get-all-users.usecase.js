@@ -25,6 +25,8 @@ exports.GetAllUserUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
+const class_transformer_1 = require("class-transformer");
+const client_dto_1 = require("../../shared/dtos/client.dto");
 let GetAllUserUseCase = class GetAllUserUseCase {
     constructor(_clientRepository, _vendorRepository) {
         this._clientRepository = _clientRepository;
@@ -59,8 +61,9 @@ let GetAllUserUseCase = class GetAllUserUseCase {
             const limit = validPageSize;
             const sort = { createdAt: -1 };
             const { items, total } = yield repo.findAll(filter, skip, limit, sort);
+            const users = (0, class_transformer_1.plainToInstance)(client_dto_1.UserDto, items, { excludeExtraneousValues: true });
             const response = {
-                users: items,
+                users: users,
                 total: Math.ceil(total / validPageSize)
             };
             return response;

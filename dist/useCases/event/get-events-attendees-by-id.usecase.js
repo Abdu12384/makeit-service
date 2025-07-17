@@ -30,18 +30,21 @@ let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
     }
     execute(eventId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const attendees = yield this._eventRepository.findAttendeesById(eventId);
-            const tickets = yield this._ticketRepository.findAll({ eventId });
-            if (!attendees || attendees.length === 0)
-                return [];
-            const enrichedAttendees = attendees.map((attendee) => {
-                const userId = typeof attendee === 'string' ? attendee : attendee.userId;
-                console.log('userIddfdfd=--=-=-=-=-=---', userId);
-                const userTicket = tickets.items.find((ticket) => ticket.clientId === userId);
-                console.log('userTikc\\\\\\\\\=--=-=-=-=-=---', userTicket);
-                return Object.assign(Object.assign({}, attendee), { ticket: userTicket || null });
-            });
-            return enrichedAttendees || [];
+            const tickets = yield this._ticketRepository.findAllWithClientDetails(eventId);
+            // if (!attendees || attendees.length === 0) return []
+            // const enrichedAttendees = attendees.map((attendee: IClientEntity) => {
+            //   const userId = typeof attendee === 'string' ? attendee : attendee.userId
+            //   // const userTicket = tickets.items.find((ticket: ITicketEntity) => ticket.clientId === userId)
+            //   // const userTickets = tickets.items.filter(
+            //   //   (ticket: ITicketEntity) =>
+            //   //     ticket.clientId === userId && ticket.eventId === eventId
+            //   // );
+            //   return {
+            //     ...attendee,
+            //     // ticket: userTickets|| null
+            //   }
+            // })
+            return tickets || [];
         });
     }
 };

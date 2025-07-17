@@ -42,7 +42,7 @@ export class WalletController implements IWalletController{
                 wallet
             })
         } catch (error) {
-            handleErrorResponse(res,error)
+            handleErrorResponse(req,res,error)
         }
     }
 

@@ -20,7 +20,7 @@ export interface IEventEntity {
     address?: string
     venueName?: string
     category: string
-    status: "upcoming" | "completed" | "cancelled"
+    status: "upcoming" | "completed" | "cancelled" | "ongoing"
     attendeesCount: number
     checkedInCount?: number
     isActive:boolean

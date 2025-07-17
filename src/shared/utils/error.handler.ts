@@ -1,9 +1,17 @@
-import { Response } from "express";
+import { Request,Response } from "express";
 import { ZodError } from "zod";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../constants";
+import logger from "./error.logger";
 
-export const handleErrorResponse = (res: Response, error: unknown): Response => {
+export const handleErrorResponse = (req:Request,res: Response, error: unknown): Response => {
+
+  logger.error(`[${req.method}] ${req.url} - ${(error as Error).message}`, {
+		ip: req.ip,
+		userAgent: req.headers["user-agent"],
+		stack: (error as Error).stack,
+	});
+
   // Handle Zod validation errors
   if (error instanceof ZodError) {
     console.log("Zod Validation Error:", error);

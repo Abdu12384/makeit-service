@@ -30,6 +30,7 @@ let CreateEventUseCase = class CreateEventUseCase {
     }
     execute(data, userId) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('evnet daata', data);
             const eventId = (0, unique_uuid_helper_1.generateUniqueId)("event");
             const event = yield this._eventRepository.save(Object.assign(Object.assign({ eventId }, data), { hostedBy: userId }));
             return event;

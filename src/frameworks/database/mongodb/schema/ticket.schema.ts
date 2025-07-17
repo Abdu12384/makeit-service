@@ -45,7 +45,7 @@ export const ticketSchema = new Schema<ITicketModel>({
     },
     ticketStatus: {
         type: String,
-        enum: ['used', 'refunded', 'unused','partially_refunded']
+        enum: ['used', 'refunded', 'unused','partially_refunded','cancelled']
     },
     paymentTransactionId: {
         type: String,

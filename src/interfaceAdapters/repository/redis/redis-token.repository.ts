@@ -29,4 +29,20 @@ export class RedisTokenRepository implements IRedisTokenRepository {
 		const key = `reset_token:${userId}`;
 		await redisClient.del(key);
 	}
+
+	async setEventLock(clientId: string, eventId: string, durationInSeconds: number = 600): Promise<void> {
+		const key = `ticket_lock:${clientId}:${eventId}`;
+		await redisClient.set(key, "locked", { EX: durationInSeconds });
+	}
+	
+	async isEventLocked(clientId: string, eventId: string): Promise<boolean> {
+		const key = `ticket_lock:${clientId}:${eventId}`;
+		const result = await redisClient.get(key);
+		return result === "locked";
+	}
+
+	async deleteEventLock(clientId: string, eventId: string): Promise<void> {
+		const key = `ticket_lock:${clientId}:${eventId}`;
+		await redisClient.del(key);
+	}	
 }

@@ -26,7 +26,7 @@ const tsyringe_1 = require("tsyringe");
 const constants_1 = require("../../shared/constants");
 const error_handler_1 = require("../../shared/utils/error.handler");
 let EventController = class EventController {
-    constructor(_createEventUseCase, _getEventsByVendorIdUseCase, _editEventUseCase, _getAllEventsUseCase, _getEventByIdUseCase, _getEventsAttendeesByIdUseCase, _checkEventBookingAvliblityUseCase, _blockEventUseCase) {
+    constructor(_createEventUseCase, _getEventsByVendorIdUseCase, _editEventUseCase, _getAllEventsUseCase, _getEventByIdUseCase, _getEventsAttendeesByIdUseCase, _checkEventBookingAvliblityUseCase, _blockEventUseCase, _getAllEventsByLocationUseCase) {
         this._createEventUseCase = _createEventUseCase;
         this._getEventsByVendorIdUseCase = _getEventsByVendorIdUseCase;
         this._editEventUseCase = _editEventUseCase;
@@ -35,6 +35,7 @@ let EventController = class EventController {
         this._getEventsAttendeesByIdUseCase = _getEventsAttendeesByIdUseCase;
         this._checkEventBookingAvliblityUseCase = _checkEventBookingAvliblityUseCase;
         this._blockEventUseCase = _blockEventUseCase;
+        this._getAllEventsByLocationUseCase = _getAllEventsByLocationUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Create Event 
@@ -51,7 +52,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -72,7 +73,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -93,7 +94,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -113,7 +114,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -132,7 +133,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -152,7 +153,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -170,7 +171,7 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -188,7 +189,26 @@ let EventController = class EventController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
+            }
+        });
+    }
+    // ══════════════════════════════════════════════════════════
+    //  Block Event 
+    // ══════════════════════════════════════════════════════════
+    getAllEventsByLocation(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { lat, lng, radius } = req.query;
+                console.log(lat, lng, radius);
+                const events = yield this._getAllEventsByLocationUseCase.execute(Number(lat), Number(lng), Number(radius));
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    events,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -204,6 +224,7 @@ exports.EventController = EventController = __decorate([
     __param(5, (0, tsyringe_1.inject)("IGetEventsAttendeesByIdUseCase")),
     __param(6, (0, tsyringe_1.inject)("ICheckEventBookingAvliblityUseCase")),
     __param(7, (0, tsyringe_1.inject)("IBlockEventUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
+    __param(8, (0, tsyringe_1.inject)("IGetAllEventsByLocationUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], EventController);
 //# sourceMappingURL=event.controller.js.map

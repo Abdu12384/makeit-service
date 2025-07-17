@@ -8,6 +8,8 @@ import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
+import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
+import { IDashboardStats } from "../../domain/entities/dahboard.entity";
 
 
 
@@ -31,7 +33,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
       @inject("ITransactionRepository") private _transactionRepository : ITransactionRepository
     ){}
     
-  async execute(role:string,userId:string):Promise<any>{
+  async execute(role:string,userId:string):Promise<IDashboardStats>{
 
    let events = await this._eventRepository.find();
     let bookings = await this._bookingRepository.find();
@@ -55,7 +57,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     const wallet = await this._walletRepository.findOne({userId})
     const totalRevenue = wallet?.balance || 0
 
-    let walletTransactions:any= [];
+    let walletTransactions:ITransactionsEntity[]= [];
     if (wallet && wallet.walletId) {
       const rawTransactions = await this._transactionRepository.find({walletId:wallet.walletId});
       walletTransactions = rawTransactions.map((tx:any) => ({

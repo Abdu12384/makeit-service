@@ -69,7 +69,7 @@ export class TicketController implements ITicketController {
         })
             
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -97,7 +97,7 @@ export class TicketController implements ITicketController {
                 confirmTicket,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -109,20 +109,22 @@ export class TicketController implements ITicketController {
     async getAllTicketsByClientId(req: Request, res: Response): Promise<void> {
         try {
             const {userId} = (req as CustomRequest).user
-            const {page,limit} = req.query
+            console.log(req.query)
+            const {page,limit,status} = req.query
             const pageNumber = Number(page)
             const pageSize = Number(limit)
             const tickets = await this._getAllTicketsByIdUseCase.execute(
               userId,
               pageNumber,
-              pageSize
+              pageSize,
+              status as string
             )
             res.status(HTTP_STATUS.OK).json({
                 success:true,
                 tickets,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -135,9 +137,12 @@ export class TicketController implements ITicketController {
     async verifyTicket(req: Request, res: Response): Promise<void> {
         try {
             const {ticketId,eventId} = req.params
+            const {status} = req.query
+
             const verifyTicket = await this._verifyTicketUseCase.execute(
                 ticketId,
                 eventId,
+                status as string
             )
             res.status(HTTP_STATUS.OK).json({
                 success:true,
@@ -145,7 +150,7 @@ export class TicketController implements ITicketController {
                 verifyTicket,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -172,7 +177,7 @@ export class TicketController implements ITicketController {
             })
             
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 

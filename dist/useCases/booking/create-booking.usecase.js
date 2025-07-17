@@ -24,8 +24,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
-const custom_error_1 = require("../../domain/utils/custom.error");
-const constants_1 = require("../../shared/constants");
 const notification_1 = require("../../shared/dtos/notification");
 let CreateBookingUseCase = class CreateBookingUseCase {
     constructor(_bookingRepository, _pushNotificationService) {
@@ -37,15 +35,18 @@ let CreateBookingUseCase = class CreateBookingUseCase {
             const bookingId = (0, unique_uuid_helper_1.generateUniqueId)("booking");
             const bookingsDetails = yield this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
             const bookedDate = bookingsDetails === null || bookingsDetails === void 0 ? void 0 : bookingsDetails.date;
-            const existingBooking = yield this._bookingRepository.findOne({
-                clientId: userId,
-                serviceId: serviceId,
-                date: { $in: [date] },
-            });
-            console.log('exitst book', existingBooking);
-            if (existingBooking) {
-                throw new custom_error_1.CustomError("You have already booked this service for this date.", constants_1.HTTP_STATUS.BAD_REQUEST);
-            }
+            // const existingBooking = await this._bookingRepository.findOne({
+            //   clientId: userId,
+            //   serviceId: serviceId,
+            //   date: { $in: [date] }, 
+            // });
+            // console.log('exitst book',existingBooking)
+            // if (existingBooking) {
+            //   throw new CustomError(
+            //     "You have already booked this service for this date.",
+            //     HTTP_STATUS.BAD_REQUEST
+            //   );
+            // }
             const booking = yield this._bookingRepository.save({
                 bookingId,
                 clientId: userId,

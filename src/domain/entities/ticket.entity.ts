@@ -13,7 +13,7 @@ export interface ITicketEntity {
     qrCodeLink: string;
     eventId: string;
     clientId: string;
-    ticketStatus: 'used' | 'refunded' | 'unused'|'partially_refunded'
+    ticketStatus: 'used' | 'refunded' | 'unused'|'partially_refunded'|'cancelled'
     paymentTransactionId: string
     checkedIn?: string
     checkInHistory?: Date[]

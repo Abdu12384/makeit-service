@@ -51,7 +51,7 @@ export class PaymentController implements IPaymentController{
          })
             
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res,error)
         }
     }
 
@@ -74,7 +74,7 @@ export class PaymentController implements IPaymentController{
           })
             
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res,error)
         }
 
 

@@ -12,6 +12,7 @@ import { IGetEventByIdUseCase } from "../../domain/interface/useCaseInterface/ev
 import { IGetEventsAttendeesByIdUseCase } from "../../domain/interface/useCaseInterface/event/get-events-attendees-by-id-usecase.interface";
 import { ICheckEventBookingAvliblityUseCase } from "../../domain/interface/useCaseInterface/event/check-event-booking-avliblity-usecase.interface";
 import { IBlockEventUseCase } from "../../domain/interface/useCaseInterface/event/block-event-usecase.interface";
+import { IGetAllEventsByLocationUseCase } from "../../domain/interface/useCaseInterface/event/get-all-events-by-location-usecase.interface";
 
 
 
@@ -35,7 +36,9 @@ export class EventController implements IEventController{
       @inject("ICheckEventBookingAvliblityUseCase")
       private _checkEventBookingAvliblityUseCase: ICheckEventBookingAvliblityUseCase,
       @inject("IBlockEventUseCase")
-      private _blockEventUseCase: IBlockEventUseCase
+      private _blockEventUseCase: IBlockEventUseCase,
+      @inject("IGetAllEventsByLocationUseCase")
+      private _getAllEventsByLocationUseCase: IGetAllEventsByLocationUseCase
     ){}
       
 
@@ -60,7 +63,7 @@ export class EventController implements IEventController{
           message:"Event Created"
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -89,7 +92,7 @@ export class EventController implements IEventController{
           events,
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -117,7 +120,7 @@ export class EventController implements IEventController{
           events
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -143,7 +146,7 @@ export class EventController implements IEventController{
           event
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -166,7 +169,7 @@ export class EventController implements IEventController{
           event
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -190,7 +193,7 @@ export class EventController implements IEventController{
           event
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -210,7 +213,7 @@ export class EventController implements IEventController{
           event
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
@@ -232,9 +235,32 @@ export class EventController implements IEventController{
           attendees
         })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 
+
+
+
+// ══════════════════════════════════════════════════════════
+//  Block Event 
+// ══════════════════════════════════════════════════════════
+  async getAllEventsByLocation(req: Request, res: Response): Promise<void> {
+    try {
+      const { lat, lng, radius } = req.query
+      console.log(lat, lng, radius)
+      const events = await this._getAllEventsByLocationUseCase.execute(
+        Number(lat),
+        Number(lng),
+        Number(radius)
+      )
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        events,
+      })
+    } catch (error) {
+      handleErrorResponse(req, res, error)
+    }
+  }
 
 }

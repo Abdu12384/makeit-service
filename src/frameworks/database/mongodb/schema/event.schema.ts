@@ -21,10 +21,22 @@ export const eventSchema = new Schema<IEventModel>({
         type: Date,
         default: Date.now
     },
-    date: [{
-        type: Date,
-        required: true
-    }],
+    date: [
+        {
+          date: {
+            type: Date,
+            required: true,
+          },
+          startTime: {
+            type: String,
+            required: true,
+          },
+          endTime: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
     description: {
         type: String,
         required: true
@@ -62,7 +74,7 @@ export const eventSchema = new Schema<IEventModel>({
     },
     status: {
         type: String,
-        enum: ["upcoming", "completed", "cancelled"]
+        enum: ["upcoming", "completed", "cancelled","ongoing"]
     },
     maxTicketsPerUser: {
         type: Number,

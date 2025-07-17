@@ -6,6 +6,6 @@ export interface IUpdateUserDetailsUseCase {
 	execute(
 		userId: string,
 		role: string,
-		userDetails: Record<string, any>
+		userDetails: IAdminEntity | IClientEntity | IVendorEntity
 	): Promise<IAdminEntity | IClientEntity | IVendorEntity | null>;
 }

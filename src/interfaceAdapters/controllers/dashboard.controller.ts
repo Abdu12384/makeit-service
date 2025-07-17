@@ -44,7 +44,7 @@ export default class DashboardController implements IDashboardControllerInterfac
               data,
           })
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
     }
 }

@@ -56,7 +56,7 @@ export class ReviewController implements IReviewController {
            })
             
         } catch (error) {
-            handleErrorResponse(res,error)
+            handleErrorResponse(req,res,error)
         }
     }
 
@@ -80,7 +80,7 @@ export class ReviewController implements IReviewController {
                 reviews
             })
         } catch (error) {
-            handleErrorResponse(res,error)
+            handleErrorResponse(req,res,error)
         }
     }
 

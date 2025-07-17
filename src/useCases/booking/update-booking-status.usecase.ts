@@ -15,8 +15,6 @@ import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/u
 
 
 
-
-
 @injectable()
 export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
     constructor(  
@@ -42,7 +40,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
           throw new Error("Booking not found")
         }
 
-        if(status === "Cancelled" || booking.paymentStatus === "AdvancePaid"){
+        if(status === "Cancelled" && booking.paymentStatus === "AdvancePaid"){
 
           const service = await this._serviceRepository.findOne({ serviceId: booking.serviceId });
           if (!service) throw new Error("Service not found");
@@ -98,6 +96,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
               paymentStatus: "credit",
               paymentType: "refund",
               walletId: clientWallet?.walletId as string,
+              relatedTitle: `Refund from: ${service?.serviceTitle || "a transaction"}`
             };
         
             const vendorTransaction: ITransactionsEntity = {
@@ -106,6 +105,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
               paymentStatus: "debit",
               paymentType: "refund",
               walletId: vendorWallet?.walletId as string,
+              relatedTitle: `Refund from: ${service?.serviceTitle || "a transaction"}`
             };
             
           await this._transactionRepository.save(clientTransaction)

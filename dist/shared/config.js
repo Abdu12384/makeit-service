@@ -53,6 +53,8 @@ const getMessaging = () => {
 exports.getMessaging = getMessaging;
 // Other config (as you already have)
 exports.config = {
+    loggerStatus: process.env.LOGGER_STATUS || "combined",
+    adminId: process.env.ADMIN_ID || "",
     ORIGIN: process.env.ORIGIN,
     server: {
         PORT: process.env.PORT || 5000,

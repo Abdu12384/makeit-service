@@ -56,7 +56,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -80,7 +80,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -108,7 +108,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -136,7 +136,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -163,7 +163,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -181,7 +181,7 @@ let ServiceController = class ServiceController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

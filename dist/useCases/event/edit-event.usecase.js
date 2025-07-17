@@ -33,9 +33,22 @@ let EditEventUseCase = class EditEventUseCase {
     execute(eventId, data) {
         return __awaiter(this, void 0, void 0, function* () {
             const event = yield this._eventRepository.findOne({ eventId });
+            if ((event === null || event === void 0 ? void 0 : event.status) === "ongoing" && data.status === "upcoming") {
+                throw new custom_error_1.CustomError("Event is already ongoing", constants_2.HTTP_STATUS.BAD_REQUEST);
+            }
+            if ((event === null || event === void 0 ? void 0 : event.status) === "ongoing" && data.status === "cancelled") {
+                throw new custom_error_1.CustomError("Cannot cancel an event that is already ongoing.", constants_2.HTTP_STATUS.BAD_REQUEST);
+            }
+            if ((event === null || event === void 0 ? void 0 : event.status) === "upcoming" && data.status === "completed") {
+                throw new custom_error_1.CustomError("Cannot change status from 'upcoming' to 'completed' directly. Please mark it as 'ongoing' first.", constants_2.HTTP_STATUS.BAD_REQUEST);
+            }
+            if (((event === null || event === void 0 ? void 0 : event.status) === "completed" || (event === null || event === void 0 ? void 0 : event.status) === "cancelled") && (data.status === "upcoming" || data.status === "ongoing" || data.status === "cancelled")) {
+                throw new custom_error_1.CustomError("Cannot change status. Event is already completed or cancelled.", constants_2.HTTP_STATUS.BAD_REQUEST);
+            }
             if (!event) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_2.HTTP_STATUS.NOT_FOUND);
             }
+            console.log('event data', event);
             yield this._eventRepository.update({ eventId: event.eventId }, data);
         });
     }

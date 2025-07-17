@@ -44,7 +44,7 @@ exports.ticketSchema = new mongoose_1.Schema({
     },
     ticketStatus: {
         type: String,
-        enum: ['used', 'refunded', 'unused', 'partially_refunded']
+        enum: ['used', 'refunded', 'unused', 'partially_refunded', 'cancelled']
     },
     paymentTransactionId: {
         type: String,

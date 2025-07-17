@@ -1,3 +1,5 @@
+import Stripe from "stripe";
+
 
 export interface IPaymentService {
   createPaymentIntent(
@@ -6,5 +8,5 @@ export interface IPaymentService {
     metadata: Record<string, any>
   ): Promise<string>;
 
-  confirmPayment(paymentIntentId: string): Promise<any>;
+  confirmPayment(paymentIntentId: string): Promise<Stripe.PaymentIntent>;
 }

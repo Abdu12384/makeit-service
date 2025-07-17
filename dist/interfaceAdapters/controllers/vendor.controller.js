@@ -50,7 +50,7 @@ let VendorCantroller = class VendorCantroller {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -76,7 +76,7 @@ let VendorCantroller = class VendorCantroller {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

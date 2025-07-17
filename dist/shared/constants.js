@@ -100,6 +100,8 @@ exports.ERROR_MESSAGES = {
     FILE_SIZE_EXCEEDED: "File size is too large",
     RATE_LIMIT_EXCEEDED: "Too many requests try again later",
     PASSWORD_SAME: "New password must be different from current password",
+    EVENT_LOCKED: "You already initiated a ticket booking. Please wait a few minutes before trying again.",
+    BOOKING_LOCKED: "You already initiated a booking. Please wait a few minutes before trying again.",
 };
 const VERIFICATION_MAIL_CONTENT = (otp) => `
 <!DOCTYPE html>

@@ -25,7 +25,7 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
        ){}
   
 
-    async execute(ticketId: string, eventId: string): Promise<ITicketEntity | null> {
+    async execute(ticketId: string, eventId: string,status:string): Promise<ITicketEntity | null> {
 
           const ticket = await this._ticketRepository.findOne({ticketId})
           const event = await this._eventRepository.findOne({eventId})
@@ -34,11 +34,14 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
           if(!ticket) throw new CustomError("Ticket not found",HTTP_STATUS.NOT_FOUND)
           if(ticket.eventId !== eventId) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
           if(ticket.checkedIn === "cancelled") throw new CustomError("Ticket already cancelled",HTTP_STATUS.FORBIDDEN)
-          if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)
+          if(ticket.ticketStatus === "cancelled") throw new CustomError("Ticket already cancelled",HTTP_STATUS.FORBIDDEN)
+            
+          // if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)
           
-
-          ticket.ticketStatus = "used"
-          ticket.checkedIn = "checked_in"
+          if(status === 'checked_in'){
+            ticket.ticketStatus = "used"
+            ticket.checkedIn = "checked_in"
+          }
 
           event.checkedInCount = event.checkedInCount ?? 0  // initialize if undefined
           event.checkedInCount!  += ticket.ticketCount

@@ -1,6 +1,6 @@
-import { ITransactionsEntity } from "../../../entities/transaction.entity";
-import { IWalletEntity } from "../../../entities/wallet.entity";
+import { TransactionDTO } from "../../../../shared/dtos/transaction.dto";
+import { WalletDTO } from "../../../../shared/dtos/wallet.dto";
 
 export interface IGetWalletByIdUseCase{
-    execute(userId:string,pageNumber:number,pageSize:number):Promise<{wallet:IWalletEntity,transaction:ITransactionsEntity[],total:number}> 
+    execute(userId:string,pageNumber:number,pageSize:number):Promise<{wallet:WalletDTO,transaction:TransactionDTO[],total:number}> 
 }

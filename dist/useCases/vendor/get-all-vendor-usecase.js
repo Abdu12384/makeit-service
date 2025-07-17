@@ -23,6 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAllVendorUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
+const class_transformer_1 = require("class-transformer");
+const vendor_dto_1 = require("../../shared/dtos/vendor.dto");
 let GetAllVendorUseCase = class GetAllVendorUseCase {
     constructor(_vendorRepository) {
         this._vendorRepository = _vendorRepository;
@@ -42,8 +44,9 @@ let GetAllVendorUseCase = class GetAllVendorUseCase {
             const skip = (validPageNumber - 1) * validPageNumber;
             const limit = validPageSize;
             const { items, total } = yield this._vendorRepository.findAll(Object.assign({}, filter), skip, limit);
+            const vendors = (0, class_transformer_1.plainToInstance)(vendor_dto_1.VendorDTO, items, { excludeExtraneousValues: true });
             const response = {
-                vendor: items,
+                vendor: vendors,
                 total: Math.ceil(total / validPageSize)
             };
             return response;

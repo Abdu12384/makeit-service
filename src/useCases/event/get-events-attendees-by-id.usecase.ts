@@ -2,6 +2,8 @@ import { inject, injectable } from "tsyringe";
 import { IGetEventsAttendeesByIdUseCase } from "../../domain/interface/useCaseInterface/event/get-events-attendees-by-id-usecase.interface";
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
+import { IClientEntity } from "../../domain/entities/client.entity";
+import { ITicketEntity } from "../../domain/entities/ticket.entity";
 
 
 
@@ -28,25 +30,29 @@ export class GetEventsAttendeesByIdUseCase implements IGetEventsAttendeesByIdUse
 
 
 
-    async execute(eventId:string):Promise<any>{
+    async execute(eventId:string):Promise<IClientEntity[]>{
         
-      const attendees = await this._eventRepository.findAttendeesById(eventId)
-      const tickets = await this._ticketRepository.findAll({eventId})
+      const tickets = await this._ticketRepository.findAllWithClientDetails(eventId)
+      // if (!attendees || attendees.length === 0) return []
 
-      if (!attendees || attendees.length === 0) return []
-
-      const enrichedAttendees = attendees.map((attendee: any) => {
-        const userId = typeof attendee === 'string' ? attendee : attendee.userId
-        console.log('userIddfdfd=--=-=-=-=-=---',userId)
-        const userTicket = tickets.items.find((ticket: any) => ticket.clientId === userId)
-        console.log('userTikc\\\\\\\\\=--=-=-=-=-=---',userTicket)
-  
-        return {
-          ...attendee,
-          ticket: userTicket || null
-        }
-      })
       
-       return enrichedAttendees || []
+
+      // const enrichedAttendees = attendees.map((attendee: IClientEntity) => {
+      //   const userId = typeof attendee === 'string' ? attendee : attendee.userId
+      //   // const userTicket = tickets.items.find((ticket: ITicketEntity) => ticket.clientId === userId)
+
+      //   // const userTickets = tickets.items.filter(
+      //   //   (ticket: ITicketEntity) =>
+      //   //     ticket.clientId === userId && ticket.eventId === eventId
+      //   // );
+    
+
+      //   return {
+      //     ...attendee,
+      //     // ticket: userTickets|| null
+      //   }
+      // })
+      
+       return tickets || []
     }
 }

@@ -23,6 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAllCategoryUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
+const category_dto_1 = require("../../shared/dtos/category.dto");
+const class_transformer_1 = require("class-transformer");
 let GetAllCategoryUseCase = class GetAllCategoryUseCase {
     constructor(_categoryRepository) {
         this._categoryRepository = _categoryRepository;
@@ -41,9 +43,10 @@ let GetAllCategoryUseCase = class GetAllCategoryUseCase {
             }
             const sort = { createdAt: -1 };
             const { total, items } = yield this._categoryRepository.findAll(filter, skip, validLimit, sort);
+            const categories = (0, class_transformer_1.plainToInstance)(category_dto_1.CategoryDTO, items, { excludeExtraneousValues: true });
             return {
                 total: Math.ceil(total / validLimit),
-                items,
+                items: categories,
             };
         });
     }

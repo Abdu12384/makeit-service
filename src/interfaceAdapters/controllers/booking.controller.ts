@@ -64,7 +64,7 @@ export class BookingController implements IBookingController{
 
 
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -76,22 +76,23 @@ export class BookingController implements IBookingController{
 
      async getAllBookings(req:Request,res:Response): Promise<void>{
         try {
-            const {page,limit} = req.query
+            const {page,limit,status} = req.query
             const {role,userId} = (req as CustomRequest).user 
             const pageNumber = Number(page)
             const pageSize = Number(limit)
             const bookings = await this._getAllBookingUseCase.execute(
                 pageNumber,
                 pageSize,
+                status as string,
                 role,
-                userId
+                userId  
             )
             res.status(HTTP_STATUS.OK).json({
                 success:true,
                 bookings,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }   
 
@@ -117,7 +118,7 @@ export class BookingController implements IBookingController{
                 booking,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -139,7 +140,7 @@ export class BookingController implements IBookingController{
                 booking,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse( req,res, error)
         }
     }
 
@@ -163,7 +164,7 @@ export class BookingController implements IBookingController{
                 booking,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -185,7 +186,7 @@ export class BookingController implements IBookingController{
                 booking,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
 
@@ -205,7 +206,7 @@ export class BookingController implements IBookingController{
                 booking,
             })
         } catch (error) {
-            handleErrorResponse(res, error)
+            handleErrorResponse(req,res, error)
         }
     }
     

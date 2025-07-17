@@ -22,13 +22,12 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
 
     async execute(pageNumber: number, pageSize: number, searchTermString: string): Promise<{events:IEventEntity[],total:number}> {
 
-
         const validPageNumber = Math.max(1, pageNumber || 1)
         const validPageSize = Math.max(1, pageSize || 10)
         const skip = (validPageNumber - 1) * validPageSize
 
 
-        let filter: any = {
+        let filter: Record<string,unknown> = {
           status: "upcoming",
           isActive: true
         }

@@ -4,6 +4,7 @@ import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/
 import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface";
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
 import { IBookingEntity } from "../../domain/entities/booking.entity";
+import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface";
 
 
 
@@ -14,7 +15,8 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
   constructor(
     @inject("IBookingRepository") private _bookingRepository: IBookingRepository,
     @inject("IPaymentService") private _stripeService: IPaymentService,
-    @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository
+    @inject("IPaymentRepository") private _paymentRepository: IPaymentRepository,
+    @inject("IRedisTokenRepository") private _redisTokenRepository: IRedisTokenRepository
   ) {}
 
   async confirmPayment(paymentIntentId: string, booking: IBookingEntity): Promise<void> {
@@ -60,7 +62,10 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
       );
       throw new Error("Stripe payment not successful");
     } 
+    await this._redisTokenRepository.deleteEventLock(booking.clientId, booking.serviceId);
+
   }
+
 }
 
 

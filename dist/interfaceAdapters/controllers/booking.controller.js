@@ -51,7 +51,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -61,18 +61,18 @@ let BookingController = class BookingController {
     getAllBookings(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { page, limit } = req.query;
+                const { page, limit, status } = req.query;
                 const { role, userId } = req.user;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
-                const bookings = yield this._getAllBookingUseCase.execute(pageNumber, pageSize, role, userId);
+                const bookings = yield this._getAllBookingUseCase.execute(pageNumber, pageSize, status, role, userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     bookings,
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -92,7 +92,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -111,7 +111,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -131,7 +131,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -151,7 +151,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -170,7 +170,7 @@ let BookingController = class BookingController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

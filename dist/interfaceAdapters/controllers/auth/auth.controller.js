@@ -64,7 +64,7 @@ let AuthController = class AuthController {
                 res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -90,7 +90,7 @@ let AuthController = class AuthController {
                 res.status(constants_1.HTTP_STATUS.CREATED).json({ message: constants_1.SUCCESS_MESSAGES.CREATED, data: client });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -124,7 +124,7 @@ let AuthController = class AuthController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -150,7 +150,7 @@ let AuthController = class AuthController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -173,7 +173,7 @@ let AuthController = class AuthController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -209,7 +209,7 @@ let AuthController = class AuthController {
                 res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.OTP_SEND_SUCCESS);
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -224,7 +224,7 @@ let AuthController = class AuthController {
                 res.status(constants_1.HTTP_STATUS.OK).json(constants_1.SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS);
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

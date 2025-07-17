@@ -7,6 +7,9 @@ import { HTTP_STATUS } from "../../shared/constants";
 import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
+import { WalletDTO } from "../../shared/dtos/wallet.dto";
+import { plainToInstance } from "class-transformer";
+import { TransactionDTO } from "../../shared/dtos/transaction.dto";
 
 
 
@@ -25,7 +28,7 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
         private readonly transactionRepository:ITransactionRepository
     ){}
 
-    async execute(userId:string,pageNumber:number,pageSize:number):Promise<{wallet:IWalletEntity,transaction:ITransactionsEntity[],total:number}>{
+    async execute(userId:string,pageNumber:number,pageSize:number):Promise<{wallet:WalletDTO,transaction:TransactionDTO[],total:number}>{
 
        const validPageNumber = Math.max(1, pageNumber || 1);
        const validPageSize = Math.max(1, pageSize || 10);
@@ -47,12 +50,19 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
           wallet = await this.walletRepository.save(newWallet);
         }
       
+        const walletDto = plainToInstance(WalletDTO, wallet, { excludeExtraneousValues: true }); 
 
         const {items,total} = await this.transactionRepository.findAll({walletId:wallet.walletId},skip,limit,sort)
 
+        const transactions = plainToInstance(TransactionDTO, items as [], { excludeExtraneousValues: true }); 
+
+        
+
+        
+
         const response = {
-            wallet,
-            transaction:items,
+            wallet:walletDto,
+            transaction:transactions,
             total:Math.ceil(total/validPageSize)
         }
         return response

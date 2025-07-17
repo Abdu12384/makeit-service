@@ -139,6 +139,8 @@ import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterfa
 import { RescheduleBookingUseCase } from "../../useCases/booking/resedul-booking.usecase";
 import { IGetVendorBookedDatesUseCase } from "../../domain/interface/useCaseInterface/booking/get-vendor-booked-dates-usecase.interface";
 import { GetVendorBookedDatesUseCase } from "../../useCases/booking/get-vendor-booked-dates.usecase";
+import { IGetAllEventsByLocationUseCase } from "../../domain/interface/useCaseInterface/event/get-all-events-by-location-usecase.interface";
+import { GetAllEventsByLocationUseCase } from "../../useCases/event/get-all-events-by-location";
 
 
 
@@ -371,6 +373,10 @@ export class UseCaseRegistry {
 
     container.register<IGetVendorBookedDatesUseCase>("IGetVendorBookedDatesUseCase",{
       useClass: GetVendorBookedDatesUseCase
+    })
+
+    container.register<IGetAllEventsByLocationUseCase>("IGetAllEventsByLocationUseCase",{
+      useClass: GetAllEventsByLocationUseCase
     })
     
    //======================= Register Bycripts =======================//

@@ -7,4 +7,5 @@ import { IEventEntity } from "../../../entities/event.entity";
 export interface IEventRepository extends IBaseRepository<IEventModel>{
     findWithAggregation(eventId:string): Promise<IVendorEntity|IEventEntity>
     findAttendeesById(eventId:string): Promise<IClientEntity[]>
+    findAllByLocation(params: { lat: number, lng: number, radius: number }): Promise<IEventEntity[]>
 }

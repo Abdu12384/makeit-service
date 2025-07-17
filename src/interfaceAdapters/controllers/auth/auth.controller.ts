@@ -78,7 +78,7 @@ export class AuthController implements IClientAuthController{
         await this._sendOtpEmailUseCase.execute(email)
        res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS)
      } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
   }
 
@@ -115,7 +115,7 @@ export class AuthController implements IClientAuthController{
          res.status(HTTP_STATUS.CREATED).json({message:SUCCESS_MESSAGES.CREATED , data: client})
 
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
   }
 
@@ -176,7 +176,7 @@ export class AuthController implements IClientAuthController{
         })
 
       } catch (error) {
-        handleErrorResponse(res,error)
+        handleErrorResponse(req,res,error)
       }
  }
 
@@ -224,7 +224,7 @@ export class AuthController implements IClientAuthController{
        user: user,
      })
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res,error)
       }
    }
 
@@ -261,7 +261,7 @@ export class AuthController implements IClientAuthController{
 				message: SUCCESS_MESSAGES.LOGOUT_SUCCESS,
 			});
 		} catch (error) {
-			handleErrorResponse(res, error);
+			handleErrorResponse(req,res,error);
 		}
 	}
 
@@ -313,7 +313,7 @@ export class AuthController implements IClientAuthController{
       await this._forgotPasswordUseCase.execute(email)
       res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS)
      } catch (error) {
-      handleErrorResponse(res,error)
+      handleErrorResponse(req,res,error)
      }
     }
 
@@ -333,7 +333,7 @@ async resetPassword(req: Request, res: Response): Promise<void> {
       await this._resetPasswordUseCase.execute(token, password)
       res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.PASSWORD_RESET_SUCCESS)
    } catch (error) {
-      handleErrorResponse(res,error)
+      handleErrorResponse(req,res,error)
    }
 }
 

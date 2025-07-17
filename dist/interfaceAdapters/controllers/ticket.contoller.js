@@ -50,7 +50,7 @@ let TicketController = class TicketController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -69,7 +69,7 @@ let TicketController = class TicketController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -80,17 +80,18 @@ let TicketController = class TicketController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { userId } = req.user;
-                const { page, limit } = req.query;
+                console.log(req.query);
+                const { page, limit, status } = req.query;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
-                const tickets = yield this._getAllTicketsByIdUseCase.execute(userId, pageNumber, pageSize);
+                const tickets = yield this._getAllTicketsByIdUseCase.execute(userId, pageNumber, pageSize, status);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     tickets,
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -101,7 +102,8 @@ let TicketController = class TicketController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { ticketId, eventId } = req.params;
-                const verifyTicket = yield this._verifyTicketUseCase.execute(ticketId, eventId);
+                const { status } = req.query;
+                const verifyTicket = yield this._verifyTicketUseCase.execute(ticketId, eventId, status);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_2.SUCCESS_MESSAGES.VERIFICATION_SUCCESS,
@@ -109,7 +111,7 @@ let TicketController = class TicketController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }
@@ -129,7 +131,7 @@ let TicketController = class TicketController {
                 });
             }
             catch (error) {
-                (0, error_handler_1.handleErrorResponse)(res, error);
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
             }
         });
     }

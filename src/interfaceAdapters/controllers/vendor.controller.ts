@@ -58,7 +58,7 @@ export class VendorCantroller implements IVendorController{
          })
 
       } catch (error) {
-        handleErrorResponse(res, error)
+        handleErrorResponse(req,res, error)
       }
   }
 
@@ -94,7 +94,7 @@ async updateVendorStatus(req: Request, res: Response): Promise<void> {
          message: SUCCESS_MESSAGES.UPDATE_SUCCESS
        })
     } catch (error) {
-      handleErrorResponse(res, error)
+      handleErrorResponse(req,res, error)
     }
 }
 

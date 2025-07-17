@@ -50,6 +50,25 @@ let RedisTokenRepository = class RedisTokenRepository {
             yield redis_client_1.redisClient.del(key);
         });
     }
+    setEventLock(clientId_1, eventId_1) {
+        return __awaiter(this, arguments, void 0, function* (clientId, eventId, durationInSeconds = 600) {
+            const key = `ticket_lock:${clientId}:${eventId}`;
+            yield redis_client_1.redisClient.set(key, "locked", { EX: durationInSeconds });
+        });
+    }
+    isEventLocked(clientId, eventId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const key = `ticket_lock:${clientId}:${eventId}`;
+            const result = yield redis_client_1.redisClient.get(key);
+            return result === "locked";
+        });
+    }
+    deleteEventLock(clientId, eventId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const key = `ticket_lock:${clientId}:${eventId}`;
+            yield redis_client_1.redisClient.del(key);
+        });
+    }
 };
 exports.RedisTokenRepository = RedisTokenRepository;
 exports.RedisTokenRepository = RedisTokenRepository = __decorate([
