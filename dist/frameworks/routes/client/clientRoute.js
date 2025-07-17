@@ -78,7 +78,7 @@ class ClientRoute {
         this.clientRoute.get("/client/events/:eventId/check-booking", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.eventController.checkEventBookingAvailability(req, res);
         });
-        this.clientRoute.get("/client/nearby", (req, res) => {
+        this.clientRoute.get("/nearby", (req, res) => {
             resolver_1.eventController.getAllEventsByLocation(req, res);
             console.log('working loaction route');
         });

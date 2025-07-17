@@ -168,7 +168,7 @@ export class ClientRoute {
          eventController.checkEventBookingAvailability(req,res)
        })
 
-       this.clientRoute.get("/client/nearby",
+       this.clientRoute.get("/nearby",
        (req: Request, res:Response) =>{
          eventController.getAllEventsByLocation(req,res)
          console.log('working loaction route')
