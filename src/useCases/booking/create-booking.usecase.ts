@@ -27,20 +27,20 @@ export class CreateBookingUseCase implements ICreateBookingUseCase{
      
       const bookedDate = bookingsDetails?.date
 
-      // const existingBooking = await this._bookingRepository.findOne({
-      //   clientId: userId,
-      //   serviceId: serviceId,
-      //   date: { $in: [date] }, 
-      // });
+      const existingBooking = await this._bookingRepository.findOne({
+        clientId: userId,
+        serviceId: serviceId,
+        status: { $ne: "Cancelled" },
+        date: { $in: [date] }, 
+      });
 
-      // console.log('exitst book',existingBooking)
       
-      // if (existingBooking) {
-      //   throw new CustomError(
-      //     "You have already booked this service for this date.",
-      //     HTTP_STATUS.BAD_REQUEST
-      //   );
-      // }
+      if (existingBooking) {
+        throw new CustomError(
+          "You have already booked this service for this date.",
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
 
       const booking = await this._bookingRepository.save({
         bookingId,

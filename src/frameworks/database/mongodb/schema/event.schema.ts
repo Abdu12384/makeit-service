@@ -64,14 +64,14 @@ export const eventSchema = new Schema<IEventModel>({
         type: Number,
         required: true
     },
-    startTime: {
-        type: String,
-        required: true
-    },
-    endTime: {
-        type: String,
-        required: true
-    },
+    // startTime: {
+    //     type: String,
+    //     required: true
+    // },
+    // endTime: {
+    //     type: String,
+    //     required: true
+    // },
     status: {
         type: String,
         enum: ["upcoming", "completed", "cancelled","ongoing"]
