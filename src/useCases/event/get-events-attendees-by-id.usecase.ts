@@ -30,29 +30,18 @@ export class GetEventsAttendeesByIdUseCase implements IGetEventsAttendeesByIdUse
 
 
 
-    async execute(eventId:string):Promise<IClientEntity[]>{
+    async execute(eventId:string,pageNumber:number,pageSize:number):Promise<{clients:IClientEntity[],total:number}>{
         
-      const tickets = await this._ticketRepository.findAllWithClientDetails(eventId)
-      // if (!attendees || attendees.length === 0) return []
+       const validPageNumber = Math.max(1,pageNumber||1)
+       const validPageSize = Math.max(1,pageSize||10)
+       const skip = (validPageNumber - 1) * validPageSize
 
-      
-
-      // const enrichedAttendees = attendees.map((attendee: IClientEntity) => {
-      //   const userId = typeof attendee === 'string' ? attendee : attendee.userId
-      //   // const userTicket = tickets.items.find((ticket: ITicketEntity) => ticket.clientId === userId)
-
-      //   // const userTickets = tickets.items.filter(
-      //   //   (ticket: ITicketEntity) =>
-      //   //     ticket.clientId === userId && ticket.eventId === eventId
-      //   // );
-    
-
-      //   return {
-      //     ...attendee,
-      //     // ticket: userTickets|| null
-      //   }
-      // })
-      
-       return tickets || []
+      const {items, total} = await this._ticketRepository.findAllWithClientDetails(eventId,skip,validPageSize)
+       
+       const response = {
+        clients:items,
+        total:Math.ceil(total/validPageSize)
+       }
+      return response
     }
 }

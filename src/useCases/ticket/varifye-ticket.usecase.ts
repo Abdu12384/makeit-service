@@ -34,8 +34,9 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
           if(!ticket) throw new CustomError("Ticket not found",HTTP_STATUS.NOT_FOUND)
           if(ticket.eventId !== eventId) throw new CustomError("Event not found",HTTP_STATUS.NOT_FOUND)
           if(ticket.checkedIn === "cancelled") throw new CustomError("Ticket already cancelled",HTTP_STATUS.FORBIDDEN)
+          if(event.status === 'completed') throw new CustomError('Event is already completed',HTTP_STATUS.FORBIDDEN) 
           if(ticket.ticketStatus === "cancelled") throw new CustomError("Ticket already cancelled",HTTP_STATUS.FORBIDDEN)
-            
+
           // if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)
           
           if(status === 'checked_in'){

@@ -167,26 +167,20 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
             return result[0];
         });
     }
-    findAllWithClientDetails(eventId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.model.aggregate([
-                {
-                    $match: { eventId: eventId }
-                },
+    findAllWithClientDetails(eventId_1) {
+        return __awaiter(this, arguments, void 0, function* (eventId, skip = 0, limit = 10) {
+            const matchStage = { $match: { eventId: eventId } };
+            const aggregationPipeline = [
+                matchStage,
                 {
                     $lookup: {
-                        from: "clients", // client collection name
-                        localField: "clientId", // field in ticket
-                        foreignField: "userId", // field in client
+                        from: "clients",
+                        localField: "clientId",
+                        foreignField: "userId",
                         as: "client"
                     }
                 },
-                {
-                    $unwind: {
-                        path: "$client",
-                        preserveNullAndEmptyArrays: true // optional
-                    }
-                },
+                { $unwind: { path: "$client", preserveNullAndEmptyArrays: true } },
                 {
                     $project: {
                         eventId: 1,
@@ -215,11 +209,18 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
                         }
                     }
                 },
-                {
-                    $sort: { createdAt: -1 } // optional, latest ticket first
-                }
+                { $sort: { createdAt: -1 } },
+                { $skip: skip },
+                { $limit: limit }
+            ];
+            const [items, countResult] = yield Promise.all([
+                this.model.aggregate(aggregationPipeline),
+                this.model.countDocuments({ eventId })
             ]);
-            return result;
+            return {
+                items,
+                total: countResult
+            };
         });
     }
 };

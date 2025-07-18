@@ -29,13 +29,11 @@ let GetAllEventsByLocationUseCase = class GetAllEventsByLocationUseCase {
     }
     execute(lat, lng, radius) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(lat, lng, radius);
             const events = yield this._eventRepository.findAllByLocation({
                 lat,
                 lng,
                 radius
             });
-            console.log(events);
             return events;
         });
     }

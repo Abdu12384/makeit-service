@@ -19,13 +19,11 @@ export class GetAllEventsByLocationUseCase implements IGetAllEventsByLocationUse
     ){}
 
     async execute(lat:number,lng:number,radius:number): Promise<IEventEntity[]> {
-      console.log(lat,lng,radius)
         const events = await this._eventRepository.findAllByLocation({
             lat,
             lng,
             radius
         })
-        console.log(events)
 
         return events
     }

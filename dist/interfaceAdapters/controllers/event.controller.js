@@ -182,7 +182,10 @@ let EventController = class EventController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { eventId } = req.params;
-                const attendees = yield this._getEventsAttendeesByIdUseCase.execute(eventId);
+                const { page, limit } = req.query;
+                const pageNumber = Number(page);
+                const pageSize = Number(limit);
+                const attendees = yield this._getEventsAttendeesByIdUseCase.execute(eventId, pageNumber, pageSize);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     attendees

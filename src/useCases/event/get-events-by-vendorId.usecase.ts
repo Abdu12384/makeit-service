@@ -24,8 +24,7 @@ export class GetEventsByVendorIdUseCase implements IGetEventsByVendorIdUseCase{
 
         const limit = validPageSize;
 
-        const sort: Record<string, 1 | -1> = { createdAt: -1 as -1 };
-
+        const sort: Record<string, 1 | -1> = { createdAt: -1 as -1 };      
          
 
         const {items, total} = await this._eventRepository.findAll({hostedBy:userId},skip,limit,sort)

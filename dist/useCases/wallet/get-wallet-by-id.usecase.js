@@ -55,6 +55,7 @@ let GetWalletByIdUseCase = class GetWalletByIdUseCase {
             const walletDto = (0, class_transformer_1.plainToInstance)(wallet_dto_1.WalletDTO, wallet, { excludeExtraneousValues: true });
             const { items, total } = yield this.transactionRepository.findAll({ walletId: wallet.walletId }, skip, limit, sort);
             const transactions = (0, class_transformer_1.plainToInstance)(transaction_dto_1.TransactionDTO, items, { excludeExtraneousValues: true });
+            console.log(transactions);
             const response = {
                 wallet: walletDto,
                 transaction: transactions,

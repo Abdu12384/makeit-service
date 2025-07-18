@@ -79,7 +79,7 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
        const transaction = await this._transactionRepository.save(adminTransaction)
        const adminWalletAddMoney = await this._walletRepository.updateWallet(adminId,adminCommission)
        const vendorWallet = await this._walletRepository.findOne({userId:vendorId})
-
+       
        let vendorWalletId: string 
         
        if(vendorWallet){

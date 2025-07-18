@@ -5,6 +5,7 @@ import { ITicketModel } from "../../../frameworks/database/mongodb/model/ticket.
 import { ITicketRepository } from "../../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
 import { FilterType, SortType } from "../../../shared/constants";
 import { IClientEntity } from "../../../domain/entities/client.entity";
+import { PipelineStage } from "mongoose";
 
 
 
@@ -156,58 +157,62 @@ export class TicketRepository extends BaseRepository<ITicketModel> implements IT
         return result[0]
     }
 
-    async findAllWithClientDetails(eventId: string): Promise<IClientEntity[]> {
-        const result = await this.model.aggregate([
-          {
-            $match: { eventId: eventId }
-          },
-          {
-            $lookup: {
-              from: "clients",           // client collection name
-              localField: "clientId",    // field in ticket
-              foreignField: "userId",    // field in client
-              as: "client"
-            }
-          },
-          {
-            $unwind: {
-              path: "$client",
-              preserveNullAndEmptyArrays: true  // optional
-            }
-          },
-          {
-            $project: {
-              eventId: 1,
-              clientId: 1,
-              ticketId: 1,
-              vendorId: 1,
-              ticketPrice: 1,
-              ticketCount: 1,
-              ticketPurchased: 1,
-              qrCodeLink: 1,
-              ticketStatus: 1,
-              totalAmount: 1,
-              paymentStatus: 1,
-              checkedIn: 1,
-              email: 1,
-              phone: 1,
-              createdAt:1,
-              updatedAt:1,
-              client: {
-                _id: 1,
-                userId: 1,
-                name: 1,
-                email: 1,
-                phone: 1,
-                profileImage: 1
-              }
-            }
-          },
-          {
-            $sort: { createdAt: -1 } // optional, latest ticket first
-          }
-        ]);
-      
-        return result;
+async findAllWithClientDetails(eventId: string, skip = 0, limit = 10): Promise<{ items: IClientEntity[], total: number }> {
+  const matchStage = { $match: { eventId: eventId } };
+
+  const aggregationPipeline:PipelineStage[] = [
+    matchStage,
+    {
+      $lookup: {
+        from: "clients",
+        localField: "clientId",
+        foreignField: "userId",
+        as: "client"
       }
+    },
+    { $unwind: { path: "$client", preserveNullAndEmptyArrays: true } },
+    {
+      $project: {
+        eventId: 1,
+        clientId: 1,
+        ticketId: 1,
+        vendorId: 1,
+        ticketPrice: 1,
+        ticketCount: 1,
+        ticketPurchased: 1,
+        qrCodeLink: 1,
+        ticketStatus: 1,
+        totalAmount: 1,
+        paymentStatus: 1,
+        checkedIn: 1,
+        email: 1,
+        phone: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        client: {
+          _id: 1,
+          userId: 1,
+          name: 1,
+          email: 1,
+          phone: 1,
+          profileImage: 1
+        }
+      }
+    },
+    { $sort: { createdAt: -1 } },
+    { $skip: skip },
+    { $limit: limit }
+  ];
+
+  const [items, countResult] = await Promise.all([
+    this.model.aggregate(aggregationPipeline),
+    this.model.countDocuments({ eventId })
+  ]);
+
+  return {
+    items,
+    total: countResult
+  };
+}
+
 }

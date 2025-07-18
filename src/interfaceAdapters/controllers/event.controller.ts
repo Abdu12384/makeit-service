@@ -227,8 +227,13 @@ export class EventController implements IEventController{
     async getAttendeesById(req:Request,res:Response):Promise<void>{
       try {
         const {eventId} = req.params
+        const {page,limit} = req.query
+        const pageNumber = Number(page)
+        const pageSize = Number(limit)
         const attendees = await this._getEventsAttendeesByIdUseCase.execute(
-          eventId
+          eventId,
+          pageNumber,
+          pageSize
         )
         res.status(HTTP_STATUS.OK).json({
           success:true,

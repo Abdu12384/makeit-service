@@ -43,6 +43,8 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
                 throw new custom_error_1.CustomError("Event not found", constants_1.HTTP_STATUS.NOT_FOUND);
             if (ticket.checkedIn === "cancelled")
                 throw new custom_error_1.CustomError("Ticket already cancelled", constants_1.HTTP_STATUS.FORBIDDEN);
+            if (event.status === 'completed')
+                throw new custom_error_1.CustomError('Event is already completed', constants_1.HTTP_STATUS.FORBIDDEN);
             if (ticket.ticketStatus === "cancelled")
                 throw new custom_error_1.CustomError("Ticket already cancelled", constants_1.HTTP_STATUS.FORBIDDEN);
             // if(ticket.ticketStatus === "used") throw new CustomError("Ticket already used",HTTP_STATUS.FORBIDDEN)

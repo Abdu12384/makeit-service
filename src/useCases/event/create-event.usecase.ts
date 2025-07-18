@@ -15,8 +15,6 @@ export class CreateEventUseCase implements ICreateEventUseCase{
     ){}
 
     async execute(data:IEventEntity,userId:string):Promise<IEventEntity>{
-
-      console.log('evnet daata',data)
         
         const eventId = generateUniqueId("event")
         const event = await this._eventRepository.save(
