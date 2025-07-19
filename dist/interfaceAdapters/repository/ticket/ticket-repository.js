@@ -29,10 +29,6 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
     getAllTicketsById(filter, skip, limit, sort) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
-            const mongoSort = {};
-            for (const key in sort) {
-                mongoSort[key] = sort[key] === "asc" ? 1 : -1;
-            }
             const pipeline = [
                 {
                     $match: filter
@@ -220,6 +216,73 @@ let TicketRepository = class TicketRepository extends base_repository_1.BaseRepo
             return {
                 items,
                 total: countResult
+            };
+        });
+    }
+    findAllLatestTicket(filter, skip, limit, sort) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const pipeline = [
+                { $match: filter },
+                {
+                    $lookup: {
+                        from: "events",
+                        localField: "eventId",
+                        foreignField: "eventId",
+                        as: "eventDetails"
+                    }
+                },
+                { $unwind: { path: "$eventDetails", preserveNullAndEmptyArrays: true } },
+                {
+                    $project: {
+                        eventId: 1,
+                        clientId: 1,
+                        ticketId: 1,
+                        vendorId: 1,
+                        ticketPrice: 1,
+                        ticketCount: 1,
+                        ticketPurchased: 1,
+                        qrCodeLink: 1,
+                        ticketStatus: 1,
+                        totalAmount: 1,
+                        paymentStatus: 1,
+                        checkedIn: 1,
+                        email: 1,
+                        phone: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        eventDetails: {
+                            eventId: 1,
+                            address: 1,
+                            attendees: 1,
+                            date: 1,
+                            totalTicket: 1,
+                            ticketPurchased: 1,
+                            hostedBy: 1,
+                            status: 1,
+                            startTime: 1,
+                            endTime: 1,
+                            venueName: 1,
+                            posterImage: 1,
+                            title: 1,
+                        }
+                    }
+                },
+                { $sort: sort },
+                { $skip: skip },
+                { $limit: limit }
+            ];
+            const countPipeline = [
+                { $match: filter },
+                { $count: "total" }
+            ];
+            const [items, countResult] = yield Promise.all([
+                this.model.aggregate(pipeline),
+                this.model.aggregate(countPipeline)
+            ]);
+            return {
+                items,
+                total: ((_a = countResult[0]) === null || _a === void 0 ? void 0 : _a.total) || 0
             };
         });
     }

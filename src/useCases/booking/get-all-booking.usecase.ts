@@ -45,7 +45,6 @@ export class GetAllBookingUseCase implements IGetAllBookingUseCase {
     }
     const limit = validPageSize;
     const sort = { createdAt: -1 as -1 };
-    console.log(status);
     const { items, total } =
       await this._bookingRepository.findAllWithVendorClient(
         filter,

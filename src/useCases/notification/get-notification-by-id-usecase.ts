@@ -17,7 +17,8 @@ export class GetNotificationByIdUseCase implements IGetNotificationByIdUseCase{
     ){}
 
     async execute(userId: string): Promise<{items:INotificationEntity[],total:number}> {
-        const notification = await this._notificationRepository.findAll({userId,isRead:false});
+
+        const notification = await this._notificationRepository.findAll({userId,isRead:false},0,10,{createdAt:-1});
         if(!notification){
             throw new Error("Notification not found");
         }

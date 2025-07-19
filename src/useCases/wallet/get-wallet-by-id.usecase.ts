@@ -57,8 +57,6 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
         const transactions = plainToInstance(TransactionDTO, items as [], { excludeExtraneousValues: true }); 
 
         
-       console.log(transactions)
-        
 
         const response = {
             wallet:walletDto,

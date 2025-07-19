@@ -17,6 +17,7 @@ export interface ITicketEntity {
     paymentTransactionId: string
     checkedIn?: string
     checkInHistory?: Date[]
+    checkedInCount?: number
     cancellationHistory?: {
         count: number,
         amount: number,

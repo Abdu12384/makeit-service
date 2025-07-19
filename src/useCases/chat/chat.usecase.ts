@@ -75,6 +75,8 @@ export class ChatUseCase implements IChatUseCase {
 
 
 
+
+
     const messageId = generateUniqueId("message")
 
     const sendedTime = new Date();
@@ -98,12 +100,13 @@ export class ChatUseCase implements IChatUseCase {
     const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
 
     const receiver = await this.findUserById(receiverId, receiverModel);
+    const sender = await this.findUserById(senderId, senderModel);
 
     
         await this.pushNotificationService.sendNotification(
           receiverId,
           "New Message",
-          "You have a new message",
+          `You have a new message from ${sender?.name}`,
           "new_message",
           receiverModel
         );

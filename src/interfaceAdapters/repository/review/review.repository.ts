@@ -3,7 +3,8 @@ import { IReviewEntity } from "../../../domain/entities/review.entity";
 import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface";
 import { injectable } from "tsyringe";
 import { IReviewModel, reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
-import { FilterType, SortType } from "../../../shared/constants";
+import { FilterType, SortTypes} from "../../../shared/constants";
+import { PipelineStage } from "mongoose";
 
 
 
@@ -19,8 +20,8 @@ export class ReviewRepository extends BaseRepository<IReviewEntity> implements I
         super(reviewModel)
     }
 
-   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort:SortType){
-    const pipeline = [
+   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort:SortTypes){
+    const pipeline:PipelineStage[] = [
         {
             $match: filter
         },
@@ -73,7 +74,7 @@ export class ReviewRepository extends BaseRepository<IReviewEntity> implements I
         }
     ]
     const [items, countResult] = await Promise.all([
-        this.model.aggregate(pipeline as any),
+        this.model.aggregate(pipeline),
         this.model.aggregate(countPipeline)
     ])
     return {

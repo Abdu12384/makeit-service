@@ -51,9 +51,9 @@ let VerifyTicketUseCase = class VerifyTicketUseCase {
             if (status === 'checked_in') {
                 ticket.ticketStatus = "used";
                 ticket.checkedIn = "checked_in";
+                event.checkedInCount = (_a = event.checkedInCount) !== null && _a !== void 0 ? _a : 0; // initialize if undefined
+                event.checkedInCount += ticket.ticketCount;
             }
-            event.checkedInCount = (_a = event.checkedInCount) !== null && _a !== void 0 ? _a : 0; // initialize if undefined
-            event.checkedInCount += ticket.ticketCount;
             const updatedTicket = yield this._ticketRepository.update({ ticketId }, ticket);
             const updatedEvent = yield this._eventRepository.update({ eventId }, event);
             return updatedTicket;

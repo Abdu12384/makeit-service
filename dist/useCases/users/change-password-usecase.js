@@ -33,7 +33,6 @@ let ChangePasswordUseCase = class ChangePasswordUseCase {
     }
     execute(userId, currentPassword, newPassword, role) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("🚀 ~ ChangePasswordUseCase ~ execute ~ role:", currentPassword, newPassword);
             let repo;
             let idField;
             if (role === "client") {
@@ -52,7 +51,6 @@ let ChangePasswordUseCase = class ChangePasswordUseCase {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             const isPasswordValid = yield this._passwordHasher.compare(currentPassword, user === null || user === void 0 ? void 0 : user.password);
-            console.log('[ioioioioiopiopippo=rs');
             if (!isPasswordValid) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.WRONG_CURRENT_PASSWORD, constants_1.HTTP_STATUS.BAD_REQUEST);
             }

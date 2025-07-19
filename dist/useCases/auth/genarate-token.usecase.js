@@ -30,7 +30,7 @@ let GenerateTokenUseCase = class GenerateTokenUseCase {
     }
     execute(userId, email, role) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = { email, userId, role };
+            const payload = { userId, role };
             const accessToken = this._tokenService.generateAccessToken(payload);
             const refreshToken = this._tokenService.generateRefreshToken(payload);
             yield this._refreshTokenRepository.save({

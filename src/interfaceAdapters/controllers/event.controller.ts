@@ -253,7 +253,6 @@ export class EventController implements IEventController{
   async getAllEventsByLocation(req: Request, res: Response): Promise<void> {
     try {
       const { lat, lng, radius } = req.query
-      console.log(lat, lng, radius)
       const events = await this._getAllEventsByLocationUseCase.execute(
         Number(lat),
         Number(lng),

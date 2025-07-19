@@ -17,7 +17,7 @@ export class GenerateTokenUseCase implements IGenerateTokenUseCase{
 
    async execute(userId: string, email: string, role: string): Promise<{ accessToken: string; refreshToken: string; }> {
        
-       const payload = {email, userId, role}
+       const payload = {userId, role}
        const accessToken = this._tokenService.generateAccessToken(payload)
        const refreshToken = this._tokenService.generateRefreshToken(payload)
        

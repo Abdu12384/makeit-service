@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 
 export interface ITransactionsEntity {
-    _id?: ObjectId;
+    _id?: ObjectId ;
     walletId: ObjectId | string;
     currency: string;
     paymentStatus: "debit" | "credit";

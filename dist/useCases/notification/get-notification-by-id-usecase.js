@@ -29,7 +29,7 @@ let GetNotificationByIdUseCase = class GetNotificationByIdUseCase {
     }
     execute(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const notification = yield this._notificationRepository.findAll({ userId, isRead: false });
+            const notification = yield this._notificationRepository.findAll({ userId, isRead: false }, 0, 10, { createdAt: -1 });
             if (!notification) {
                 throw new Error("Notification not found");
             }

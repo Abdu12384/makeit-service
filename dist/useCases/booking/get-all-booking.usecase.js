@@ -62,7 +62,6 @@ let GetAllBookingUseCase = class GetAllBookingUseCase {
             }
             const limit = validPageSize;
             const sort = { createdAt: -1 };
-            console.log(status);
             const { items, total } = yield this._bookingRepository.findAllWithVendorClient(filter, skip, limit, sort);
             const response = {
                 bookings: items,

@@ -24,12 +24,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateEventUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let CreateEventUseCase = class CreateEventUseCase {
     constructor(_eventRepository) {
         this._eventRepository = _eventRepository;
     }
     execute(data, userId) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (data.status !== "upcoming") {
+                throw new custom_error_1.CustomError("Initial status must be 'upcoming'", constants_1.HTTP_STATUS.BAD_REQUEST);
+            }
             const eventId = (0, unique_uuid_helper_1.generateUniqueId)("event");
             const event = yield this._eventRepository.save(Object.assign(Object.assign({ eventId }, data), { hostedBy: userId }));
             return event;

@@ -29,7 +29,6 @@ let RefreshTokenUseCase = class RefreshTokenUseCase {
             role: payload.role,
             accessToken: this._tokenService.generateAccessToken({
                 userId: payload.userId,
-                email: payload.email,
                 role: payload.role
             })
         };

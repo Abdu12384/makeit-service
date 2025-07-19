@@ -3,6 +3,8 @@ import { ICreateEventUseCase } from "../../domain/interface/useCaseInterface/eve
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
 import { IEventEntity } from "../../domain/entities/event.entity";
+import { CustomError } from "../../domain/utils/custom.error";
+import { HTTP_STATUS } from "../../shared/constants";
 
 
 
@@ -15,6 +17,13 @@ export class CreateEventUseCase implements ICreateEventUseCase{
     ){}
 
     async execute(data:IEventEntity,userId:string):Promise<IEventEntity>{
+
+        if(data.status !== "upcoming"){
+          throw new CustomError(
+            "Initial status must be 'upcoming'",
+            HTTP_STATUS.BAD_REQUEST
+          )
+        }
         
         const eventId = generateUniqueId("event")
         const event = await this._eventRepository.save(

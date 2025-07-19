@@ -4,12 +4,10 @@ import { JwtPayload } from "jsonwebtoken";
 export interface ITokenService{
     generateAccessToken(payload:{
        userId: string;
-       email: string,
        role: string
     }): string
     generateRefreshToken(payload:{
        userId:string,
-       email:string,
        role:string
     }): string
    verifyAccessToken(token:string):string | JwtPayload | null;

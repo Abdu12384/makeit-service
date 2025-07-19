@@ -75,6 +75,7 @@ let GetAllDashboardDataUseCase = class GetAllDashboardDataUseCase {
             const limit = 5;
             const filter = { vendorId: userId };
             const recentBookings = yield this._bookingRepository.findAllWithVendorClient(filter, skip, limit, sort);
+            const recentTickets = yield this._ticketRepository.findAllLatestTicket(filter, skip, limit, sort);
             // Aggregate metrics
             const totalEvents = events.length;
             const totalClients = clients.length;
@@ -89,7 +90,8 @@ let GetAllDashboardDataUseCase = class GetAllDashboardDataUseCase {
                 totalVendors,
                 transactions: walletTransactions,
                 recentBookings: recentBookings === null || recentBookings === void 0 ? void 0 : recentBookings.items,
-                totalTickets
+                totalTickets,
+                recentTickets: recentTickets === null || recentTickets === void 0 ? void 0 : recentTickets.items
             };
         });
     }

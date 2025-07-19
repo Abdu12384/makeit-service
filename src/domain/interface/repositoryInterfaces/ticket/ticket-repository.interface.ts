@@ -7,6 +7,7 @@ export interface ITicketRepository extends IBaseRepository<ITicketEntity> {
   getAllTicketsById(filter:FilterType,skip:number,limit:number,sort:SortType): Promise<{items:ITicketEntity[],total:number}>;
   findOneWithPopulate(filter:FilterType): Promise<ITicketEntity>;
   findAllWithClientDetails(eventId: string, skip: number, limit: number): Promise<{ items: IClientEntity[], total: number }>;
+  findAllLatestTicket(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items: ITicketEntity[], total: number }>;
 }
 
     

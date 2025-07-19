@@ -109,7 +109,6 @@ export class TicketController implements ITicketController {
     async getAllTicketsByClientId(req: Request, res: Response): Promise<void> {
         try {
             const {userId} = (req as CustomRequest).user
-            console.log(req.query)
             const {page,limit,status} = req.query
             const pageNumber = Number(page)
             const pageSize = Number(limit)

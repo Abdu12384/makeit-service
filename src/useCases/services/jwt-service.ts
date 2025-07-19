@@ -33,14 +33,14 @@ export class JWTService implements ITokenService{
         this._resetExpiresIn = config.jwt.REFRESH_SECRET_KEY;
     }
 
-    generateAccessToken(payload: { userId: string; email: string; role: string; }): string {
+    generateAccessToken(payload: { userId: string;  role: string; }): string {
         return jwt.sign(payload, this._accessSecret,{
            expiresIn: this._accessExpiresIn as ms.StringValue,
         })
     }
 
 
-    generateRefreshToken(payload: { userId: string; email: string; role: string; }): string {
+    generateRefreshToken(payload: { userId: string;  role: string; }): string {
       return jwt.sign(payload, this._refreshSecret,{
         expiresIn: this._refreshExpiresIn as ms.StringValue,
       })

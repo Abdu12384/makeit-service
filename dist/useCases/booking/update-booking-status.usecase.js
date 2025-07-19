@@ -115,7 +115,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                 // if (conflict) throw new CustomError("You already have an approved booking on this date.",HTTP_STATUS.BAD_REQUEST);
                 booking.vendorApproval = "Approved";
                 booking.status = "Pending";
-                yield this._pushNotificationService.sendNotification(booking.clientId, `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`, "booking", notification_1.NotificationType.BOOKING_APPROVED, "client");
+                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`, notification_1.NotificationType.BOOKING_APPROVED, "client");
             }
             else if (status === "Rejected") {
                 booking.vendorApproval = "Rejected";
@@ -132,6 +132,21 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                 }
                 booking.isComplete = true;
                 booking.status = "Completed";
+                const vendor = yield this._vendorRepository.VendorfindOne(booking.vendorId);
+                if (!vendor) {
+                    throw new Error("Vendor not found.");
+                }
+                if (!Array.isArray(vendor.bookedDates)) {
+                    vendor.bookedDates = [];
+                }
+                const index = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString());
+                if (index !== -1) {
+                    vendor.bookedDates[index].count -= 1;
+                    if (vendor.bookedDates[index].count <= 0) {
+                        vendor.bookedDates.splice(index, 1);
+                    }
+                }
+                yield this._vendorRepository.vendorSave(vendor);
                 yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been completed.`, notification_1.NotificationType.BOOKING_COMPLETED, "client");
             }
             yield this._bookingRepository.update({ bookingId }, booking);

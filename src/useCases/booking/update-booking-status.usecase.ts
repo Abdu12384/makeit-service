@@ -152,7 +152,6 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
           )
         }
 
-
         
         if (status === "Approved" ) {
 
@@ -169,8 +168,8 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
 
           await this._pushNotificationService.sendNotification(
             booking.clientId,
-            `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`,
             "booking",
+            `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`,
             NotificationType.BOOKING_APPROVED,
             "client"
           );
@@ -203,6 +202,28 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
         
           booking.isComplete = true;
           booking.status = "Completed";
+
+          const vendor = await this._vendorRepository.VendorfindOne(booking.vendorId);
+                if (!vendor) {
+                  throw new Error("Vendor not found.");
+                }
+
+                if (!Array.isArray(vendor.bookedDates)) {
+                  vendor.bookedDates = [];
+                }
+
+                const index = vendor.bookedDates.findIndex(
+                  (entry) => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString()
+                );
+
+                if (index !== -1) {
+                  vendor.bookedDates[index].count -= 1;
+                  if (vendor.bookedDates[index].count <= 0) {
+                    vendor.bookedDates.splice(index, 1);
+                  }
+                }
+
+              await this._vendorRepository.vendorSave(vendor)
 
           await this._pushNotificationService.sendNotification(
             booking.clientId,

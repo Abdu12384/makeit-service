@@ -9,6 +9,8 @@ export type statusTypes = "active" |"approved" | "pending" | "rejected" | "block
 
 export type FilterType = FilterQuery<IBookingEntity>;            
 export type SortType = Record<string, SortOrder>; 
+export type SortTypes = Record<string, 1 | -1>;
+
 export type PopulatedItem = IServiceEntity;  
 export type CreateCategoryDTO = Omit<ICategoryEntity, "categoryId">;
 
@@ -29,7 +31,7 @@ export const HTTP_STATUS = {
 	CONFLICT: 409, // Conflict in request (e.g., duplicate email, already registered)
 	PAYLOAD_TOO_LARGE: 413, // Request payload is too large (e.g., file upload exceeds limit)
 	UNSUPPORTED_MEDIA_TYPE: 415, // Unsupported content type (e.g., sending XML instead of JSON)
-	TOO_MANY_REQUESTS: 429, // Rate limiting (e.g., too many login attempts, API abuse)
+	TOO_MANY_REQUESTS: 429, // Rate limiting (e.g., too login attempts, API abuse)
 
 	// ⚠️ Server errors
 	INTERNAL_SERVER_ERROR: 500, // Generic server error (e.g., database failure, unhandled exception)
@@ -114,10 +116,10 @@ export const ERROR_MESSAGES = {
 	ACCOUNT_SUSPENDED: "Your account has been suspended",
 	ACCOUNT_BANNED: "Your account has been banned",
 	SESSION_EXPIRED: "Your session has expired please log in again",
-	TOO_MANY_ATTEMPTS: "Too many failed attempts try again later",
+	TOO_MANY_ATTEMPTS: " failed attempts try again later",
 	UNSUPPORTED_FILE_TYPE: "Unsupported file type",
 	FILE_SIZE_EXCEEDED: "File size is too large",
-	RATE_LIMIT_EXCEEDED: "Too many requests try again later",
+	RATE_LIMIT_EXCEEDED: " requests try again later",
 	PASSWORD_SAME: "New password must be different from current password",
   EVENT_LOCKED: "You already initiated a ticket booking. Please wait a few minutes before trying again.",
   BOOKING_LOCKED: "You already initiated a booking. Please wait a few minutes before trying again.",
@@ -501,7 +503,7 @@ export const RESET_PASSWORD_MAIL_CONTENT = (resetLink: string) => `
     <!-- Footer -->
     <div class="footer">
       <p class="footer-text">
-        If you have any questions, feel free to contact our support team.
+        If you have questions, feel free to contact our support team.
       </p>
       <div class="footer-links">
         <a href="#" class="footer-link">Help Center</a>
@@ -829,7 +831,7 @@ export const VENDOR_APPLICATION_MAIL_CONTENT = (message: string, name: string,st
             <div style="text-align: center; padding: 20px 0;">
                 <h3 style="color: #374151; margin-bottom: 15px;">Need Help?</h3>
                 <p style="color: #6b7280; margin-bottom: 20px;">
-                    Our support team is here to assist you with any questions or concerns.
+                    Our support team is here to assist you with questions or concerns.
                 </p>
                 <a href="mailto:support@makeit.com" style="color: #667eea; text-decoration: none; font-weight: 600;">
                     📧 support@makeit.com

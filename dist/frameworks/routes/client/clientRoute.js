@@ -80,7 +80,6 @@ class ClientRoute {
         });
         this.clientRoute.get("/nearby", (req, res) => {
             resolver_1.eventController.getAllEventsByLocation(req, res);
-            console.log('working loaction route');
         });
         /** ==========================
          *  Client Ticket  Routes

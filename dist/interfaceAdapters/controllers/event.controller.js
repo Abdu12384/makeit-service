@@ -203,7 +203,6 @@ let EventController = class EventController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { lat, lng, radius } = req.query;
-                console.log(lat, lng, radius);
                 const events = yield this._getAllEventsByLocationUseCase.execute(Number(lat), Number(lng), Number(radius));
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,

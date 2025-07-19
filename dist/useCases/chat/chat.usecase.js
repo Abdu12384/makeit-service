@@ -71,7 +71,8 @@ let ChatUseCase = class ChatUseCase {
             const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
             const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
             const receiver = yield this.findUserById(receiverId, receiverModel);
-            yield this.pushNotificationService.sendNotification(receiverId, "New Message", "You have a new message", "new_message", receiverModel);
+            const sender = yield this.findUserById(senderId, senderModel);
+            yield this.pushNotificationService.sendNotification(receiverId, "New Message", `You have a new message from ${sender === null || sender === void 0 ? void 0 : sender.name}`, "new_message", receiverModel);
             return newMessage;
         });
     }

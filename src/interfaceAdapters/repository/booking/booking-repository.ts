@@ -2,8 +2,8 @@ import { injectable } from "tsyringe";
 import { IBookingRepository } from "../../../domain/interface/repositoryInterfaces/booking/booking-repository.interface";
 import { BookingModel, IBookingModel } from "../../../frameworks/database/mongodb/model/booking.model";
 import { BaseRepository } from "../base.repository";
-import { FilterType, SortType } from "../../../shared/constants";
-import { FilterQuery } from "mongoose";
+import { FilterType, SortTypes } from "../../../shared/constants";
+import { FilterQuery, PipelineStage } from "mongoose";
 
 
 @injectable()
@@ -12,9 +12,9 @@ export class BookingRepository  extends BaseRepository<IBookingModel> implements
         super(BookingModel)
     }
 
-    async findAllWithVendorClient(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items:IBookingModel[], total: number }> {
+    async findAllWithVendorClient(filter: FilterType, skip: number, limit: number, sort: SortTypes): Promise<{ items:IBookingModel[], total: number }> {
 
-      const pipeline: any[] = [
+      const pipeline: PipelineStage[] = [
           { $match: filter },
           { $sort: sort },
           

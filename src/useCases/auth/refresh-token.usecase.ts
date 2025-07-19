@@ -29,7 +29,6 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase{
          role: (payload as JwtPayload).role,
          accessToken: this._tokenService.generateAccessToken({
            userId: (payload as JwtPayload).userId,
-           email: (payload as JwtPayload).email,
            role: (payload as JwtPayload).role
          })
       }

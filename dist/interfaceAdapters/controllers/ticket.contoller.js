@@ -80,7 +80,6 @@ let TicketController = class TicketController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { userId } = req.user;
-                console.log(req.query);
                 const { page, limit, status } = req.query;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);

@@ -79,6 +79,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     const filter = {vendorId:userId}
 
     const recentBookings = await this._bookingRepository.findAllWithVendorClient(filter,skip,limit,sort)
+    const recentTickets = await this._ticketRepository.findAllLatestTicket(filter,skip,limit,sort)
 
 
     // Aggregate metrics
@@ -97,7 +98,8 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
       totalVendors,
       transactions: walletTransactions,
       recentBookings : recentBookings?.items,
-      totalTickets
+      totalTickets,
+      recentTickets : recentTickets?.items
      };
     }
 }

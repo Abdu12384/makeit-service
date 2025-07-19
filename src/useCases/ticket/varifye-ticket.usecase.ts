@@ -42,10 +42,10 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
           if(status === 'checked_in'){
             ticket.ticketStatus = "used"
             ticket.checkedIn = "checked_in"
+            event.checkedInCount = event.checkedInCount ?? 0  // initialize if undefined
+            event.checkedInCount!  += ticket.ticketCount
           }
 
-          event.checkedInCount = event.checkedInCount ?? 0  // initialize if undefined
-          event.checkedInCount!  += ticket.ticketCount
           
           const updatedTicket = await this._ticketRepository.update(
             {ticketId},

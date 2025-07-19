@@ -1,4 +1,5 @@
 import { IBookingEntity } from "./booking.entity";
+import { ITicketEntity } from "./ticket.entity";
 import { ITransactionsEntity } from "./transaction.entity";
 
 export interface IDashboardStats {
@@ -10,4 +11,5 @@ export interface IDashboardStats {
   transactions: ITransactionsEntity[];
   recentBookings: IBookingEntity[]; 
   totalTickets: number;
+  recentTickets: ITicketEntity[];
 }
