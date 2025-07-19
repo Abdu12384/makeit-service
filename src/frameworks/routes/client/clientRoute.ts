@@ -1,5 +1,5 @@
 import { Request,RequestHandler,Response,Router } from "express";
-import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController, notificationController } from "../../di/resolver";
+import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController, notificationController, categoryController } from "../../di/resolver";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
 
 
@@ -77,6 +77,13 @@ export class ClientRoute {
           (req: Request, res:Response) =>{
             serviceController.getServiceById(req,res)
           })  
+
+          this.clientRoute.get("/client/categories",
+          verifyAuth,
+          blockStatusMiddleware.checkStatus as RequestHandler,
+          (req: Request, res:Response) =>{
+            categoryController.getAllCategories(req,res)
+          })
 
 
         this.clientRoute.put("/client/profile",

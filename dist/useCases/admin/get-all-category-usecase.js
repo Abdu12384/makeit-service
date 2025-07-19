@@ -38,7 +38,7 @@ let GetAllCategoryUseCase = class GetAllCategoryUseCase {
             if (search) {
                 filter.title = { $regex: search, $options: "i" };
             }
-            if (role === "vendor") {
+            if (role === "vendor" || role === "client") {
                 filter.status = "active";
             }
             const sort = { createdAt: -1 };

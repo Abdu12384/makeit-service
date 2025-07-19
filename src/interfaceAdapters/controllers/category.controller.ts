@@ -61,6 +61,7 @@ export class CategoryController implements ICategoryController {
 
           const {search,page,limit} = req.query
           const {role} = (req as CustomRequest).user 
+          console.log('role',role)
            const pageNumber = Number(page)
            const pageSize = Number(limit)
             const categories = await this._getAllCategoriesUseCase.execute(

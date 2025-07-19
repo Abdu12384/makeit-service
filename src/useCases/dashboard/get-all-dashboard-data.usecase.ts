@@ -53,7 +53,6 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     }
 
 
-
     const wallet = await this._walletRepository.findOne({userId})
     const totalRevenue = wallet?.balance || 0
 
@@ -61,7 +60,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     if (wallet && wallet.walletId) {
       const rawTransactions = await this._transactionRepository.find({walletId:wallet.walletId});
       walletTransactions = rawTransactions.map((tx:any) => ({
-        _id: tx._id.toString(), // Convert MongoDB ObjectId to string
+        _id: tx._id.toString(), 
         amount: tx.amount,
         currency: tx.currency || "INR",
         paymentStatus: tx.paymentStatus,

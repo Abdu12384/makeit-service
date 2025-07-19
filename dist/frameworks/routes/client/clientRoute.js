@@ -42,6 +42,9 @@ class ClientRoute {
         this.clientRoute.get("/client/services/:serviceId", (req, res) => {
             resolver_1.serviceController.getServiceById(req, res);
         });
+        this.clientRoute.get("/client/categories", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.categoryController.getAllCategories(req, res);
+        });
         this.clientRoute.put("/client/profile", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.userController.updateUserDetails(req, res);
         });
