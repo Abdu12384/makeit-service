@@ -22,8 +22,6 @@ import { ITicketEntity } from "../../domain/entities/ticket.entity";
 @injectable()
 export class GetEventsAttendeesByIdUseCase implements IGetEventsAttendeesByIdUseCase{
     constructor(
-        @inject("IEventRepository")
-        private _eventRepository: IEventRepository,
         @inject("ITicketRepository")
         private _ticketRepository: ITicketRepository
     ){}

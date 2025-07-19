@@ -89,7 +89,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                         paymentStatus: "debit",
                         paymentType: "refund",
                         walletId: vendorWallet === null || vendorWallet === void 0 ? void 0 : vendorWallet.walletId,
-                        relatedTitle: `Refund from: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a transaction"}`
+                        relatedTitle: `Refund to client for: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a transaction"}`
                     };
                     yield this._transactionRepository.save(clientTransaction);
                     yield this._transactionRepository.save(vendorTransaction);

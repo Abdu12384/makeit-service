@@ -105,7 +105,7 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase{
               paymentStatus: "debit",
               paymentType: "refund",
               walletId: vendorWallet?.walletId as string,
-              relatedTitle: `Refund from: ${service?.serviceTitle || "a transaction"}`
+              relatedTitle: `Refund to client for: ${service?.serviceTitle || "a transaction"}`
             };
             
           await this._transactionRepository.save(clientTransaction)

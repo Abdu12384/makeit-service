@@ -24,8 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetEventsAttendeesByIdUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
-    constructor(_eventRepository, _ticketRepository) {
-        this._eventRepository = _eventRepository;
+    constructor(_ticketRepository) {
         this._ticketRepository = _ticketRepository;
     }
     execute(eventId, pageNumber, pageSize) {
@@ -45,8 +44,7 @@ let GetEventsAttendeesByIdUseCase = class GetEventsAttendeesByIdUseCase {
 exports.GetEventsAttendeesByIdUseCase = GetEventsAttendeesByIdUseCase;
 exports.GetEventsAttendeesByIdUseCase = GetEventsAttendeesByIdUseCase = __decorate([
     (0, tsyringe_1.injectable)(),
-    __param(0, (0, tsyringe_1.inject)("IEventRepository")),
-    __param(1, (0, tsyringe_1.inject)("ITicketRepository")),
-    __metadata("design:paramtypes", [Object, Object])
+    __param(0, (0, tsyringe_1.inject)("ITicketRepository")),
+    __metadata("design:paramtypes", [Object])
 ], GetEventsAttendeesByIdUseCase);
 //# sourceMappingURL=get-events-attendees-by-id.usecase.js.map
