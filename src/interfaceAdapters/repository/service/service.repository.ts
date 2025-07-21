@@ -2,7 +2,8 @@ import { injectable } from "tsyringe";
 import { BaseRepository } from "../base.repository";
 import { IServiceRepository } from "../../../domain/interface/repositoryInterfaces/service/service-repository.interface";
 import { IServiceModel, serviceModel } from "../../../frameworks/database/mongodb/model/service.model";
-import { FilterType, PopulatedItem, SortType } from "../../../shared/constants";
+import { FilterType, PopulatedItem, SortTypes } from "../../../shared/constants";
+import { PipelineStage } from "mongoose";
 
 
 
@@ -13,8 +14,8 @@ export class ServiceRepository extends BaseRepository<IServiceModel> implements 
    }
 
 
-   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort: SortType): Promise<{ items: PopulatedItem[], total: number }> {
-    const pipeline: any[] = [
+   async findAllWithPopulate(filter: FilterType, skip: number, limit: number, sort: SortTypes): Promise<{ items: PopulatedItem[], total: number }> {
+    const pipeline: PipelineStage[] = [
       { $match: filter },
   
       {

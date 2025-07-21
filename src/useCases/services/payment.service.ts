@@ -15,7 +15,6 @@ export class PaymentService implements IPaymentService {
     }
     async createPaymentIntent(amount: number, purpose: "ticket" | "service", metadata: Record<string, any>): Promise<string> {
 
-
         try {
             const paymentIntent = await this.stripe.paymentIntents.create({
                 amount: Math.round(amount * 100),

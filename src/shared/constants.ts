@@ -31,7 +31,7 @@ export const HTTP_STATUS = {
 	CONFLICT: 409, // Conflict in request (e.g., duplicate email, already registered)
 	PAYLOAD_TOO_LARGE: 413, // Request payload is too large (e.g., file upload exceeds limit)
 	UNSUPPORTED_MEDIA_TYPE: 415, // Unsupported content type (e.g., sending XML instead of JSON)
-	TOO_MANY_REQUESTS: 429, // Rate limiting (e.g., too login attempts, API abuse)
+	TOO_MORE_REQUESTS: 429, // Rate limiting (e.g., too login attempts, API abuse)
 
 	// ⚠️ Server errors
 	INTERNAL_SERVER_ERROR: 500, // Generic server error (e.g., database failure, unhandled exception)
@@ -116,7 +116,7 @@ export const ERROR_MESSAGES = {
 	ACCOUNT_SUSPENDED: "Your account has been suspended",
 	ACCOUNT_BANNED: "Your account has been banned",
 	SESSION_EXPIRED: "Your session has expired please log in again",
-	TOO_MANY_ATTEMPTS: " failed attempts try again later",
+	TOO_MORE_ATTEMPTS: " failed attempts try again later",
 	UNSUPPORTED_FILE_TYPE: "Unsupported file type",
 	FILE_SIZE_EXCEEDED: "File size is too large",
 	RATE_LIMIT_EXCEEDED: " requests try again later",

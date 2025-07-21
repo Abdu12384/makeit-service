@@ -27,10 +27,7 @@ export default class DashboardController implements IDashboardControllerInterfac
     
     async getAllDashboardData(req:Request,res:Response):Promise<void>{
         const {role,userId} = (req as unknown as CustomRequest).user
-        const {period } = req.query 
-
-    
-      
+        const {period } = req.query   
       try {
           const data = await this._getAllDashboardDataUseCase.execute(
             role,
