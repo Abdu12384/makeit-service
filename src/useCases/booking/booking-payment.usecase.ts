@@ -33,7 +33,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         @inject("IRedisTokenRepository") private _redisTokenRepository: IRedisTokenRepository
     ){}
 
-    async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:any,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
+    async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:IBookingEntity,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
         let booking = await this._bookingRepository.findOne({bookingId})
         let vendor = await this._vendorRepository.findOne({vendorId:booking?.vendorId})
 
@@ -43,7 +43,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
                 if (isLocked) {
                   throw new CustomError(
                    ERROR_MESSAGES.BOOKING_LOCKED  , 
-                    HTTP_STATUS.TOO_MANY_REQUESTS);
+                    HTTP_STATUS.TOO_MORE_REQUESTS);
                  }
         
                 await this._redisTokenRepository.setEventLock(clientId, serviceId, 600);
@@ -67,7 +67,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
             email: bookingDetails.email,
             phone: bookingDetails.phone,
             vendorId: bookingDetails.vendorId,
-            date: [bookingDetails.date],
+            date: bookingDetails.date,
             status: "Pending",
             paymentStatus: "AdvancePaid",
             vendorApproval: "Pending",

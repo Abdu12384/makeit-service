@@ -47,7 +47,7 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
             let serviceId = (booking === null || booking === void 0 ? void 0 : booking.serviceId) || bookingDetails.serviceId;
             const isLocked = yield this._redisTokenRepository.isEventLocked(clientId, serviceId);
             if (isLocked) {
-                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BOOKING_LOCKED, constants_1.HTTP_STATUS.TOO_MANY_REQUESTS);
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BOOKING_LOCKED, constants_1.HTTP_STATUS.TOO_MORE_REQUESTS);
             }
             yield this._redisTokenRepository.setEventLock(clientId, serviceId, 600);
             const service = yield this._serviceRepository.findOne({ serviceId });
@@ -66,7 +66,7 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                     email: bookingDetails.email,
                     phone: bookingDetails.phone,
                     vendorId: bookingDetails.vendorId,
-                    date: [bookingDetails.date],
+                    date: bookingDetails.date,
                     status: "Pending",
                     paymentStatus: "AdvancePaid",
                     vendorApproval: "Pending",

@@ -40,7 +40,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         if (isLocked) {
           throw new CustomError(
            ERROR_MESSAGES.EVENT_LOCKED, 
-            HTTP_STATUS.TOO_MANY_REQUESTS);
+            HTTP_STATUS.TOO_MORE_REQUESTS);
          }
 
         await this._redisTokenRepository.setEventLock(clientId, eventId, 600);

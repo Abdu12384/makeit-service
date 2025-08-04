@@ -43,7 +43,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             }
             const isLocked = yield this._redisTokenRepository.isEventLocked(clientId, eventId);
             if (isLocked) {
-                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.EVENT_LOCKED, constants_1.HTTP_STATUS.TOO_MANY_REQUESTS);
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.EVENT_LOCKED, constants_1.HTTP_STATUS.TOO_MORE_REQUESTS);
             }
             yield this._redisTokenRepository.setEventLock(clientId, eventId, 600);
             if (eventDetails.status === "cancelled")

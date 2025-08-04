@@ -58,7 +58,7 @@ let GetAllDashboardDataUseCase = class GetAllDashboardDataUseCase {
                 walletTransactions = rawTransactions.map((tx) => {
                     var _a, _b, _c;
                     return ({
-                        _id: tx._id.toString(), // Convert MongoDB ObjectId to string
+                        _id: tx._id.toString(),
                         amount: tx.amount,
                         currency: tx.currency || "INR",
                         paymentStatus: tx.paymentStatus,
