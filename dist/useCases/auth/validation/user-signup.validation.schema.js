@@ -6,11 +6,6 @@ const email_validation_1 = require("../../../shared/validation/email.validation"
 const name_validation_1 = require("../../../shared/validation/name.validation");
 const password_validation_1 = require("../../../shared/validation/password.validation");
 const phone_validaton_1 = require("../../../shared/validation/phone.validaton");
-// const adminSchema = z.object({
-// 	email: strongEmailRegex,
-// 	password: passwordSchema,
-// 	role: z.literal("admin"),
-// });
 const clientSchema = zod_1.z.object({
     name: name_validation_1.nameSchema,
     email: email_validation_1.strongEmailRegex,
@@ -27,7 +22,6 @@ const vendorSchema = zod_1.z.object({
     role: zod_1.z.literal("vendor")
 });
 exports.userSchemas = {
-    // admin: adminSchema,
     client: clientSchema,
     vendor: vendorSchema,
 };

@@ -46,7 +46,7 @@ export class TicketController implements ITicketController {
   async createTicket(req: Request, res: Response): Promise<void> {
         try {
 
-        const {ticket,email,phone,eventId,paymentIntentId,totalAmount,totalCount,vendorId} = req.body
+        const {ticket,email,phone,eventId,paymentIntentId,totalAmount,ticketCount,vendorId} = req.body
         const {userId:clientId,role} = (req as CustomRequest).user 
 
         
@@ -54,7 +54,7 @@ export class TicketController implements ITicketController {
             ticket,
             paymentIntentId,
             totalAmount,
-            totalCount,
+            ticketCount,
             vendorId,
             clientId,
             eventId,

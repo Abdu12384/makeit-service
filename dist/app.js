@@ -80,9 +80,9 @@ class App {
     }
     setRoutes() {
         this.app.use('/auth', new authRoute_1.AuthRoute().authRoute);
-        this.app.use('/client', new clientRoute_1.ClientRoute().clientRoute);
-        this.app.use('/admin', new adminRoute_1.AdminRoute().adminRoute);
-        this.app.use('/vendor', new vendorRoute_1.VendorRoute().vendorRoute);
+        this.app.use('/_cl', new clientRoute_1.ClientRoute().clientRoute);
+        this.app.use('/_ad', new adminRoute_1.AdminRoute().adminRoute);
+        this.app.use('/_ve', new vendorRoute_1.VendorRoute().vendorRoute);
     }
     listen() {
         const port = process.env.PORT || 3000;

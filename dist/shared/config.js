@@ -51,7 +51,6 @@ const getMessaging = () => {
     return messagingInstance;
 };
 exports.getMessaging = getMessaging;
-// Other config (as you already have)
 exports.config = {
     loggerStatus: process.env.LOGGER_STATUS || "combined",
     adminId: process.env.ADMIN_ID || "",

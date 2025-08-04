@@ -7,7 +7,7 @@ import { ISendOtpEmailUseCase } from "../../../domain/interface/useCaseInterface
 import { IVerifyOtpEmailUseCase } from "../../../domain/interface/useCaseInterface/auth/verify-otp-usercase.interface";
 import { handleErrorResponse } from "../../../shared/utils/error.handler";
 import { userSchemas } from "../../../useCases/auth/validation/user-signup.validation.schema";
-import { LoginUserDTO } from "../../../shared/dtos/user.dto";
+import { ILoginUserDTO } from "../../../shared/dtos/user.dto";
 import { ILoginUserUseCase } from "../../../domain/interface/useCaseInterface/auth/login.usecase.interface";
 import { IGenerateTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/genarate-token-usecase.interface";
 import { clearAuthCookies, setAuthCookies, updateCookieWithAccessToken } from "../../../shared/utils/cookie.helper";
@@ -18,6 +18,8 @@ import { IBlackListTokenUseCase } from "../../../domain/interface/useCaseInterfa
 import { IForgotPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/forgot-password-usecase.interface";
 import { IResetPasswordUseCase } from "../../../domain/interface/useCaseInterface/auth/reset-password-usecase.interface";
 import { IClearFCMTokenUseCase } from "../../../domain/interface/useCaseInterface/auth/clear-fcm-token-usecase.interface";
+import { loginSchema } from "../../../useCases/auth/validation/user-login.validation.schema";
+import { SignupDto } from "../../../shared/dtos/request/signup-request.dto";
 
 
 @injectable()
@@ -72,7 +74,8 @@ export class AuthController implements IClientAuthController{
 
   async sendOtp(req: Request, res: Response): Promise<void> {
      try {
-      const {email}  = req.body
+      const {email} = req.body 
+      
         await this._sendOtpEmailUseCase.execute(email)
        res.status(HTTP_STATUS.OK).json(SUCCESS_MESSAGES.OTP_SEND_SUCCESS)
      } catch (error) {
@@ -82,8 +85,6 @@ export class AuthController implements IClientAuthController{
 
   
   
-
-     
 // ══════════════════════════════════════════════════════════
 // 📝 Register New User
 // ══════════════════════════════════════════════════════════
@@ -91,8 +92,8 @@ export class AuthController implements IClientAuthController{
 
   async register(req: Request, res: Response): Promise<void> {
       try {
-        
-        const {formdata, otpString} = req.body
+
+        const {formdata, otpString}:SignupDto = req.body
         
         await this._varifyOtpUseCase.execute(formdata.email, otpString)
         
@@ -121,27 +122,22 @@ export class AuthController implements IClientAuthController{
 
 
 
-
-
-
-
-
 // ══════════════════════════════════════════════════════════
 // 🔐 User Login Controller
 // ══════════════════════════════════════════════════════════
 
  async login(req: Request, res: Response): Promise<void> {
       try {
-           const data = req.body as LoginUserDTO
+           const data = req.body as ILoginUserDTO
 
-            // const validatedData = loginSchema.parse(data)
-            // if(!validatedData){
-            //   res.status(HTTP_STATUS.BAD_REQUEST).json({
-            //     success:false,
-            //     message: ERROR_MESSAGES.INSUFFICIENT_FUNDS,
-            //   })
-            // }
-          const user = await this._loginUseCase.execute(data)
+            const validatedData = loginSchema.parse(data)
+            if(!validatedData){
+              res.status(HTTP_STATUS.BAD_REQUEST).json({
+                success:false,
+                message: ERROR_MESSAGES.INSUFFICIENT_FUNDS,
+              })
+            }
+          const user = await this._loginUseCase.execute(validatedData)
 
           if(!user.userId || !user.email || !user.role){
              throw new Error("User ID, email, or role is missing")

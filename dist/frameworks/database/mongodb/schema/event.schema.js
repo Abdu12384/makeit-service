@@ -65,14 +65,6 @@ exports.eventSchema = new mongoose_1.Schema({
         type: Number,
         required: true
     },
-    // startTime: {
-    //     type: String,
-    //     required: true
-    // },
-    // endTime: {
-    //     type: String,
-    //     required: true
-    // },
     status: {
         type: String,
         enum: ["upcoming", "completed", "cancelled", "ongoing"]

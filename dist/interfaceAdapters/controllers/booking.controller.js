@@ -42,7 +42,7 @@ let BookingController = class BookingController {
             try {
                 const { serviceId } = req.params;
                 const { date, email, phone, vendorId } = req.body;
-                const { userId, role } = req.user;
+                const { userId } = req.user;
                 const booking = yield this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,

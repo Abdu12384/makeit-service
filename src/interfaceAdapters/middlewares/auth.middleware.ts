@@ -39,6 +39,7 @@ export const verifyAuth = async (
 ) => {
      try {
         const token = extractToken(req)
+        
         if(!token){
           res.status(HTTP_STATUS.UNAUTHORIZED).json({
              success: false,
@@ -166,6 +167,7 @@ export const authorizeRole = (allowedRoles: string[]) => {
 export const decodeToken = async (req: Request, res: Response, next:NextFunction) =>{
     try {
         const token = extractToken(req)
+        console.log('token',token)
 
         if(!token){
            res.status(HTTP_STATUS.UNAUTHORIZED).json({

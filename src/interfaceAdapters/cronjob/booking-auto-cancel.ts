@@ -26,4 +26,4 @@ export class BookingAutoCancelController implements IBookingAutoCancelController
     });
   }
 
-}
+}           

@@ -3,7 +3,7 @@ import { IClientEntity } from "../../domain/entities/client.entity";
 import { IRegisterUseCase } from "../../domain/interface/useCaseInterface/auth/register.usecase";
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
-import { UserDTO } from "../../shared/dtos/user.dto";
+import { IUserDTO } from "../../shared/dtos/user.dto";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IUserExistenceService } from "../../domain/interface/servicesInterface/user-existence-service.interface";
@@ -28,7 +28,7 @@ export class RegisterClientUseCase implements IRegisterUseCase{
 
    ) {}
 
-async createUsers(user: UserDTO): Promise<IClientEntity | null> {
+async createUsers(user: IUserDTO): Promise<IClientEntity | null> {
    const {role, email, password} = user
 
        const {exists} = await this._emailExistenService.findUserByEmail(email)

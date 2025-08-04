@@ -293,7 +293,5 @@ export class VendorRoute {
          (req:Request, res:Response) =>{
           authController.handleTokenRefresh(req, res)
            })
-                    
-
    }
 }

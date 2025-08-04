@@ -41,6 +41,7 @@ DependencyInjection.registerAll()
 
 export const blockStatusMiddleware = container.resolve(BlockStatusMiddleware)
 
+
 // ================== Controller Resolving ====================== //
 export const authController = 
       container.resolve<IClientAuthController>(AuthController);

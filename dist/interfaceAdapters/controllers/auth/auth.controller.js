@@ -38,6 +38,7 @@ const constants_1 = require("../../../shared/constants");
 const error_handler_1 = require("../../../shared/utils/error.handler");
 const user_signup_validation_schema_1 = require("../../../useCases/auth/validation/user-signup.validation.schema");
 const cookie_helper_1 = require("../../../shared/utils/cookie.helper");
+const user_login_validation_schema_1 = require("../../../useCases/auth/validation/user-login.validation.schema");
 let AuthController = class AuthController {
     constructor(_registerUseCase, _sendOtpEmailUseCase, _varifyOtpUseCase, _loginUseCase, _generateTokenUseCase, _googleUseCase, _refreshTokenUseCase, _blackListTokenUseCase, _revokeRefreshTokenUseCase, _forgotPasswordUseCase, _resetPasswordUseCase, _clearFCMTokenUseCase) {
         this._registerUseCase = _registerUseCase;
@@ -101,14 +102,14 @@ let AuthController = class AuthController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = req.body;
-                // const validatedData = loginSchema.parse(data)
-                // if(!validatedData){
-                //   res.status(HTTP_STATUS.BAD_REQUEST).json({
-                //     success:false,
-                //     message: ERROR_MESSAGES.INSUFFICIENT_FUNDS,
-                //   })
-                // }
-                const user = yield this._loginUseCase.execute(data);
+                const validatedData = user_login_validation_schema_1.loginSchema.parse(data);
+                if (!validatedData) {
+                    res.status(constants_1.HTTP_STATUS.BAD_REQUEST).json({
+                        success: false,
+                        message: constants_1.ERROR_MESSAGES.INSUFFICIENT_FUNDS,
+                    });
+                }
+                const user = yield this._loginUseCase.execute(validatedData);
                 if (!user.userId || !user.email || !user.role) {
                     throw new Error("User ID, email, or role is missing");
                 }

@@ -54,9 +54,9 @@ export class App {
 
       private setRoutes(){
         this.app.use('/auth',new AuthRoute().authRoute)
-        this.app.use('/client', new ClientRoute().clientRoute)
-        this.app.use('/admin',new AdminRoute().adminRoute)
-        this.app.use('/vendor', new VendorRoute().vendorRoute )
+        this.app.use('/_cl', new ClientRoute().clientRoute)
+        this.app.use('/_ad',new AdminRoute().adminRoute)
+        this.app.use('/_ve', new VendorRoute().vendorRoute)
       } 
 
    public listen(){
@@ -64,8 +64,6 @@ export class App {
 
           this.server.listen(port,()=>console.log(`server running on ${port}`))
         }
-         
-   
 }
 
 

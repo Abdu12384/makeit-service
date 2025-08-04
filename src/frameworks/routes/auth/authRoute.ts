@@ -1,5 +1,8 @@
 import { Request,Response,Router } from "express";
 import { authController} from "../../di/resolver";
+import { validateDto } from "../../../interfaceAdapters/middlewares/validation.middleware";
+import { UserDto } from "../../../shared/dtos/client.dto";
+import { SignupDto } from "../../../shared/dtos/request/signup-request.dto";
 
 
 
@@ -12,7 +15,6 @@ export class AuthRoute {
     this.setRoute()
    }
       private setRoute(): void{
-
 
           this.authRoute.post('/signup', (req: Request, res:Response) => 
             authController.register(req,res)

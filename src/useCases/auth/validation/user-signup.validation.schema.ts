@@ -6,11 +6,7 @@ import { phoneNumberSchema } from '../../../shared/validation/phone.validaton'
 
 
 
-// const adminSchema = z.object({
-// 	email: strongEmailRegex,
-// 	password: passwordSchema,
-// 	role: z.literal("admin"),
-// });
+
 
 const clientSchema = z.object({
 	name: nameSchema,
@@ -31,7 +27,6 @@ const vendorSchema = z.object({
 
 
 export const userSchemas = {
-	// admin: adminSchema,
 	client: clientSchema,
 	vendor: vendorSchema,
 };

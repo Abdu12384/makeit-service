@@ -41,7 +41,7 @@ export const getMessaging = (): firebaseAdmin.messaging.Messaging => {
   return messagingInstance;
 };
 
-// Other config (as you already have)
+
 export const config = {
 
   loggerStatus: process.env.LOGGER_STATUS || "combined",

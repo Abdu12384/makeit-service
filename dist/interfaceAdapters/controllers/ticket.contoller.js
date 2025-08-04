@@ -40,9 +40,9 @@ let TicketController = class TicketController {
     createTicket(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { ticket, email, phone, eventId, paymentIntentId, totalAmount, totalCount, vendorId } = req.body;
+                const { ticket, email, phone, eventId, paymentIntentId, totalAmount, ticketCount, vendorId } = req.body;
                 const { userId: clientId, role } = req.user;
-                const { stripeClientId, createdTicket } = yield this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, totalCount, vendorId, clientId, eventId, email, phone);
+                const { stripeClientId, createdTicket } = yield this._createTicketUseCase.execute(ticket, paymentIntentId, totalAmount, ticketCount, vendorId, clientId, eventId, email, phone);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     stripeClientId,

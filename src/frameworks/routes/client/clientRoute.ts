@@ -294,9 +294,6 @@ export class ClientRoute {
               authController.handleTokenRefresh(req, res);
             }
           )
-
-
            
-
         }
 }

@@ -1,15 +1,15 @@
 import { statusTypes, TRole } from "../constants";
 
-export interface AdminDTO {
+export interface IAdminDTO {
    userId?:string;
    name?:string;
    email:string;
    password:string;
-   role:"admin"
+   role:TRole
 }
 
 
-export interface ClientDTO {
+export interface IClientDTO {
 	userId?: string;
 	name: string;
 	email: string;
@@ -18,24 +18,24 @@ export interface ClientDTO {
    googleVarified?:boolean;
 	googleId?: string;
    profileImage?:string
-	role: "client";
+	role: TRole;
 }
 
-export interface VendorDTO {
+export interface IVendorDTO {
    userID?: string,
    name: string;
    email: string;
    phone?: string;
    password: string
-   vendorStatus?: "active" | "pending" | "rejected" | "blocked";
+   vendorStatus?: statusTypes
    idProof: string;
-   role:"vendor"
+   role:TRole
 }
 
 
-export type UserDTO = AdminDTO | ClientDTO |  VendorDTO ;
+export type IUserDTO = IAdminDTO | IClientDTO |  IVendorDTO ;
 
-export interface LoginUserDTO{
+export interface ILoginUserDTO{
    email: string;
    password?: string;
    role: TRole

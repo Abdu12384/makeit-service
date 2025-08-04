@@ -8,7 +8,7 @@ import { IClientEntity } from "../../domain/entities/client.entity";
 import { IVendorEntity } from "../../domain/entities/vendor.entity";
 import { ERROR_MESSAGES, HTTP_STATUS, TRole } from "../../shared/constants";
 import { CustomError } from "../../domain/utils/custom.error";
-import { ClientDTO } from "../../shared/dtos/user.dto";
+import { IClientDTO } from "../../shared/dtos/user.dto";
 import { SendEmailUseCase } from "../common/send-email.usecase";
 
 
@@ -87,7 +87,7 @@ export class GoogleUseCase implements IGoogleUseCase{
          )
       }
 
-      const userData: ClientDTO={
+      const userData: IClientDTO={
          name,
          role,
          email,

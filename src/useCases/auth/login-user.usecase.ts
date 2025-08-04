@@ -6,7 +6,7 @@ import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/us
 import { IAdminEntity } from "../../domain/entities/admin.entity";
 import { IClientEntity } from "../../domain/entities/client.entity";
 import { IVendorEntity } from "../../domain/entities/vendor.entity";
-import { LoginUserDTO } from "../../shared/dtos/user.dto";
+import { ILoginUserDTO } from "../../shared/dtos/user.dto";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
@@ -34,7 +34,7 @@ export class LoginUserUseCase implements ILoginUserUseCase{
     ){}
 
 
-    async execute(user: LoginUserDTO): Promise<Partial<IVendorEntity | IAdminEntity | IClientEntity>> {
+    async execute(user: ILoginUserDTO): Promise<Partial<IVendorEntity | IAdminEntity | IClientEntity>> {
  
          let repository;
 
