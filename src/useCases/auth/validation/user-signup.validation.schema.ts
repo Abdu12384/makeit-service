@@ -30,4 +30,3 @@ export const userSchemas = {
 	client: clientSchema,
 	vendor: vendorSchema,
 };
-

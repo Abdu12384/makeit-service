@@ -45,7 +45,7 @@ export class BookingController implements IBookingController{
    async bookService(req:Request,res:Response): Promise<void>{
         try {
            const {serviceId} = req.params
-           const {date,email,phone,vendorId} = req.body
+           const {date,email,phone,vendorId} = req.body.validatedDto
            const {userId} = (req as CustomRequest).user 
          const booking = await this._createBookingUseCase.execute(
             serviceId,

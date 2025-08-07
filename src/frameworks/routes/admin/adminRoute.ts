@@ -1,6 +1,8 @@
 import { Request,RequestHandler,Response,Router } from "express";
 import { authController, blockStatusMiddleware, bookingController, categoryController, dashboardController, eventController, userController, vendorController, walletController } from "../../di/resolver";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
+import { validateDto } from "../../../interfaceAdapters/middlewares/validation.middleware";
+import { CreateCategoryDTO } from "../../../shared/dtos/request/category-requst.dto";
 
 
 
@@ -85,6 +87,7 @@ export class AdminRoute {
      this.adminRoute.post('/admin/category',
       verifyAuth,authorizeRole(['admin']),
       blockStatusMiddleware.checkStatus as RequestHandler,
+      validateDto(CreateCategoryDTO),
       (req:Request, res:Response) =>{
          categoryController.createCategory(req,res)
      })
@@ -151,11 +154,6 @@ export class AdminRoute {
       (req: Request, res:Response) =>{
        authController.logout(req,res)
      })
-
-    
-
-
-        
    }
 
 } 

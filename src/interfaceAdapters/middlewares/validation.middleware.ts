@@ -5,8 +5,10 @@ import { HTTP_STATUS } from '../../shared/constants';
 
 export function validateDto(DtoClass: any) {
   return async (req: Request, res: Response, next: NextFunction):Promise<void> =>  {
+    console.log('req.bod',req.body)
 
     const dtoObject = plainToInstance(DtoClass, req.body);
+    console.log('dtoObject',dtoObject)
 
 
     const errors = await validate(dtoObject);
@@ -19,6 +21,7 @@ export function validateDto(DtoClass: any) {
           constraints: err.constraints,
         })),
       });
+      console.log('errors',errors)
       return; 
     }
 

@@ -1,6 +1,8 @@
 import { Request,RequestHandler,Response,Router } from "express";
 import { authController, blockStatusMiddleware, userController, serviceController, bookingController, paymentController, eventController, ticketController, walletController, reviewController, workSampleController, notificationController, categoryController } from "../../di/resolver";
 import { authorizeRole, decodeToken, verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
+import { validateDto } from "../../../interfaceAdapters/middlewares/validation.middleware";
+import { BookingDto } from "../../../shared/dtos/request/booking-requst.dto";
 
 
 
@@ -111,6 +113,7 @@ export class ClientRoute {
       this.clientRoute.post("/client/services/:serviceId/book",
         verifyAuth,
         blockStatusMiddleware.checkStatus as RequestHandler,
+        validateDto(BookingDto),
         (req: Request, res:Response) =>{  
           bookingController.bookService(req,res)
         })
