@@ -11,7 +11,7 @@ import { ITransactionRepository } from "../../domain/interface/repositoryInterfa
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface"
 import { CustomError } from "../../domain/utils/custom.error"
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants"
-import { NotificationType } from "../../shared/dtos/notification"
+import { NotificationType } from "../../shared/constants"
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
 import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface"
@@ -80,7 +80,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           vendorShare = advanceAmount;
         } else {
           if (booking.paymentStatus === "Successfull") {
-            throw new Error("This booking is already fully paid.");
+            throw new CustomError(ERROR_MESSAGES.BOOKING_ALREADY_PAID,HTTP_STATUS.BAD_REQUEST);
           }
       
           if (booking.paymentStatus === "Pending") {
@@ -126,7 +126,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           } else if (booking.paymentStatus === "AdvancePaid") {
             // Balance payment
             if (!booking.balanceAmount || booking.balanceAmount <= 0) {
-              throw new Error("No balance amount available to pay.");
+              throw new CustomError(ERROR_MESSAGES.NO_BALANCE_AMOUNT,HTTP_STATUS.BAD_REQUEST);
             }
             
             const fullBalannceAmount = booking.balanceAmount;

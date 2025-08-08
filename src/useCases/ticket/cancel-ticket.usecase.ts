@@ -8,7 +8,7 @@ import { ITransactionRepository } from "../../domain/interface/repositoryInterfa
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IEventRepository } from "../../domain/interface/repositoryInterfaces/event/event-repository.interface";
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
-import { NotificationType } from "../../shared/dtos/notification";
+import { NotificationType } from "../../shared/constants";
 
 @injectable()
 export default class CancelTicketUseCase implements ICancelTicketUseCase {

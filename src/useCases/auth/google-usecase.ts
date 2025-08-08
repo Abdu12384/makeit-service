@@ -43,7 +43,7 @@ export class GoogleUseCase implements IGoogleUseCase{
           const payload = ticket.getPayload()
           if(!payload){
             throw new CustomError(
-              "Invalid or empty token payload",
+              ERROR_MESSAGES.INVALID_TOKEN,
               HTTP_STATUS.UNAUTHORIZED
             )
           }
@@ -54,7 +54,7 @@ export class GoogleUseCase implements IGoogleUseCase{
         const name = payload.given_name || payload.family_name || ""
 
         if(!email){
-          throw new CustomError("Email is required", HTTP_STATUS.BAD_REQUEST)
+          throw new CustomError(ERROR_MESSAGES.EMAIL_REQUIRED, HTTP_STATUS.BAD_REQUEST)
         }
 
         let repository;
@@ -82,7 +82,7 @@ export class GoogleUseCase implements IGoogleUseCase{
 
       if(role === "vendor"){
          throw new CustomError(
-          "Vendor accounts cannot be created using Google. Pleas Register First",
+          ERROR_MESSAGES.VENDOR_ACCOUNTS_CANNOT_BE_CREATED_USING_GOOGLE,
            HTTP_STATUS.FORBIDDEN
          )
       }

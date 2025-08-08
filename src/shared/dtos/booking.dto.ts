@@ -9,14 +9,14 @@ export class BookingDTO {
   @Type(() => Date)
   date!: Date[];
 
-  @Expose() paymentStatus!: "Pending" | "Failed" | "Successfull" | "Refunded" | "AdvancePaid" | "Confirmed";
+  @Expose() paymentStatus!: string;
   @Expose() serviceId!: string;
-  @Expose() vendorApproval!: "Pending" | "Approved" | "Rejected";
+  @Expose() vendorApproval!: string;
   @Expose() vendorId!: string;
   @Expose() email!: string;
   @Expose() phone!: string;
   @Expose() rejectionReason?: string;
-  @Expose() status!: "Pending" | "Rejected" | "Completed" | "Cancelled" | "Confirmed" | "vendorCancelled" | "Rescheduled";
+  @Expose() status!: string;
 
   @Expose()
   @Type(() => Date)
@@ -30,7 +30,7 @@ export class BookingDTO {
   @Type(() => Date)
   rescheduleDate?: Date;
 
-  @Expose() rescheduleStatus!: "Pending" | "Approved" | "Rejected" | "Requested";
+  @Expose() rescheduleStatus!: string;
   @Expose() cancellationReason?: string;
 
   constructor(partial: Partial<BookingDTO>) {

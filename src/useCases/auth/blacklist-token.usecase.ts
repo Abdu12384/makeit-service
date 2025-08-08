@@ -3,6 +3,8 @@ import { IBlackListTokenUseCase } from "../../domain/interface/useCaseInterface/
 import { JwtPayload } from "jsonwebtoken";
 import { ITokenService } from "../../domain/interface/servicesInterface/jwt-service.interface";
 import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 
 
@@ -22,7 +24,7 @@ export class BlackListTokenUseCase implements IBlackListTokenUseCase {
      const decode: string |  JwtPayload | null = 
       this._tokenService.verifyAccessToken(token);
       if(!decode || typeof decode === "string" || !decode.exp){
-         throw new Error("Invalid Token: Missing expiratrion time")
+         throw new CustomError(ERROR_MESSAGES.TOKEN_EXPIRED,HTTP_STATUS.BAD_REQUEST)
       }
 
       const expiresIn = decode.exp - Math.floor(Date.now() / 1000);

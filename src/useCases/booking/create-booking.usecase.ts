@@ -5,7 +5,7 @@ import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
 import { CustomError } from "../../domain/utils/custom.error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
-import { NotificationType } from "../../shared/dtos/notification";
+import { NotificationType } from "../../shared/constants";
 
 @injectable()
 export class CreateBookingUseCase implements ICreateBookingUseCase {

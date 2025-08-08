@@ -5,7 +5,7 @@ import { IEmailService } from "../../domain/interface/servicesInterface/email.se
 import { CustomError } from "../../domain/utils/custom.error"
 import { HTTP_STATUS } from "../../shared/constants"
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
-import { NotificationType } from "../../shared/dtos/notification"
+import { NotificationType } from "../../shared/constants"
 import { ITransactionsEntity } from "../../domain/entities/transaction.entity"
 import { IServiceRepository } from "../../domain/interface/repositoryInterfaces/service/service-repository.interface"
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface"

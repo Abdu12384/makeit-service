@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import { INotificationModel } from "../model/notification.model";
-import { NotificationType } from "../../../../shared/dtos/notification";
+import { NotificationType } from "../../../../shared/constants";
 
 export const notificationSchema = new Schema<INotificationModel>({
   userId: { 

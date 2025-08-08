@@ -6,6 +6,8 @@ import { CustomError } from "../../domain/utils/custom.error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { ICategoryEntity } from "../../domain/entities/category.entity";
 import { CreateCategoryDTO } from "../../shared/constants";
+import { plainToInstance } from "class-transformer";
+import { CategoryDTO } from "../../shared/dtos/category.dto";
 
 
 
@@ -37,6 +39,7 @@ export class CategoryUseCase implements ICategoryUseCase{
          categoryId,
             ...data
       })
-      return categoryData
+      const categories = plainToInstance(CategoryDTO, categoryData, { excludeExtraneousValues: true }); 
+      return categories
    }
 }
