@@ -3,7 +3,6 @@ import { BaseRepository } from "../base.repository";
 import { IChatRepository } from "../../../domain/interface/repositoryInterfaces/chat/chat-repository.interface";
 import { IChatEntity } from "../../../domain/entities/chat.entity";
 import { messageModel } from "../../../frameworks/database/mongodb/model/message.model";
-import mongoose, { FilterQuery } from "mongoose";
 import { injectable } from "tsyringe";
 import { IMessageEntity } from "../../../domain/entities/message.entity";
 
@@ -25,7 +24,7 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
       receiverModel: "client" | "vendor",
       chatId: string
     ): Promise<IChatEntity> {
-      let chat = await chatModel.findOne({
+      const chat = await chatModel.findOne({
         $or: [
           { senderId, senderModel, receiverId, receiverModel , chatId },
           { senderId: receiverId, senderModel: receiverModel, receiverId: senderId, receiverModel: senderModel , chatId },
@@ -77,11 +76,8 @@ export  class ChatRepository extends BaseRepository<IChatModel> implements IChat
     }
 
 
-    async getMessages(chatId: string, skip: number, limit: number): Promise<IMessageEntity[]> {
+    async getMessages(chatId: string): Promise<IMessageEntity[]> {
       return await messageModel.find({ chatId })
-        // .sort({ sendedTime: 1 })
-        // .skip(skip)
-        // .limit(limit)
         .lean();
     }
   

@@ -52,9 +52,9 @@ export class EventController implements IEventController{
     async createEvent(req:Request,res:Response):Promise<void>{
       try {
         const data = req.body
-        const {userId,role} = (req as CustomRequest).user
+        const {userId} = (req as CustomRequest).user
 
-      const event = await this._createEventUseCase.execute(
+       await this._createEventUseCase.execute(
         data,
         userId
       )
@@ -105,7 +105,7 @@ export class EventController implements IEventController{
 
     async getAllEventsByVendorId(req:Request,res:Response):Promise<void>{
       try {
-        const {userId,role} = (req as CustomRequest).user
+        const {userId} = (req as CustomRequest).user
         const {page ,limit } = req.query
         const pageNumber = Number(page)
         const pageSize = Number(limit)

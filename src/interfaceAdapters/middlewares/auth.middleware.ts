@@ -167,7 +167,6 @@ export const authorizeRole = (allowedRoles: string[]) => {
 export const decodeToken = async (req: Request, res: Response, next:NextFunction) =>{
     try {
         const token = extractToken(req)
-        console.log('token',token)
 
         if(!token){
            res.status(HTTP_STATUS.UNAUTHORIZED).json({
@@ -192,5 +191,7 @@ export const decodeToken = async (req: Request, res: Response, next:NextFunction
             refresh_token: token.refresh_token
          }
          next()
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
 }

@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import {  IVendorController } from "../../domain/interface/controllerInterfaces/vendor/vendor-controller.interface";
 import { Request, Response } from "express";
 import { IGetAllVendorUseCase } from "../../domain/interface/useCaseInterface/vendor/get-all-vendor-usecase.interface";
-import { table } from "console";
 import { ERROR_MESSAGES, HTTP_STATUS, SUCCESS_MESSAGES } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/error.handler";
 import { IUpdateVendorStatusUseCase } from "../../domain/interface/useCaseInterface/vendor/update-vendor-status-usecase.interface";
@@ -83,7 +82,7 @@ async updateVendorStatus(req: Request, res: Response): Promise<void> {
          return 
        }
   
-       const vendor = await  this._updateVendorStatusUseCase.execute(
+        await  this._updateVendorStatusUseCase.execute(
          vendorId,
          status,
          message || ""

@@ -25,6 +25,8 @@ exports.UpdateUserDetailsUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
+const client_dto_1 = require("../../shared/dtos/client.dto");
+const class_transformer_1 = require("class-transformer");
 let UpdateUserDetailsUseCase = class UpdateUserDetailsUseCase {
     constructor(_clientRepository, _vendorRepository, _adminRepository) {
         this._clientRepository = _clientRepository;
@@ -50,7 +52,8 @@ let UpdateUserDetailsUseCase = class UpdateUserDetailsUseCase {
             if (!user) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             }
-            return user;
+            const users = (0, class_transformer_1.plainToInstance)(client_dto_1.UserDto, user, { excludeExtraneousValues: true });
+            return users;
         });
     }
 };

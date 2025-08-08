@@ -36,7 +36,7 @@ let AddWorkSampleUseCase = class AddWorkSampleUseCase {
             if (!title || !description || !images || !vendorId) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.MISSING_PARAMETERS, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
-            const workSampleId = (0, unique_uuid_helper_1.generateUniqueId)("workSample");
+            const workSampleId = (0, unique_uuid_helper_1.generateUniqueId)();
             yield this._workSampleRepository.save(Object.assign(Object.assign({}, data), { workSampleId }));
         });
     }

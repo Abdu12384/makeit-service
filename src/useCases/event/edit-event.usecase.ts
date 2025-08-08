@@ -6,8 +6,6 @@ import { CustomError } from "../../domain/utils/custom.error"
 import { ERROR_MESSAGES } from "../../shared/constants"
 import { HTTP_STATUS } from "../../shared/constants"
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface"
-import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface"
-import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface"
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface"
 import { ITransactionsEntity } from "../../domain/entities/transaction.entity"
@@ -57,6 +55,11 @@ export class EditEventUseCase implements IEditEventUseCase{
       
             const clientWallet = await this._walletRepository.findOne({userId:ticket.clientId})
             const vendorWallet = await this._walletRepository.findOne({userId:ticket.vendorId})
+
+            if (!clientWallet?.walletId || !vendorWallet?.walletId) {
+              throw new Error("Wallet not found");
+            }
+
               await this._walletRepository.findOne({userId:ticket.vendorId})
 
               await this._walletRepository.updateWallet(ticket.clientId, totalAmount);
@@ -68,7 +71,7 @@ export class EditEventUseCase implements IEditEventUseCase{
                 currency: "INR",
                 paymentStatus: "credit", 
                 paymentType:"ticketBooking",
-                walletId: clientWallet?.walletId!,
+                walletId: clientWallet.walletId,
                 relatedTitle: `Event Cancelled Refund from: ${event?.title || "an event"}`
               }
 
@@ -77,7 +80,7 @@ export class EditEventUseCase implements IEditEventUseCase{
                 currency: "INR",
                 paymentStatus: "debit", 
                 paymentType:"ticketBooking",
-                walletId: vendorWallet?.walletId!,
+                walletId: vendorWallet.walletId,
                 relatedTitle: `Event Cancelled Refund from: ${event?.title || "an event"}`
               }
 

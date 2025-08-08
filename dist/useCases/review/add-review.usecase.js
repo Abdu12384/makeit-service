@@ -29,7 +29,7 @@ let AddReviewUseCase = class AddReviewUseCase {
     }
     execute(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const review = yield this._reviewRepository.findOne({ targetId: data.targetId });
+            yield this._reviewRepository.findOne({ targetId: data.targetId });
             // if(review){
             //     throw new CustomError(
             //         ERROR_MESSAGES.REVIEW_ALREADY_EXISTS,

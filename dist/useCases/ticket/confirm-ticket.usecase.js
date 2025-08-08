@@ -46,9 +46,9 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 throw new custom_error_1.CustomError("Error while confirming payment", constants_1.HTTP_STATUS.INTERNAL_SERVER_ERROR);
             }
             const eventDetails = yield this._eventRepository.findOne({ eventId: ticket.eventId });
-            const paymentDetails = yield this._paymentRepository.update({ paymentId: paymentIntentId }, { status: "success" });
+            yield this._paymentRepository.update({ paymentId: paymentIntentId }, { status: "success" });
             const newTicketPurchased = ((eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) || 0) + ticket.ticketCount;
-            const updateTicketCount = yield this._eventRepository.update({ eventId: ticket.eventId }, { ticketPurchased: newTicketPurchased });
+            yield this._eventRepository.update({ eventId: ticket.eventId }, { ticketPurchased: newTicketPurchased });
             const updatedTicket = yield this._ticketRepository.update({ ticketId: ticket.ticketId }, { paymentStatus: "successfull" });
             const adminId = config_1.config.adminId;
             if (!adminId)
@@ -67,15 +67,15 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 walletId: adminWalletId === null || adminWalletId === void 0 ? void 0 : adminWalletId.walletId,
                 relatedTitle: `Admin Commission from Ticket Booking: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "a transaction"}`
             };
-            const transaction = yield this._transactionRepository.save(adminTransaction);
-            const adminWalletAddMoney = yield this._walletRepository.updateWallet(adminId, adminCommission);
+            yield this._transactionRepository.save(adminTransaction);
+            yield this._walletRepository.updateWallet(adminId, adminCommission);
             const vendorWallet = yield this._walletRepository.findOne({ userId: vendorId });
             let vendorWalletId;
             if (vendorWallet) {
                 vendorWalletId = vendorWallet.walletId;
             }
             else {
-                vendorWalletId = (0, unique_uuid_helper_1.generateUniqueId)("wallet");
+                vendorWalletId = (0, unique_uuid_helper_1.generateUniqueId)();
                 const newVendorWallet = {
                     walletId: vendorWalletId,
                     userId: vendorId,
@@ -96,8 +96,8 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
                 walletId: vendorWalletId,
                 relatedTitle: `Ticket: ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"}`
             };
-            const vendorTransaction = yield this._transactionRepository.save(vendorTransactionDetails);
-            const addMoneyToVendorWallet = yield this._walletRepository.updateWallet(vendorId, vendorPrice);
+            yield this._transactionRepository.save(vendorTransactionDetails);
+            yield this._walletRepository.updateWallet(vendorId, vendorPrice);
             yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been confirmed.`, notification_1.NotificationType.TICKET_BOOKING, "client");
             yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
             yield this._redisTokenRepository.deleteEventLock(ticket.clientId, ticket.eventId);

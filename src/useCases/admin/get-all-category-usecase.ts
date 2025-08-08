@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe"
 import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface"
 import { IGetCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/get-category-usecase.interface"
-import { ICategoryEntity } from "../../domain/entities/category.entity";
 import { CategoryDTO } from "../../shared/dtos/category.dto";
 import { plainToInstance } from "class-transformer";
 

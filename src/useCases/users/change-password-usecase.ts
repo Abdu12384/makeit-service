@@ -23,13 +23,10 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
     async execute(userId: string, currentPassword: string, newPassword: string, role: string): Promise<void> {
 
              let repo;
-             let idField;
              if(role === "client"){
                 repo = this._clientRepository
-                idField = "clientId";
              }else if(role === "vendor"){
                repo = this._vendorRepository
-               idField = "vendorId";
              }else {
               throw new CustomError(
                 ERROR_MESSAGES.INVALID_ROLE,

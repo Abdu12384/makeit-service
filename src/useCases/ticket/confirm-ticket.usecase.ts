@@ -53,10 +53,10 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
 
         const eventDetails = await this._eventRepository.findOne({eventId:ticket.eventId})
        
-      const paymentDetails = await this._paymentRepository.update({paymentId:paymentIntentId},{status:"success"})
+      await this._paymentRepository.update({paymentId:paymentIntentId},{status:"success"})
       
       const newTicketPurchased = (eventDetails?.ticketPurchased || 0) + ticket.ticketCount
-      const updateTicketCount = await this._eventRepository.update({eventId:ticket.eventId},{ticketPurchased:newTicketPurchased})
+       await this._eventRepository.update({eventId:ticket.eventId},{ticketPurchased:newTicketPurchased})
       const updatedTicket = await this._ticketRepository.update({ticketId:ticket.ticketId},{paymentStatus:"successfull"})
       const adminId = config.adminId
 
@@ -76,8 +76,8 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
          relatedTitle:  `Admin Commission from Ticket Booking: ${eventDetails?.title || "a transaction"}`
        }
 
-       const transaction = await this._transactionRepository.save(adminTransaction)
-       const adminWalletAddMoney = await this._walletRepository.updateWallet(adminId,adminCommission)
+        await this._transactionRepository.save(adminTransaction)
+       await this._walletRepository.updateWallet(adminId,adminCommission)
        const vendorWallet = await this._walletRepository.findOne({userId:vendorId})
        
        let vendorWalletId: string 
@@ -85,7 +85,7 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
        if(vendorWallet){
         vendorWalletId = vendorWallet.walletId
        }else{
-        vendorWalletId = generateUniqueId("wallet")
+        vendorWalletId = generateUniqueId()
         const newVendorWallet = {
           walletId: vendorWalletId,
           userId: vendorId,
@@ -106,8 +106,8 @@ export class ConfirmTicketUseCase implements IConfirmTicketUseCase{
          walletId: vendorWalletId,
          relatedTitle: `Ticket: ${eventDetails?.title || "an event"}`
        }
-       const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
-       const addMoneyToVendorWallet = await this._walletRepository.updateWallet(vendorId,vendorPrice)
+        await this._transactionRepository.save(vendorTransactionDetails)
+       await this._walletRepository.updateWallet(vendorId,vendorPrice)
        
 
        await this._pushNotificationService.sendNotification(

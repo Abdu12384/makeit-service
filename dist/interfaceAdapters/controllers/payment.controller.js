@@ -57,7 +57,7 @@ let PaymentController = class PaymentController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { booking, paymentIntentId } = req.body;
-                const confirmPayment = yield this._confirmPayment.confirmPayment(paymentIntentId, booking);
+                yield this._confirmPayment.confirmPayment(paymentIntentId, booking);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: "Payment Confirmed"

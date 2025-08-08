@@ -32,7 +32,7 @@ export class AddServiceUseCase implements IAddServiceUseCase{
             )
          }   
          
-         const serviceId = generateUniqueId("service")  
+         const serviceId = generateUniqueId()  
 
         await this._serviceRepository.save(
             {

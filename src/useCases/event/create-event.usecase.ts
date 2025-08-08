@@ -25,7 +25,7 @@ export class CreateEventUseCase implements ICreateEventUseCase{
           )
         }
         
-        const eventId = generateUniqueId("event")
+        const eventId = generateUniqueId()
         const event = await this._eventRepository.save(
           {
             eventId,

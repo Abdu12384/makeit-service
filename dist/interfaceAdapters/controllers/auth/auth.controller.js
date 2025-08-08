@@ -20,17 +20,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const tsyringe_1 = require("tsyringe");
@@ -117,11 +106,10 @@ let AuthController = class AuthController {
                 const accessTokenName = `${user.role}_access_token`;
                 const refreshTokenName = `${user.role}_refresh_token`;
                 (0, cookie_helper_1.setAuthCookies)(res, token.accessToken, token.refreshToken, accessTokenName, refreshTokenName);
-                const { password } = user, userWihoutPassword = __rest(user, ["password"]);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_1.SUCCESS_MESSAGES.LOGIN_SUCCESS,
-                    user: Object.assign({}, userWihoutPassword)
+                    user: Object.assign({}, user)
                 });
             }
             catch (error) {
@@ -193,6 +181,7 @@ let AuthController = class AuthController {
             });
         }
         catch (error) {
+            console.log(error);
             (0, cookie_helper_1.clearAuthCookies)(res, `${req.user.role}_access_token`, `${req.user.role}_refresh_token`);
             res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
                 message: constants_1.ERROR_MESSAGES.INVALID_TOKEN

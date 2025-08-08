@@ -29,7 +29,7 @@ let ChatRepository = class ChatRepository extends base_repository_1.BaseReposito
     }
     findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let chat = yield chat_model_1.chatModel.findOne({
+            const chat = yield chat_model_1.chatModel.findOne({
                 $or: [
                     { senderId, senderModel, receiverId, receiverModel, chatId },
                     { senderId: receiverId, senderModel: receiverModel, receiverId: senderId, receiverModel: senderModel, chatId },
@@ -65,12 +65,9 @@ let ChatRepository = class ChatRepository extends base_repository_1.BaseReposito
             }, { new: true });
         });
     }
-    getMessages(chatId, skip, limit) {
+    getMessages(chatId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield message_model_1.messageModel.find({ chatId })
-                // .sort({ sendedTime: 1 })
-                // .skip(skip)
-                // .limit(limit)
                 .lean();
         });
     }

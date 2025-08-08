@@ -26,10 +26,11 @@ export class CheckEventBookingAvliblityUseCase implements ICheckEventBookingAvli
       if (!event) throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
 
       const ticket = await this._ticketRepository.findOne({eventId,clientId:userId})
-      
 
-        if(ticket?.ticketCount! + ticketCount > event.maxTicketsPerUser){
-            throw new CustomError(  `You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - ticket?.ticketCount!} more ticket(s).`,
+       if(!ticket){ throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)}
+
+        if(ticket.ticketCount + ticketCount > event.maxTicketsPerUser){
+            throw new CustomError(  `You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - ticket.ticketCount} more ticket(s).`,
               HTTP_STATUS.BAD_REQUEST)
         }
 

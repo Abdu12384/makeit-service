@@ -75,7 +75,7 @@ let WorkSampleController = class WorkSampleController {
                     });
                     return;
                 }
-                const workSample = yield this._addWorkSampleUseCase.execute({
+                yield this._addWorkSampleUseCase.execute({
                     title,
                     description,
                     images,
@@ -107,7 +107,7 @@ let WorkSampleController = class WorkSampleController {
                     });
                     return;
                 }
-                const workSample = yield this._updateWorkSampleUseCase.execute(workSampleId, {
+                yield this._updateWorkSampleUseCase.execute(workSampleId, {
                     title,
                     description,
                     images,

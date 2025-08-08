@@ -47,7 +47,7 @@ export class TicketController implements ITicketController {
         try {
 
         const {ticket,email,phone,eventId,paymentIntentId,totalAmount,ticketCount,vendorId} = req.body
-        const {userId:clientId,role} = (req as CustomRequest).user 
+        const {userId:clientId} = (req as CustomRequest).user 
 
         
         const {stripeClientId, createdTicket} = await this._createTicketUseCase.execute(

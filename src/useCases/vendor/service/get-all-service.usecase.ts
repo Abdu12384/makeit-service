@@ -21,7 +21,7 @@ export class GetAllServiceUseCase implements IGetAllServicesUseCase {
       const skip = (validPageNumber - 1) * validPageSize; 
 
 
-      let filter: Record<string, unknown> = {};
+      const filter: Record<string, unknown> = {};
 
       if (role !== "vendor") {
       filter.status = "active";

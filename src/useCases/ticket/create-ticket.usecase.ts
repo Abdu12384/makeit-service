@@ -51,7 +51,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
     if (eventDetails?.ticketPurchased && eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
      
       const HOSTNAME = process.env.HOSTNAME
-      const ticketId = generateUniqueId("ticket")
+      const ticketId = generateUniqueId()
       const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${eventId}`
       const qrCode = await this._qrService.generateQRCode(qrLink)
       if(!qrCode){throw new CustomError("QR Code generation failed",HTTP_STATUS.INTERNAL_SERVER_ERROR)}
@@ -73,7 +73,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
       let attendeesCount = eventDetails?.ticketPurchased || 0
       attendeesCount += totalCount
 
-       let currentAttendees = eventDetails.attendees || []
+       const currentAttendees = eventDetails.attendees || []
         if (!currentAttendees.includes(clientId)) {
           currentAttendees.push(clientId)
         }
@@ -83,7 +83,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         attendees:currentAttendees
        }
 
-       const updatedEvent = await this._eventRepository.update(
+        await this._eventRepository.update(
         {eventId:eventDetails.eventId},
         eventUpdate
       )
@@ -95,8 +95,8 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
         ticketId: ticketId,
         qrCodeLink: qrCode,
         clientId: clientId,
-        paymentStatus: "pending" as "pending",
-        ticketStatus: "unused" as "unused",
+        paymentStatus: "pending" as const,
+        ticketStatus: "unused" as const,
         ticketCount: totalCount,
         totalAmount: totalAmount,
         paymentTransactionId: paymentDocument.paymentId,

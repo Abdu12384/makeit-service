@@ -41,8 +41,8 @@ let ChatUseCase = class ChatUseCase {
             if (senderId === receiverId) {
                 throw new Error("Cannot start a chat with yourself");
             }
-            const chatId = (0, unique_uuid_helper_1.generateUniqueId)("chat");
-            const chat = yield this.chatRepository.findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId);
+            const chatId = (0, unique_uuid_helper_1.generateUniqueId)();
+            yield this.chatRepository.findOrCreateChat(senderId, senderModel, receiverId, receiverModel, chatId);
             return chatId;
         });
     }
@@ -57,7 +57,7 @@ let ChatUseCase = class ChatUseCase {
             if (!chat || (chat.senderId !== senderId && chat.receiverId !== senderId)) {
                 throw new Error("Unauthorized to send message in this chat");
             }
-            const messageId = (0, unique_uuid_helper_1.generateUniqueId)("message");
+            const messageId = (0, unique_uuid_helper_1.generateUniqueId)();
             const sendedTime = new Date();
             const newMessage = yield this.chatRepository.saveMessage({
                 chatId,
@@ -70,19 +70,19 @@ let ChatUseCase = class ChatUseCase {
             yield this.chatRepository.updateChatLastMessage(chatId, messageContent, sendedTime.toISOString());
             const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
             const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
-            const receiver = yield this.findUserById(receiverId, receiverModel);
+            yield this.findUserById(receiverId, receiverModel);
             const sender = yield this.findUserById(senderId, senderModel);
             yield this.pushNotificationService.sendNotification(receiverId, "New Message", `You have a new message from ${sender === null || sender === void 0 ? void 0 : sender.name}`, "new_message", receiverModel);
             return newMessage;
         });
     }
     //======================================================
-    getMessages(chatId, skip, limit) {
+    getMessages(chatId) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!chatId) {
                 throw new Error("Chat ID is required");
             }
-            const messages = yield this.chatRepository.getMessages(chatId, skip, limit);
+            const messages = yield this.chatRepository.getMessages(chatId);
             return messages;
         });
     }

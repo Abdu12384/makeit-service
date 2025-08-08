@@ -41,7 +41,7 @@ let GetWalletByIdUseCase = class GetWalletByIdUseCase {
             const sort = { createdAt: -1 };
             let wallet = yield this.walletRepository.findOne({ userId });
             if (!wallet) {
-                const walletId = (0, unique_uuid_helper_1.generateUniqueId)("wallet");
+                const walletId = (0, unique_uuid_helper_1.generateUniqueId)();
                 const newWallet = {
                     walletId,
                     userId,

@@ -35,7 +35,7 @@ let CreateEventUseCase = class CreateEventUseCase {
             if (data.status !== "upcoming") {
                 throw new custom_error_1.CustomError("Initial status must be 'upcoming'", constants_1.HTTP_STATUS.BAD_REQUEST);
             }
-            const eventId = (0, unique_uuid_helper_1.generateUniqueId)("event");
+            const eventId = (0, unique_uuid_helper_1.generateUniqueId)();
             const event = yield this._eventRepository.save(Object.assign(Object.assign({ eventId }, data), { hostedBy: userId }));
             return event;
         });

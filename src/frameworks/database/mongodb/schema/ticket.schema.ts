@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import { ITicketModel } from "../model/ticket.model";
-import { date } from "zod";
 
 
 export const ticketSchema = new Schema<ITicketModel>({

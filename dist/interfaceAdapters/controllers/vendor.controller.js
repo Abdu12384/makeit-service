@@ -69,7 +69,7 @@ let VendorCantroller = class VendorCantroller {
                     });
                     return;
                 }
-                const vendor = yield this._updateVendorStatusUseCase.execute(vendorId, status, message || "");
+                yield this._updateVendorStatusUseCase.execute(vendorId, status, message || "");
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS

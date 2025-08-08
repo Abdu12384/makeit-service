@@ -35,9 +35,9 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
 
     async confirmPayment(paymentIntentId:string,bookingId:string,bookingDetails:IBookingEntity,clientId:string):Promise<{clientStripeId:string,booking:IBookingEntity}>{
         let booking = await this._bookingRepository.findOne({bookingId})
-        let vendor = await this._vendorRepository.findOne({vendorId:booking?.vendorId})
+        await this._vendorRepository.findOne({vendorId:booking?.vendorId})
 
-        let serviceId = booking?.serviceId || bookingDetails.serviceId;
+        const serviceId = booking?.serviceId || bookingDetails.serviceId;
 
                 const isLocked = await this._redisTokenRepository.isEventLocked(clientId, serviceId);
                 if (isLocked) {
@@ -50,7 +50,10 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
 
 
         const service = await this._serviceRepository.findOne({ serviceId });
-        const totalAmount = service?.servicePrice!;
+ 
+        if(!service) throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+
+        const totalAmount = service.servicePrice;
         const advanceAmount = Math.round(totalAmount * 0.3);
         const balanceAmount = totalAmount - advanceAmount;
       
@@ -59,7 +62,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
       
         if (!booking) {
           // New booking → pay advance
-          const newBookingId = generateUniqueId("booking");
+          const newBookingId = generateUniqueId();
           booking = await this._bookingRepository.save({
             bookingId: newBookingId,
             clientId,
@@ -96,7 +99,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
               }
             );
 
-            let vendor = await this._vendorRepository.VendorfindOne(booking?.vendorId)
+            const vendor = await this._vendorRepository.VendorfindOne(booking?.vendorId)
             if (!vendor) {
               throw new Error("Vendor not found"); 
             }
@@ -105,7 +108,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
               vendor.bookedDates = [{date:new Date(booking!.date[0]),count:0}];
             }
 
-            const index = vendor?.bookedDates.findIndex(entry =>
+            const index = vendor.bookedDates.findIndex(entry =>
               new Date(entry.date).toDateString() === new Date(booking!.date[0]).toDateString()
             );
 
@@ -128,9 +131,10 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
             
             const fullBalannceAmount = booking.balanceAmount;
             const platformFee = Math.round(fullBalannceAmount * 0.1);
-            let adminId = config.adminId
+            const adminId = config.adminId
 
-            let adminWallet = await this._walletRepository.findOne({userId:adminId})
+            const adminWallet = await this._walletRepository.findOne({userId:adminId})
+            if(!adminWallet){ throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)}
             
             amountToPay = booking.balanceAmount;
             vendorShare = fullBalannceAmount - platformFee;
@@ -140,12 +144,12 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
               currency: "INR",
               paymentStatus: "credit",
               paymentType: "adminCommission",
-              walletId:adminWallet?.walletId!,
+              walletId:adminWallet.walletId,
               relatedTitle:`Admin Commission from Service Booking: ${service?.serviceTitle || "a service"}`,
             }
 
-            const adminCommissionTransaction = await this._transactionRepository.save(adminCommission)
-            const addMoneyToAdminWallet = await this._walletRepository.updateWallet(adminWallet?.walletId!,platformFee)
+            await this._transactionRepository.save(adminCommission)
+            await this._walletRepository.updateWallet(adminWallet.walletId,platformFee)
       
             await this._bookingRepository.updateOne(
               { bookingId: booking.bookingId },
@@ -175,18 +179,18 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
           currency: "INR",
           paymentStatus: "credit",
           paymentType: "serviceBooking",
-          walletId:wallet?.walletId,
-          relatedTitle:`Service Booking: ${service?.serviceTitle || "a service"}`,
+          walletId:wallet.walletId,
+          relatedTitle:`Service Booking: ${service.serviceTitle || "a service"}`,
         }
 
-        const vendorTransaction = await this._transactionRepository.save(vendorTransactionDetails)
-        const addMoneyToVendorWallet = await this._walletRepository.updateWallet(booking.vendorId,vendorShare)
+       await this._transactionRepository.save(vendorTransactionDetails)
+       await this._walletRepository.updateWallet(booking.vendorId,vendorShare)
         
   
         await this._pushNotificationService.sendNotification(
           booking.clientId,
           "Booking Confirmed",
-          `Your advance payment for ${service?.serviceTitle} is successful.`,
+          `Your advance payment for ${service.serviceTitle} is successful.`,
           NotificationType.BOOKIG_ADVANCE_PAYMENT,
           "client"
         );
@@ -194,7 +198,7 @@ export class BookingPaymentUseCase implements IBookingPaymentUseCase{
         await this._pushNotificationService.sendNotification(
           booking.vendorId,
           "Advance Payment Received",
-          `You have received advance payment for ${service?.serviceTitle}.`,
+          `You have received advance payment for ${service.serviceTitle}.`,
           NotificationType.BOOKIG_ADVANCE_PAYMENT,
           "vendor"
         );

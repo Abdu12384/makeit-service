@@ -1,6 +1,5 @@
 import { inject, injectable } from "tsyringe";
 import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface";
-import { TicketRepository } from "../../interfaceAdapters/repository/ticket/ticket-repository";
 import { CustomError } from "../../domain/utils/custom.error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
@@ -52,7 +51,7 @@ export class VerifyTicketUseCase implements IVerifyTicketUseCase {
             ticket
           )
 
-          const updatedEvent = await this._eventRepository.update(
+           await this._eventRepository.update(
             {eventId},
             event
           )

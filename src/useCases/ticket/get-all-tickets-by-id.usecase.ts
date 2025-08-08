@@ -22,7 +22,7 @@ export class GetAllTicketsByIdUseCase implements IGetAllTicketsByIdUseCase {
     const limit = validPageSize;
     const sort = { createdAt: -1 as -1 };
 
-    let filter: Record<string, unknown> = {
+    const filter: Record<string, unknown> = {
       clientId: userId,
     };
 

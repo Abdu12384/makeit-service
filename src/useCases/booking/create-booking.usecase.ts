@@ -24,15 +24,14 @@ export class CreateBookingUseCase implements ICreateBookingUseCase {
     vendorId: string,
     userId: string
   ): Promise<void> {
-    const bookingId = generateUniqueId("booking");
+    const bookingId = generateUniqueId();
 
-    const bookingsDetails =
+
       await this._bookingRepository.findExactApprovedBookingByVendorAndDate(
         vendorId,
         date
       );
 
-    const bookedDate = bookingsDetails?.date;
 
     const existingBooking = await this._bookingRepository.findOne({
       clientId: userId,
@@ -48,7 +47,7 @@ export class CreateBookingUseCase implements ICreateBookingUseCase {
       );
     }
 
-    const booking = await this._bookingRepository.save({
+     await this._bookingRepository.save({
       bookingId,
       clientId: userId,
       serviceId,

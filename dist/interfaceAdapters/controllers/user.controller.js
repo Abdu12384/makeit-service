@@ -20,17 +20,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const tsyringe_1 = require("tsyringe");
@@ -135,11 +124,10 @@ let UserController = class UserController {
                 if (!updatedUser) {
                     throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.USER_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
                 }
-                const { password } = updatedUser, userWithoutPassword = __rest(updatedUser, ["password"]);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
-                    user: userWithoutPassword,
+                    user: updatedUser,
                 });
             }
             catch (error) {
@@ -155,7 +143,7 @@ let UserController = class UserController {
             try {
                 const { currentPassword, newPassword } = req.body;
                 const { userId, role } = req.user;
-                const updatedUser = yield this._changePasswordUseCase.execute(userId, currentPassword, newPassword, role);
+                yield this._changePasswordUseCase.execute(userId, currentPassword, newPassword, role);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,
@@ -174,7 +162,7 @@ let UserController = class UserController {
             try {
                 const { token } = req.body;
                 const { userId, role } = req.user;
-                const updatedUser = yield this._saveFCMTokenUseCase.execute(userId, token, role);
+                yield this._saveFCMTokenUseCase.execute(userId, token, role);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: constants_1.SUCCESS_MESSAGES.UPDATE_SUCCESS,

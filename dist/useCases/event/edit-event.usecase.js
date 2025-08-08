@@ -60,6 +60,9 @@ let EditEventUseCase = class EditEventUseCase {
                     const totalAmount = ticket.totalAmount * ticket.ticketCount;
                     const clientWallet = yield this._walletRepository.findOne({ userId: ticket.clientId });
                     const vendorWallet = yield this._walletRepository.findOne({ userId: ticket.vendorId });
+                    if (!(clientWallet === null || clientWallet === void 0 ? void 0 : clientWallet.walletId) || !(vendorWallet === null || vendorWallet === void 0 ? void 0 : vendorWallet.walletId)) {
+                        throw new Error("Wallet not found");
+                    }
                     yield this._walletRepository.findOne({ userId: ticket.vendorId });
                     yield this._walletRepository.updateWallet(ticket.clientId, totalAmount);
                     yield this._walletRepository.reduceMoney(ticket.vendorId, -totalAmount);
@@ -68,7 +71,7 @@ let EditEventUseCase = class EditEventUseCase {
                         currency: "INR",
                         paymentStatus: "credit",
                         paymentType: "ticketBooking",
-                        walletId: clientWallet === null || clientWallet === void 0 ? void 0 : clientWallet.walletId,
+                        walletId: clientWallet.walletId,
                         relatedTitle: `Event Cancelled Refund from: ${(event === null || event === void 0 ? void 0 : event.title) || "an event"}`
                     };
                     const vendorTransaction = {
@@ -76,7 +79,7 @@ let EditEventUseCase = class EditEventUseCase {
                         currency: "INR",
                         paymentStatus: "debit",
                         paymentType: "ticketBooking",
-                        walletId: vendorWallet === null || vendorWallet === void 0 ? void 0 : vendorWallet.walletId,
+                        walletId: vendorWallet.walletId,
                         relatedTitle: `Event Cancelled Refund from: ${(event === null || event === void 0 ? void 0 : event.title) || "an event"}`
                     };
                     yield this._transactionRepository.save(clientTransaction);

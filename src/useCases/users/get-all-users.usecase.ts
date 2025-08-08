@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import { IGetAllUsersUseCase } from "../../domain/interface/useCaseInterface/users/get-all-users-usecase.interface";
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
-import { IPaginatedUsers } from "../../domain/entities/paginated/paginated-users.entity";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { plainToInstance } from "class-transformer";
@@ -24,7 +23,7 @@ export class GetAllUserUseCase implements IGetAllUsersUseCase{
       ){}
 
       async execute(userType: string, pageNumber: number, pageSize: number, searchTerm: string): Promise<{users: UserDto[], total: number}> {
-          let filter: Record<string, unknown> = {}
+          const filter: Record<string, unknown> = {}
           if(userType){
             filter.role = userType
           }

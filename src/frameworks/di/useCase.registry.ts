@@ -69,7 +69,6 @@ import { IChangePasswordUseCase } from "../../domain/interface/useCaseInterface/
 import { ChangePasswordUseCase } from "../../useCases/users/change-password-usecase";
 import { IPaymentService } from "../../domain/interface/servicesInterface/payment.service.interface";
 import { PaymentService } from "../../useCases/services/payment.service";
-import { compareSync } from "bcrypt";
 import { IBookingPaymentUseCase } from "../../domain/interface/useCaseInterface/booking/booking-payment-usecase.interface";
 import { BookingPaymentUseCase } from "../../useCases/booking/booking-payment.usecase";
 import { ConfirmPaymentUseCase } from "../../useCases/booking/booking-confirm-payment.usecase";
@@ -129,7 +128,6 @@ import {  pushNotificationService } from "../../useCases/services/firebase-push-
 import { IGetNotificationByIdUseCase } from "../../domain/interface/useCaseInterface/notification/get-notification-id-by-usecase-interface";
 import { GetNotificationByIdUseCase } from "../../useCases/notification/get-notification-by-id-usecase";
 import { IUpdateNotificationReadUseCase } from "../../domain/interface/useCaseInterface/notification/update-notificaton-read-usecase.interface";
-import { register } from "module";
 import { UpdateNotificationReadUseCase } from "../../useCases/notification/update-notification-read.usecase";
 import { ICheckEventBookingAvliblityUseCase } from "../../domain/interface/useCaseInterface/event/check-event-booking-avliblity-usecase.interface";
 import { CheckEventBookingAvliblityUseCase } from "../../useCases/event/check-event-booking-avliblity.usecase";

@@ -33,7 +33,7 @@ let CategoryUseCase = class CategoryUseCase {
     execute(data) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
-            const categoryId = (0, unique_uuid_helper_1.generateUniqueId)("category");
+            const categoryId = (0, unique_uuid_helper_1.generateUniqueId)();
             const category = yield this._categoryRepository.findOne({
                 title: { $regex: `^${(_a = data.title) === null || _a === void 0 ? void 0 : _a.trim()}$`, $options: "i" },
             });

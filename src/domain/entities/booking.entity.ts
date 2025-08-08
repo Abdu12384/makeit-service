@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 export interface IBookingEntity {
     bookingId?: string;
     serviceId: string;

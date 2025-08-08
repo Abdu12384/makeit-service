@@ -34,14 +34,11 @@ let ChangePasswordUseCase = class ChangePasswordUseCase {
     execute(userId, currentPassword, newPassword, role) {
         return __awaiter(this, void 0, void 0, function* () {
             let repo;
-            let idField;
             if (role === "client") {
                 repo = this._clientRepository;
-                idField = "clientId";
             }
             else if (role === "vendor") {
                 repo = this._vendorRepository;
-                idField = "vendorId";
             }
             else {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_ROLE, constants_1.HTTP_STATUS.BAD_REQUEST);

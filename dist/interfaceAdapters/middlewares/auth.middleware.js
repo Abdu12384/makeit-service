@@ -108,7 +108,6 @@ exports.authorizeRole = authorizeRole;
 const decodeToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = extractToken(req);
-        console.log('token', token);
         if (!token) {
             res.status(constants_1.HTTP_STATUS.UNAUTHORIZED).json({
                 message: constants_1.ERROR_MESSAGES.UNAUTHORIZED_ACCESS
@@ -131,7 +130,9 @@ const decodeToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         };
         next();
     }
-    catch (error) { }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.decodeToken = decodeToken;
 //# sourceMappingURL=auth.middleware.js.map

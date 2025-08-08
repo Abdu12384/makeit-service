@@ -34,9 +34,8 @@ let CreateBookingUseCase = class CreateBookingUseCase {
     }
     execute(serviceId, date, email, phone, vendorId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bookingId = (0, unique_uuid_helper_1.generateUniqueId)("booking");
-            const bookingsDetails = yield this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
-            const bookedDate = bookingsDetails === null || bookingsDetails === void 0 ? void 0 : bookingsDetails.date;
+            const bookingId = (0, unique_uuid_helper_1.generateUniqueId)();
+            yield this._bookingRepository.findExactApprovedBookingByVendorAndDate(vendorId, date);
             const existingBooking = yield this._bookingRepository.findOne({
                 clientId: userId,
                 serviceId: serviceId,
@@ -46,7 +45,7 @@ let CreateBookingUseCase = class CreateBookingUseCase {
             if (existingBooking) {
                 throw new custom_error_1.CustomError("You have already booked this service for this date.", constants_1.HTTP_STATUS.BAD_REQUEST);
             }
-            const booking = yield this._bookingRepository.save({
+            yield this._bookingRepository.save({
                 bookingId,
                 clientId: userId,
                 serviceId,

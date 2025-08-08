@@ -41,9 +41,9 @@ export class ChatUseCase implements IChatUseCase {
       throw new Error("Cannot start a chat with yourself");
     }
 
-    const chatId = generateUniqueId("chat")
+    const chatId = generateUniqueId()
 
-    const chat = await this.chatRepository.findOrCreateChat(
+     await this.chatRepository.findOrCreateChat(
       senderId,
       senderModel,
       receiverId,
@@ -77,7 +77,7 @@ export class ChatUseCase implements IChatUseCase {
 
 
 
-    const messageId = generateUniqueId("message")
+    const messageId = generateUniqueId()
 
     const sendedTime = new Date();
     const newMessage = await this.chatRepository.saveMessage({
@@ -99,7 +99,7 @@ export class ChatUseCase implements IChatUseCase {
     const receiverId = chat.senderId === senderId ? chat.receiverId : chat.senderId;
     const receiverModel = chat.senderId === senderId ? chat.receiverModel : chat.senderModel;
 
-    const receiver = await this.findUserById(receiverId, receiverModel);
+    await this.findUserById(receiverId, receiverModel);
     const sender = await this.findUserById(senderId, senderModel);
 
     
@@ -116,12 +116,12 @@ export class ChatUseCase implements IChatUseCase {
 
 
   //======================================================
-  async getMessages(chatId: string, skip: number, limit: number): Promise<IMessageEntity[]> {
+  async getMessages(chatId: string): Promise<IMessageEntity[]> {
     if (!chatId) {
       throw new Error("Chat ID is required");
     }
 
-    const messages = await this.chatRepository.getMessages(chatId, skip, limit);
+    const messages = await this.chatRepository.getMessages(chatId);
     return messages;
   }
 

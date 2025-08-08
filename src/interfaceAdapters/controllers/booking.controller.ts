@@ -196,7 +196,7 @@ export class BookingController implements IBookingController{
 
      async getBookedDates(req:Request,res:Response): Promise<void>{
         try {
-            const {role,userId} = (req as CustomRequest).user 
+            const {userId} = (req as CustomRequest).user 
             const booking = await this._getVendorBookedDatesUseCase.execute(
                 userId,
             )

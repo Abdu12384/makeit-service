@@ -34,7 +34,7 @@ let GetAllTicketsByIdUseCase = class GetAllTicketsByIdUseCase {
             const skip = (validPageNumber - 1) * validPageSize;
             const limit = validPageSize;
             const sort = { createdAt: -1 };
-            let filter = {
+            const filter = {
                 clientId: userId,
             };
             if (status) {

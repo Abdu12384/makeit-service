@@ -9,44 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserDto = void 0;
+exports.CreateCategoryDTO = void 0;
 const class_transformer_1 = require("class-transformer");
-let UserDto = class UserDto {
-    constructor(partial) {
-        Object.assign(this, partial);
-    }
-};
-exports.UserDto = UserDto;
+const class_validator_1 = require("class-validator");
+class CreateCategoryDTO {
+}
+exports.CreateCategoryDTO = CreateCategoryDTO;
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Title is required' }),
+    (0, class_validator_1.IsString)({ message: 'Title must be a string' }),
     __metadata("design:type", String)
-], UserDto.prototype, "userId", void 0);
+], CreateCategoryDTO.prototype, "title", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)({ message: 'Description must be a string' }),
     __metadata("design:type", String)
-], UserDto.prototype, "profileImage", void 0);
+], CreateCategoryDTO.prototype, "description", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)({ message: 'Image must be a string' }),
     __metadata("design:type", String)
-], UserDto.prototype, "name", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], UserDto.prototype, "phone", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], UserDto.prototype, "email", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], UserDto.prototype, "role", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], UserDto.prototype, "status", void 0);
-exports.UserDto = UserDto = __decorate([
-    (0, class_transformer_1.Exclude)(),
-    __metadata("design:paramtypes", [Object])
-], UserDto);
-//# sourceMappingURL=client.dto.js.map
+], CreateCategoryDTO.prototype, "image", void 0);
+//# sourceMappingURL=category-requst.dto.js.map

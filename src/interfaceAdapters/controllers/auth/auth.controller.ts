@@ -159,13 +159,12 @@ export class AuthController implements IClientAuthController{
           refreshTokenName
         )
   
-        const {password, ...userWihoutPassword} = user;
 
         res.status(HTTP_STATUS.OK).json({
            success:true,
            message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
            user:{
-            ...userWihoutPassword,
+            ...user,
            }
         })
 
@@ -282,6 +281,7 @@ export class AuthController implements IClientAuthController{
                message: SUCCESS_MESSAGES.OPERATION_SUCCESS
          })
          } catch (error) {
+            console.log(error)
             clearAuthCookies(
               res,
               `${(req as CustomRequest).user.role}_access_token`,

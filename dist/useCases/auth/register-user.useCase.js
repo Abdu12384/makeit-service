@@ -43,7 +43,7 @@ let RegisterClientUseCase = class RegisterClientUseCase {
             const hashedPassword = password
                 ? yield this._passwordHasher.hash(password)
                 : null;
-            const userId = (0, unique_uuid_helper_1.generateUniqueId)(role);
+            const userId = (0, unique_uuid_helper_1.generateUniqueId)();
             let repository;
             if (role === "client") {
                 repository = this._clientRepository;

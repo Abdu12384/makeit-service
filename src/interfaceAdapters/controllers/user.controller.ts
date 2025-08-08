@@ -165,11 +165,10 @@ async refreshSession(req: Request, res: Response): Promise<void> {
        )
    }
 
-   const {password, ...userWithoutPassword} = updatedUser
    res.status(HTTP_STATUS.OK).json({
        success:true,
        message: SUCCESS_MESSAGES.UPDATE_SUCCESS,
-       user: userWithoutPassword,
+       user: updatedUser,
    })
      } catch (error) {
        handleErrorResponse(req,res,error)      
@@ -190,7 +189,7 @@ async changePassword(req: Request, res: Response): Promise<void> {
         const {currentPassword, newPassword} = req.body
 
        const {userId, role} = (req as CustomRequest).user;
-       const updatedUser = await this._changePasswordUseCase.execute(
+       await this._changePasswordUseCase.execute(
          userId,
          currentPassword,
          newPassword,
@@ -215,7 +214,7 @@ async saveFCMToken(req: Request, res: Response): Promise<void> {
         const {token} = req.body
 
        const {userId, role} = (req as CustomRequest).user;
-       const updatedUser = await this._saveFCMTokenUseCase.execute(
+       await this._saveFCMTokenUseCase.execute(
          userId,
          token,
          role

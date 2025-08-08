@@ -44,8 +44,8 @@ let EventController = class EventController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = req.body;
-                const { userId, role } = req.user;
-                const event = yield this._createEventUseCase.execute(data, userId);
+                const { userId } = req.user;
+                yield this._createEventUseCase.execute(data, userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     message: "Event Created"
@@ -83,7 +83,7 @@ let EventController = class EventController {
     getAllEventsByVendorId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { userId, role } = req.user;
+                const { userId } = req.user;
                 const { page, limit } = req.query;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);

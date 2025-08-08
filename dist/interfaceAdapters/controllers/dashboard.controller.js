@@ -31,7 +31,6 @@ let DashboardController = class DashboardController {
     getAllDashboardData(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { role, userId } = req.user;
-            const { period } = req.query;
             try {
                 const data = yield this._getAllDashboardDataUseCase.execute(role, userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({

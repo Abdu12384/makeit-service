@@ -91,8 +91,8 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                         rescheduleStatus: "Approved"
                     },
                 });
-                this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been successfully rescheduled to ${new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
-                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `The client has accepted your reschedule request. New date: ${new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
+                this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been successfully rescheduled to ${new Date(booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `The client has accepted your reschedule request. New date: ${new Date(booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
             }
             if (status === "Rejected") {
                 yield this._bookingRepository.updateOne({ bookingId }, {
@@ -108,7 +108,7 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                 if (!Array.isArray(vendor.bookedDates)) {
                     vendor.bookedDates = [];
                 }
-                const oldIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === new Date(booking === null || booking === void 0 ? void 0 : booking.rescheduleDate).toDateString());
+                const oldIndex = vendor.bookedDates.findIndex((entry) => new Date(entry.date).toDateString() === new Date(booking.rescheduleDate).toDateString());
                 if (oldIndex !== -1) {
                     vendor.bookedDates[oldIndex].count -= 1;
                     if (vendor.bookedDates[oldIndex].count <= 0) {

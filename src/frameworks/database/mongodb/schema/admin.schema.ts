@@ -1,5 +1,4 @@
-import { Mongoose,Schema } from "mongoose";
-import { string } from "zod";
+import { Schema } from "mongoose";
 
 export const adminSchema=new Schema({
     userId: {type: String, required: true},

@@ -2,7 +2,7 @@ import { BaseRepository } from "../base.repository";
 import { IReviewEntity } from "../../../domain/entities/review.entity";
 import { IReviewRepository } from "../../../domain/interface/repositoryInterfaces/review/review-repository.interface";
 import { injectable } from "tsyringe";
-import { IReviewModel, reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
+import { reviewModel } from "../../../frameworks/database/mongodb/model/review.model";
 import { FilterType, SortTypes} from "../../../shared/constants";
 import { PipelineStage } from "mongoose";
 

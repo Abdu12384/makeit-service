@@ -106,7 +106,7 @@ let SocketConfig = class SocketConfig {
                     const chat = yield this._chatUseCase.getChatById(data.chatId);
                     if (chat) {
                         const receiverId = chat.senderId === data.senderId ? chat.receiverId : chat.senderId;
-                        const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
+                        // const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
                         if (receiverId !== data.senderId) {
                             this.io.to(receiverId).emit("notification", {
                                 type: "new-message",

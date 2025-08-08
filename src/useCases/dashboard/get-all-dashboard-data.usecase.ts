@@ -4,7 +4,6 @@ import { IEventRepository } from "../../domain/interface/repositoryInterfaces/ev
 import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
 import { ITicketRepository } from "../../domain/interface/repositoryInterfaces/ticket/ticket-repository.interface";
-import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
@@ -39,7 +38,7 @@ export class GetAllDashboardDataUseCase implements IGetAllDashboardDataUseCase{
     let bookings = await this._bookingRepository.find();
     let vendors = await this._vendorRepository.find();
     let tickets = await this._ticketRepository.find();
-    let clients = await this._clientRepository.find();
+    const clients = await this._clientRepository.find();
 
     // Role-based filtering
     if (role === "vendor") {

@@ -8,6 +8,8 @@ import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/u
 import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { UserDto } from "../../shared/dtos/client.dto";
+import { plainToInstance } from "class-transformer";
 
 
 
@@ -32,9 +34,7 @@ export class UpdateUserDetailsUseCase implements IUpdateUserDetailsUseCase{
   ){}
 
 
-
-
-  async execute(userId: string, role: string, userDetails: IAdminEntity | IClientEntity | IVendorEntity): Promise<IAdminEntity | IClientEntity | IVendorEntity | null> {
+  async execute(userId: string, role: string, userDetails: IAdminEntity | IClientEntity | IVendorEntity): Promise<UserDto | null> {
      let repository; 
       
       if(role === "client"){
@@ -58,6 +58,7 @@ export class UpdateUserDetailsUseCase implements IUpdateUserDetailsUseCase{
           HTTP_STATUS.NOT_FOUND
          )
       }
-      return user
+       const users: UserDto = plainToInstance(UserDto, user , { excludeExtraneousValues: true }); 
+      return users
   }
 }

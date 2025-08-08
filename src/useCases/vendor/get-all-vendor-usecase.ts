@@ -19,7 +19,7 @@ export class GetAllVendorUseCase implements IGetAllVendorUseCase {
      ){}
 
      async execute(forType: string, pageNumber: number, pageSize: number, searchTerm: string): Promise<IPaginatedVendor> {
-         let filter: Record<string, unknown> = {}
+         const filter: Record<string, unknown> = {}
          if(searchTerm) {
            filter.$or =[
               {name:{$regex: searchTerm, $options:"i"}},

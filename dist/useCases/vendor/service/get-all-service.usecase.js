@@ -32,7 +32,7 @@ let GetAllServiceUseCase = class GetAllServiceUseCase {
             const validPageNumber = Math.max(1, pageNumber || 1);
             const validPageSize = Math.max(1, pageSize || 10);
             const skip = (validPageNumber - 1) * validPageSize;
-            let filter = {};
+            const filter = {};
             if (role !== "vendor") {
                 filter.status = "active";
             }

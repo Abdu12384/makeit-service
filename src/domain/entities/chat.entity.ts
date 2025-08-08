@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 export interface IChatEntity {
       chatId:string,
       lastMessage:string,
@@ -14,6 +12,5 @@ export interface IChatEntity {
       receiverProfileImage?:string,
       name:string,
       profileImage?:string,
-      fcmToken?:string
-      
+      fcmToken?:string      
 }

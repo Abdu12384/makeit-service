@@ -1,4 +1,3 @@
-import { IBookingEntity } from "../../../entities/booking.entity";
 
 export interface IUpdateBookingStatusUseCase {
     execute(

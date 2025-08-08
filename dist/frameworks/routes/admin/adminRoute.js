@@ -4,6 +4,8 @@ exports.AdminRoute = void 0;
 const express_1 = require("express");
 const resolver_1 = require("../../di/resolver");
 const auth_middleware_1 = require("../../../interfaceAdapters/middlewares/auth.middleware");
+const validation_middleware_1 = require("../../../interfaceAdapters/middlewares/validation.middleware");
+const category_requst_dto_1 = require("../../../shared/dtos/request/category-requst.dto");
 class AdminRoute {
     constructor() {
         this.adminRoute = (0, express_1.Router)();
@@ -46,7 +48,7 @@ class AdminRoute {
         /** ==========================
          *  Category Management Routes
         * ========================== */
-        this.adminRoute.post('/admin/category', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+        this.adminRoute.post('/admin/category', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (0, validation_middleware_1.validateDto)(category_requst_dto_1.CreateCategoryDTO), (req, res) => {
             resolver_1.categoryController.createCategory(req, res);
         });
         this.adminRoute.get('/admin/category', auth_middleware_1.verifyAuth, (0, auth_middleware_1.authorizeRole)(['admin']), resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {

@@ -38,7 +38,7 @@ let VendorRepository = class VendorRepository extends base_repository_1.BaseRepo
     }
     vendorSave(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const vendorDoc = yield data.save();
+            yield data.save();
         });
     }
     VendorfindOne(userId) {

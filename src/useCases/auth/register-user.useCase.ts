@@ -43,7 +43,7 @@ async createUsers(user: IUserDTO): Promise<IClientEntity | null> {
         ? await this._passwordHasher.hash(password)
         :null;
 
-        const userId = generateUniqueId(role)
+        const userId = generateUniqueId()
 
 
         let repository;

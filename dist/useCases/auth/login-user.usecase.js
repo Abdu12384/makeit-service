@@ -25,6 +25,8 @@ exports.LoginUserUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
+const client_dto_1 = require("../../shared/dtos/client.dto");
+const class_transformer_1 = require("class-transformer");
 let LoginUserUseCase = class LoginUserUseCase {
     constructor(_clientRepository, _vendorRepository, _adminRepository, _passwordBcrypt) {
         this._clientRepository = _clientRepository;
@@ -66,7 +68,9 @@ let LoginUserUseCase = class LoginUserUseCase {
                     throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_CREDENTIALS, constants_1.HTTP_STATUS.FORBIDDEN);
                 }
             }
-            return userData;
+            const users = (0, class_transformer_1.plainToInstance)(client_dto_1.UserDto, userData, { excludeExtraneousValues: true });
+            console.log(users);
+            return users;
         });
     }
 };

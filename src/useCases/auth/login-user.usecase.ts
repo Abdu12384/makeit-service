@@ -3,13 +3,12 @@ import { ILoginUserUseCase } from "../../domain/interface/useCaseInterface/auth/
 import { IClientRepository } from "../../domain/interface/repositoryInterfaces/users/client.repository.interface";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";
 import { IAdminRepository } from "../../domain/interface/repositoryInterfaces/users/admin.repository.interface";
-import { IAdminEntity } from "../../domain/entities/admin.entity";
-import { IClientEntity } from "../../domain/entities/client.entity";
-import { IVendorEntity } from "../../domain/entities/vendor.entity";
 import { ILoginUserDTO } from "../../shared/dtos/user.dto";
 import { CustomError } from "../../domain/utils/custom.error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IPasswordHasher } from "../../domain/interface/useCaseInterface/auth/passwordHasher.interface";
+import { UserDto } from "../../shared/dtos/client.dto";
+import { plainToInstance } from "class-transformer";
 
 
 
@@ -34,7 +33,7 @@ export class LoginUserUseCase implements ILoginUserUseCase{
     ){}
 
 
-    async execute(user: ILoginUserDTO): Promise<Partial<IVendorEntity | IAdminEntity | IClientEntity>> {
+    async execute(user: ILoginUserDTO): Promise<UserDto> {
  
          let repository;
 
@@ -92,9 +91,9 @@ export class LoginUserUseCase implements ILoginUserUseCase{
              )
            }
          }
-
-         return userData
-
+       const users: UserDto = plainToInstance(UserDto, userData , { excludeExtraneousValues: true }); 
+         console.log(users)
+         return users
     }
 
 }

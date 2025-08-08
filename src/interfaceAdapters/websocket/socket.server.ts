@@ -110,7 +110,7 @@ export class SocketConfig {
               const chat = await this._chatUseCase.getChatById(data.chatId);
               if (chat) {
                 const receiverId = chat.senderId === data.senderId ? chat.receiverId : chat.senderId;
-                const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
+                // const receiverModel = chat.senderId === data.senderId ? chat.receiverModel : chat.senderModel;
                 
                 
 

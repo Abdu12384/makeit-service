@@ -91,7 +91,7 @@ export class WorkSampleController implements IWorkSampleController {
           return  
         }
 
-        const workSample = await this._addWorkSampleUseCase.execute(
+         await this._addWorkSampleUseCase.execute(
           {
             title,
             description,
@@ -130,7 +130,7 @@ export class WorkSampleController implements IWorkSampleController {
           return  
         }
 
-        const workSample = await this._updateWorkSampleUseCase.execute(
+        await this._updateWorkSampleUseCase.execute(
           workSampleId,
           {
             title,

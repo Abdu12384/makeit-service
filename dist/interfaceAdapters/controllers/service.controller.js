@@ -66,7 +66,7 @@ let ServiceController = class ServiceController {
     getAllServices(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { page, limit, search, sortBy, sortOrder } = req.query;
+                const { page, limit, search } = req.query;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
                 const customReq = req;

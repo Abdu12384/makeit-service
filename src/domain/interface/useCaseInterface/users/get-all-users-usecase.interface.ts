@@ -1,5 +1,4 @@
 import { UserDto } from "../../../../shared/dtos/client.dto";
-import { IPaginatedUsers } from "../../../entities/paginated/paginated-users.entity";
 
 export interface IGetAllUsersUseCase {
 	execute(

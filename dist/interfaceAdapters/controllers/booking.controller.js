@@ -41,7 +41,7 @@ let BookingController = class BookingController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { serviceId } = req.params;
-                const { date, email, phone, vendorId } = req.body;
+                const { date, email, phone, vendorId } = req.body.validatedDto;
                 const { userId } = req.user;
                 const booking = yield this._createBookingUseCase.execute(serviceId, date, email, phone, vendorId, userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({
@@ -161,7 +161,7 @@ let BookingController = class BookingController {
     getBookedDates(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { role, userId } = req.user;
+                const { userId } = req.user;
                 const booking = yield this._getVendorBookedDatesUseCase.execute(userId);
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,

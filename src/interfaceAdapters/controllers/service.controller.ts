@@ -73,7 +73,7 @@ export class ServiceController implements IServiceController {
 
 async getAllServices(req: Request, res: Response): Promise<void> {
       try {
-        const {page, limit, search, sortBy, sortOrder} = req.query
+        const {page, limit, search} = req.query
         const pageNumber = Number(page)
         const pageSize = Number(limit)
 

@@ -1,10 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IWalletRepository } from "../../domain/interface/repositoryInterfaces/wallet/wallet-repository.interface";
-import { IWalletEntity } from "../../domain/entities/wallet.entity";
 import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface";
-import { CustomError } from "../../domain/utils/custom.error";
-import { HTTP_STATUS } from "../../shared/constants";
-import { ITransactionsEntity } from "../../domain/entities/transaction.entity";
 import { ITransactionRepository } from "../../domain/interface/repositoryInterfaces/transaction/transaction-repository.interface";
 import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
 import { WalletDTO } from "../../shared/dtos/wallet.dto";
@@ -38,7 +34,7 @@ export class GetWalletByIdUseCase implements IGetWalletByIdUseCase{
 
         let wallet = await this.walletRepository.findOne({userId})
         if (!wallet) {
-          const walletId = generateUniqueId("wallet")
+          const walletId = generateUniqueId()
           const newWallet = {
             walletId,
             userId,

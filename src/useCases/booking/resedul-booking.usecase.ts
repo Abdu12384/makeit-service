@@ -120,7 +120,7 @@ async execute(
       this._pushNotificationService.sendNotification(
         booking.clientId,
         "booking",
-        `Your booking has been successfully rescheduled to ${new Date(booking?.rescheduleDate!).toDateString()}.`,
+        `Your booking has been successfully rescheduled to ${new Date(booking.rescheduleDate!).toDateString()}.`,
         NotificationType.RESCHEDULE_SERVICE_BOOKING,
         "client"
       );
@@ -128,7 +128,7 @@ async execute(
       this._pushNotificationService.sendNotification(
         booking.vendorId,
         "booking",
-        `The client has accepted your reschedule request. New date: ${new Date(booking?.rescheduleDate!).toDateString()}.`,
+        `The client has accepted your reschedule request. New date: ${new Date(booking.rescheduleDate!).toDateString()}.`,
         NotificationType.RESCHEDULE_SERVICE_BOOKING,
         "vendor"
       );
@@ -155,7 +155,7 @@ async execute(
       }
 
       const oldIndex = vendor.bookedDates.findIndex(
-        (entry) => new Date(entry.date).toDateString() === new Date(booking?.rescheduleDate!).toDateString()
+        (entry) => new Date(entry.date).toDateString() === new Date(booking.rescheduleDate!).toDateString()
       );
       if (oldIndex !== -1) {
         vendor.bookedDates[oldIndex].count -= 1;

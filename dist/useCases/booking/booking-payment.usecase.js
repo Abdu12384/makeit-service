@@ -43,22 +43,24 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
     confirmPayment(paymentIntentId, bookingId, bookingDetails, clientId) {
         return __awaiter(this, void 0, void 0, function* () {
             let booking = yield this._bookingRepository.findOne({ bookingId });
-            let vendor = yield this._vendorRepository.findOne({ vendorId: booking === null || booking === void 0 ? void 0 : booking.vendorId });
-            let serviceId = (booking === null || booking === void 0 ? void 0 : booking.serviceId) || bookingDetails.serviceId;
+            yield this._vendorRepository.findOne({ vendorId: booking === null || booking === void 0 ? void 0 : booking.vendorId });
+            const serviceId = (booking === null || booking === void 0 ? void 0 : booking.serviceId) || bookingDetails.serviceId;
             const isLocked = yield this._redisTokenRepository.isEventLocked(clientId, serviceId);
             if (isLocked) {
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BOOKING_LOCKED, constants_1.HTTP_STATUS.TOO_MORE_REQUESTS);
             }
             yield this._redisTokenRepository.setEventLock(clientId, serviceId, 600);
             const service = yield this._serviceRepository.findOne({ serviceId });
-            const totalAmount = service === null || service === void 0 ? void 0 : service.servicePrice;
+            if (!service)
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
+            const totalAmount = service.servicePrice;
             const advanceAmount = Math.round(totalAmount * 0.3);
             const balanceAmount = totalAmount - advanceAmount;
             let amountToPay;
             let vendorShare;
             if (!booking) {
                 // New booking → pay advance
-                const newBookingId = (0, unique_uuid_helper_1.generateUniqueId)("booking");
+                const newBookingId = (0, unique_uuid_helper_1.generateUniqueId)();
                 booking = yield this._bookingRepository.save({
                     bookingId: newBookingId,
                     clientId,
@@ -90,14 +92,14 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                             status: "Confirmed",
                         },
                     });
-                    let vendor = yield this._vendorRepository.VendorfindOne(booking === null || booking === void 0 ? void 0 : booking.vendorId);
+                    const vendor = yield this._vendorRepository.VendorfindOne(booking === null || booking === void 0 ? void 0 : booking.vendorId);
                     if (!vendor) {
                         throw new Error("Vendor not found");
                     }
                     if (!Array.isArray(vendor.bookedDates)) {
                         vendor.bookedDates = [{ date: new Date(booking.date[0]), count: 0 }];
                     }
-                    const index = vendor === null || vendor === void 0 ? void 0 : vendor.bookedDates.findIndex(entry => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString());
+                    const index = vendor.bookedDates.findIndex(entry => new Date(entry.date).toDateString() === new Date(booking.date[0]).toDateString());
                     if (index !== -1) {
                         vendor.bookedDates[index].count += 1;
                     }
@@ -116,8 +118,11 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                     }
                     const fullBalannceAmount = booking.balanceAmount;
                     const platformFee = Math.round(fullBalannceAmount * 0.1);
-                    let adminId = config_1.config.adminId;
-                    let adminWallet = yield this._walletRepository.findOne({ userId: adminId });
+                    const adminId = config_1.config.adminId;
+                    const adminWallet = yield this._walletRepository.findOne({ userId: adminId });
+                    if (!adminWallet) {
+                        throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
+                    }
                     amountToPay = booking.balanceAmount;
                     vendorShare = fullBalannceAmount - platformFee;
                     const adminCommission = {
@@ -125,11 +130,11 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                         currency: "INR",
                         paymentStatus: "credit",
                         paymentType: "adminCommission",
-                        walletId: adminWallet === null || adminWallet === void 0 ? void 0 : adminWallet.walletId,
+                        walletId: adminWallet.walletId,
                         relatedTitle: `Admin Commission from Service Booking: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a service"}`,
                     };
-                    const adminCommissionTransaction = yield this._transactionRepository.save(adminCommission);
-                    const addMoneyToAdminWallet = yield this._walletRepository.updateWallet(adminWallet === null || adminWallet === void 0 ? void 0 : adminWallet.walletId, platformFee);
+                    yield this._transactionRepository.save(adminCommission);
+                    yield this._walletRepository.updateWallet(adminWallet.walletId, platformFee);
                     yield this._bookingRepository.updateOne({ bookingId: booking.bookingId }, {
                         $set: {
                             paymentStatus: "Successfull",
@@ -151,13 +156,13 @@ let BookingPaymentUseCase = class BookingPaymentUseCase {
                 currency: "INR",
                 paymentStatus: "credit",
                 paymentType: "serviceBooking",
-                walletId: wallet === null || wallet === void 0 ? void 0 : wallet.walletId,
-                relatedTitle: `Service Booking: ${(service === null || service === void 0 ? void 0 : service.serviceTitle) || "a service"}`,
+                walletId: wallet.walletId,
+                relatedTitle: `Service Booking: ${service.serviceTitle || "a service"}`,
             };
-            const vendorTransaction = yield this._transactionRepository.save(vendorTransactionDetails);
-            const addMoneyToVendorWallet = yield this._walletRepository.updateWallet(booking.vendorId, vendorShare);
-            yield this._pushNotificationService.sendNotification(booking.clientId, "Booking Confirmed", `Your advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle} is successful.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "client");
-            yield this._pushNotificationService.sendNotification(booking.vendorId, "Advance Payment Received", `You have received advance payment for ${service === null || service === void 0 ? void 0 : service.serviceTitle}.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "vendor");
+            yield this._transactionRepository.save(vendorTransactionDetails);
+            yield this._walletRepository.updateWallet(booking.vendorId, vendorShare);
+            yield this._pushNotificationService.sendNotification(booking.clientId, "Booking Confirmed", `Your advance payment for ${service.serviceTitle} is successful.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "client");
+            yield this._pushNotificationService.sendNotification(booking.vendorId, "Advance Payment Received", `You have received advance payment for ${service.serviceTitle}.`, notification_1.NotificationType.BOOKIG_ADVANCE_PAYMENT, "vendor");
             return { booking, clientStripeId };
         });
     }

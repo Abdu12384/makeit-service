@@ -34,7 +34,7 @@ let GetAllUserUseCase = class GetAllUserUseCase {
     }
     execute(userType, pageNumber, pageSize, searchTerm) {
         return __awaiter(this, void 0, void 0, function* () {
-            let filter = {};
+            const filter = {};
             if (userType) {
                 filter.role = userType;
             }

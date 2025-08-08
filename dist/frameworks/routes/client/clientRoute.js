@@ -4,6 +4,8 @@ exports.ClientRoute = void 0;
 const express_1 = require("express");
 const resolver_1 = require("../../di/resolver");
 const auth_middleware_1 = require("../../../interfaceAdapters/middlewares/auth.middleware");
+const validation_middleware_1 = require("../../../interfaceAdapters/middlewares/validation.middleware");
+const booking_requst_dto_1 = require("../../../shared/dtos/request/booking-requst.dto");
 class ClientRoute {
     constructor() {
         this.clientRoute = (0, express_1.Router)();
@@ -54,7 +56,7 @@ class ClientRoute {
         this.clientRoute.get("/client/bookings", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.bookingController.getAllBookings(req, res);
         });
-        this.clientRoute.post("/client/services/:serviceId/book", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+        this.clientRoute.post("/client/services/:serviceId/book", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (0, validation_middleware_1.validateDto)(booking_requst_dto_1.BookingDto), (req, res) => {
             resolver_1.bookingController.bookService(req, res);
         });
         this.clientRoute.post("/client/create-booking-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {

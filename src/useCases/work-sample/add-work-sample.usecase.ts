@@ -29,7 +29,7 @@ export class AddWorkSampleUseCase implements IAddWorkSampleUseCase {
                   HTTP_STATUS.BAD_REQUEST
                   )
             }
-            const workSampleId = generateUniqueId("workSample")
+            const workSampleId = generateUniqueId()
             await this._workSampleRepository.save({
                 ...data,
                workSampleId,

@@ -15,7 +15,9 @@ const class_validator_1 = require("class-validator");
 const constants_1 = require("../../shared/constants");
 function validateDto(DtoClass) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        console.log('req.bod', req.body);
         const dtoObject = (0, class_transformer_1.plainToInstance)(DtoClass, req.body);
+        console.log('dtoObject', dtoObject);
         const errors = yield (0, class_validator_1.validate)(dtoObject);
         if (errors.length > 0) {
             res.status(constants_1.HTTP_STATUS.BAD_REQUEST).json({
@@ -25,6 +27,7 @@ function validateDto(DtoClass) {
                     constraints: err.constraints,
                 })),
             });
+            console.log('errors', errors);
             return;
         }
         req.body.validatedDto = dtoObject;

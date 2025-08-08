@@ -20,7 +20,7 @@ export class CategoryUseCase implements ICategoryUseCase{
       
    async execute(data: CreateCategoryDTO): Promise<ICategoryEntity> {
 
-      const categoryId = generateUniqueId("category")
+      const categoryId = generateUniqueId()
 
       const category = await this._categoryRepository.findOne({
 			title: { $regex: `^${data.title?.trim()}$`, $options: "i" }, 

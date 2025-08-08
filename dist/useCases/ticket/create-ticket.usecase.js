@@ -55,7 +55,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             if ((eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) && (eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) + totalCount > eventDetails.totalTicket)
                 throw new custom_error_1.CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`, constants_1.HTTP_STATUS.FORBIDDEN);
             const HOSTNAME = process.env.HOSTNAME;
-            const ticketId = (0, unique_uuid_helper_1.generateUniqueId)("ticket");
+            const ticketId = (0, unique_uuid_helper_1.generateUniqueId)();
             const qrLink = `${HOSTNAME}/verify-ticket/${ticketId}/${eventId}`;
             const qrCode = yield this._qrService.generateQRCode(qrLink);
             if (!qrCode) {
@@ -81,7 +81,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
             }
             let attendeesCount = (eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.ticketPurchased) || 0;
             attendeesCount += totalCount;
-            let currentAttendees = eventDetails.attendees || [];
+            const currentAttendees = eventDetails.attendees || [];
             if (!currentAttendees.includes(clientId)) {
                 currentAttendees.push(clientId);
             }
@@ -89,7 +89,7 @@ let CreateTicketUseCase = class CreateTicketUseCase {
                 attendeesCount,
                 attendees: currentAttendees
             };
-            const updatedEvent = yield this._eventRepository.update({ eventId: eventDetails.eventId }, eventUpdate);
+            yield this._eventRepository.update({ eventId: eventDetails.eventId }, eventUpdate);
             const ogTicket = {
                 email,
                 phone,

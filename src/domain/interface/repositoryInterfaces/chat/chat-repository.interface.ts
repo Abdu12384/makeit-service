@@ -33,7 +33,7 @@ export interface IChatRepository extends IBaseRepository<IChatModel> {
 
   updateChatLastMessage(chatId: string, lastMessage: string, lastMessageAt: string): Promise<void>;
 
-  getMessages(chatId: string, skip: number, limit: number): Promise<IMessageEntity[]>;
+  getMessages(chatId: string): Promise<IMessageEntity[]>;
 
   getUserChats(userId: string): Promise<IChatEntity[]>;
 

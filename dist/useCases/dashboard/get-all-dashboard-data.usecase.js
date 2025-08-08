@@ -39,7 +39,7 @@ let GetAllDashboardDataUseCase = class GetAllDashboardDataUseCase {
             let bookings = yield this._bookingRepository.find();
             let vendors = yield this._vendorRepository.find();
             let tickets = yield this._ticketRepository.find();
-            let clients = yield this._clientRepository.find();
+            const clients = yield this._clientRepository.find();
             // Role-based filtering
             if (role === "vendor") {
                 events = events.filter((event) => event.hostedBy === userId);

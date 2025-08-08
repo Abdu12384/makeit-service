@@ -27,7 +27,7 @@ export class GetAllEventsUseCase implements IGetAllEventsUseCase{
         const skip = (validPageNumber - 1) * validPageSize
 
 
-        let filter: Record<string,unknown> = {
+        const filter: Record<string,unknown> = {
           status: "upcoming",
           isActive: true
         }
