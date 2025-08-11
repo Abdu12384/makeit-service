@@ -26,6 +26,8 @@ const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
+const class_transformer_1 = require("class-transformer");
+const category_dto_1 = require("../../shared/dtos/category.dto");
 let CategoryUseCase = class CategoryUseCase {
     constructor(_categoryRepository) {
         this._categoryRepository = _categoryRepository;
@@ -41,7 +43,8 @@ let CategoryUseCase = class CategoryUseCase {
                 throw new custom_error_1.CustomError("Category already exists", constants_1.HTTP_STATUS.CONFLICT);
             }
             const categoryData = yield this._categoryRepository.save(Object.assign({ categoryId }, data));
-            return categoryData;
+            const categories = (0, class_transformer_1.plainToInstance)(category_dto_1.CategoryDTO, categoryData, { excludeExtraneousValues: true });
+            return categories;
         });
     }
 };

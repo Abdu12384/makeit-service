@@ -23,6 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateStatusCategoryUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
+const class_transformer_1 = require("class-transformer");
+const category_dto_1 = require("../../shared/dtos/category.dto");
 let UpdateStatusCategoryUseCase = class UpdateStatusCategoryUseCase {
     constructor(_categoryRepository) {
         this._categoryRepository = _categoryRepository;
@@ -30,7 +32,8 @@ let UpdateStatusCategoryUseCase = class UpdateStatusCategoryUseCase {
     execute(categoryId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             const category = yield this._categoryRepository.update({ categoryId }, { status });
-            return category;
+            const categories = (0, class_transformer_1.plainToInstance)(category_dto_1.CategoryDTO, category, { excludeExtraneousValues: true });
+            return categories;
         });
     }
 };

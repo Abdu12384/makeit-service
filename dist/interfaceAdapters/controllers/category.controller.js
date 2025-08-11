@@ -59,7 +59,6 @@ let CategoryController = class CategoryController {
             try {
                 const { search, page, limit } = req.query;
                 const { role } = req.user;
-                console.log('role', role);
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
                 const categories = yield this._getAllCategoriesUseCase.execute(pageNumber, pageSize, search, role);

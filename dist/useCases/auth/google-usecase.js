@@ -43,14 +43,14 @@ let GoogleUseCase = class GoogleUseCase {
             });
             const payload = ticket.getPayload();
             if (!payload) {
-                throw new custom_error_1.CustomError("Invalid or empty token payload", constants_1.HTTP_STATUS.UNAUTHORIZED);
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.INVALID_TOKEN, constants_1.HTTP_STATUS.UNAUTHORIZED);
             }
             const googleId = payload.sub;
             const email = payload.email;
             const profileImage = payload.picture || "";
             const name = payload.given_name || payload.family_name || "";
             if (!email) {
-                throw new custom_error_1.CustomError("Email is required", constants_1.HTTP_STATUS.BAD_REQUEST);
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.EMAIL_REQUIRED, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             let repository;
             if (role === 'client') {
@@ -70,7 +70,7 @@ let GoogleUseCase = class GoogleUseCase {
                 return existingUser;
             }
             if (role === "vendor") {
-                throw new custom_error_1.CustomError("Vendor accounts cannot be created using Google. Pleas Register First", constants_1.HTTP_STATUS.FORBIDDEN);
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.VENDOR_ACCOUNTS_CANNOT_BE_CREATED_USING_GOOGLE, constants_1.HTTP_STATUS.FORBIDDEN);
             }
             const userData = {
                 name,
