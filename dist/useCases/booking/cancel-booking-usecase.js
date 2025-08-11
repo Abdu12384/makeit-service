@@ -23,7 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CancelBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
-const notification_1 = require("../../shared/dtos/notification");
+const constants_1 = require("../../shared/constants");
+const custom_error_1 = require("../../domain/utils/custom.error");
 let CancelBookingUseCase = class CancelBookingUseCase {
     constructor(_bookingRepository, _pushNotificationService, _vendorRepository) {
         this._bookingRepository = _bookingRepository;
@@ -34,13 +35,13 @@ let CancelBookingUseCase = class CancelBookingUseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const booking = yield this._bookingRepository.findOne({ bookingId });
             if (!booking) {
-                throw new Error("Booking not found");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BOOKING_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             }
             booking.status = "Cancelled";
             yield this._bookingRepository.update({ bookingId }, booking);
             const vendor = yield this._vendorRepository.VendorfindOne(booking.vendorId);
             if (!vendor)
-                throw new Error("Vendor not found");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.VENDOR_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             if (!Array.isArray(vendor.bookedDates)) {
                 vendor.bookedDates = [];
             }
@@ -52,8 +53,8 @@ let CancelBookingUseCase = class CancelBookingUseCase {
                 }
             }
             yield this._vendorRepository.vendorSave(vendor);
-            yield this._pushNotificationService.sendNotification(booking.clientId, notification_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "client");
-            yield this._pushNotificationService.sendNotification(booking.vendorId, notification_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "vendor");
+            yield this._pushNotificationService.sendNotification(booking.clientId, constants_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "client");
+            yield this._pushNotificationService.sendNotification(booking.vendorId, constants_1.NotificationType.CANCEL_SERVICE_BOOKING, `Your booking for ${new Date(booking.date[0]).toDateString()} has been cancelled`, "booking", "vendor");
         });
     }
 };

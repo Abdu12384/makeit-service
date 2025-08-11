@@ -24,7 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
-const notification_1 = require("../../shared/dtos/notification");
+const constants_2 = require("../../shared/constants");
 let CancelTicketUseCase = class CancelTicketUseCase {
     constructor(_ticketRepository, _transactionRepository, _walletRepository, _eventRepository, _pushNotificationService) {
         this._ticketRepository = _ticketRepository;
@@ -122,8 +122,8 @@ let CancelTicketUseCase = class CancelTicketUseCase {
             eventDetails.checkedInCount =
                 Math.max(0, eventDetails.checkedInCount - cancelCount) || 0;
             yield this._eventRepository.update({ eventId: ticket.eventId }, eventDetails);
-            yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Cancelled", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been cancelled.`, notification_1.NotificationType.TICKET_BOOKING, "client");
-            yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
+            yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Cancelled", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been cancelled.`, constants_2.NotificationType.TICKET_BOOKING, "client");
+            yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been cancelled for your event", `${ticket.ticketCount} tickets were cancelled for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, constants_2.NotificationType.TICKET_BOOKING, "vendor");
             /** Step 3: Update ticket status */
             yield this._ticketRepository.update({ ticketId }, ticket);
         });

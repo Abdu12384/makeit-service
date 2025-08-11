@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { NotificationType } from "../../shared/dtos/notification";
+import { NotificationType } from "../../shared/constants";
 export interface INotificationEntity {
     _id?:ObjectId | string;
     userId:ObjectId | string;

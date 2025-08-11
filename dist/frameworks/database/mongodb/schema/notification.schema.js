@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.notificationSchema = void 0;
 const mongoose_1 = require("mongoose");
-const notification_1 = require("../../../../shared/dtos/notification");
+const constants_1 = require("../../../../shared/constants");
 exports.notificationSchema = new mongoose_1.Schema({
     userId: {
         type: String,
@@ -11,7 +11,7 @@ exports.notificationSchema = new mongoose_1.Schema({
     },
     type: {
         type: String,
-        enum: notification_1.NotificationType,
+        enum: constants_1.NotificationType,
         // required: true,
     },
     message: {

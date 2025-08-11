@@ -25,7 +25,7 @@ exports.UpdateBookingStatusUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
-const notification_1 = require("../../shared/dtos/notification");
+const constants_2 = require("../../shared/constants");
 let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
     constructor(_bookingRepository, _mailService, _pushNotificationService, _serviceRepository, _walletRepository, _transactionRepository, _vendorRepository) {
         this._bookingRepository = _bookingRepository;
@@ -98,8 +98,8 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                 const clientMessage = refundAmount > 0
                     ? `Your booking has been cancelled and ₹${refundAmount} has been refunded to your wallet.`
                     : `Your booking has been cancelled successfully.`;
-                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", clientMessage, notification_1.NotificationType.BOOKING_CANCELLED, "client");
-                yield this._pushNotificationService.sendNotification(booking.vendorId, "booking", clientMessage, notification_1.NotificationType.BOOKING_CANCELLED, "vendor");
+                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", clientMessage, constants_2.NotificationType.BOOKING_CANCELLED, "client");
+                yield this._pushNotificationService.sendNotification(booking.vendorId, "booking", clientMessage, constants_2.NotificationType.BOOKING_CANCELLED, "vendor");
             }
             else if (status === "Cancelled") {
                 booking.status = "Cancelled";
@@ -115,14 +115,14 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                 // if (conflict) throw new CustomError("You already have an approved booking on this date.",HTTP_STATUS.BAD_REQUEST);
                 booking.vendorApproval = "Approved";
                 booking.status = "Pending";
-                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`, notification_1.NotificationType.BOOKING_APPROVED, "client");
+                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been approved. Please make the advance payment of ₹${booking.balanceAmount} to complete the booking.`, constants_2.NotificationType.BOOKING_APPROVED, "client");
             }
             else if (status === "Rejected") {
                 booking.vendorApproval = "Rejected";
                 booking.status = "Rejected";
                 booking.rejectionReason = reason;
                 yield this._mailService.sendCustomEmail(booking.email, "Booking Rejected", `Your booking has been rejected. Reason: ${reason || "No reason provided."}`);
-                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been rejected. Reason: ${reason || "No reason provided."}`, notification_1.NotificationType.BOOKING_REJECTED, "client");
+                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been rejected. Reason: ${reason || "No reason provided."}`, constants_2.NotificationType.BOOKING_REJECTED, "client");
             }
             else if (status === "Completed") {
                 const today = new Date();
@@ -147,7 +147,7 @@ let UpdateBookingStatusUseCase = class UpdateBookingStatusUseCase {
                     }
                 }
                 yield this._vendorRepository.vendorSave(vendor);
-                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been completed.`, notification_1.NotificationType.BOOKING_COMPLETED, "client");
+                yield this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been completed.`, constants_2.NotificationType.BOOKING_COMPLETED, "client");
             }
             yield this._bookingRepository.update({ bookingId }, booking);
         });

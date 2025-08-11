@@ -26,7 +26,7 @@ const tsyringe_1 = require("tsyringe");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
-const notification_1 = require("../../shared/dtos/notification");
+const constants_2 = require("../../shared/constants");
 const config_1 = require("../../shared/config");
 let ConfirmTicketUseCase = class ConfirmTicketUseCase {
     constructor(_stripeService, _eventRepository, _ticketRepository, _transactionRepository, _paymentRepository, _walletRepository, _pushNotificationService, _redisTokenRepository) {
@@ -98,8 +98,8 @@ let ConfirmTicketUseCase = class ConfirmTicketUseCase {
             };
             yield this._transactionRepository.save(vendorTransactionDetails);
             yield this._walletRepository.updateWallet(vendorId, vendorPrice);
-            yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been confirmed.`, notification_1.NotificationType.TICKET_BOOKING, "client");
-            yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, notification_1.NotificationType.TICKET_BOOKING, "vendor");
+            yield this._pushNotificationService.sendNotification(ticket.clientId, "Ticket Booking Confirmed", `Your booking for ${(eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title) || "an event"} has been confirmed.`, constants_2.NotificationType.TICKET_BOOKING, "client");
+            yield this._pushNotificationService.sendNotification(vendorId, "A ticket has been booked for your event", `${ticket.ticketCount} tickets were booked for ${eventDetails === null || eventDetails === void 0 ? void 0 : eventDetails.title}.`, constants_2.NotificationType.TICKET_BOOKING, "vendor");
             yield this._redisTokenRepository.deleteEventLock(ticket.clientId, ticket.eventId);
             return updatedTicket;
         });

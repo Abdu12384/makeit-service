@@ -23,6 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfirmPaymentUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
     constructor(_bookingRepository, _stripeService, _paymentRepository, _redisTokenRepository) {
         this._bookingRepository = _bookingRepository;
@@ -35,10 +37,10 @@ let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
             var _a;
             const paymentIntent = yield this._stripeService.confirmPayment(paymentIntentId);
             if (!paymentIntent)
-                throw new Error("Failed to confirm Stripe payment");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.STRIPE_PAYMENT_FAILED, constants_1.HTTP_STATUS.BAD_REQUEST);
             const existingBooking = yield this._bookingRepository.findOne({ bookingId: booking.bookingId });
             if (!existingBooking) {
-                throw new Error("Booking not found");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.BOOKING_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             }
             const paidAmount = paymentIntent.amount / 100;
             const balanceAmount = (_a = existingBooking.balanceAmount) !== null && _a !== void 0 ? _a : 0;
@@ -54,7 +56,7 @@ let ConfirmPaymentUseCase = class ConfirmPaymentUseCase {
             }
             else {
                 yield this._paymentRepository.update({ bookingId: booking.bookingId }, { status: "failed" });
-                throw new Error("Stripe payment not successful");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.STRIPE_PAYMENT_FAILED, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             yield this._redisTokenRepository.deleteEventLock(booking.clientId, booking.serviceId);
         });

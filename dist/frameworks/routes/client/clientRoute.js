@@ -12,9 +12,7 @@ class ClientRoute {
         this.setRoute();
     }
     setRoute() {
-        this.clientRoute.put("/client/details", auth_middleware_1.verifyAuth, 
-        // authorizeRole(["client"])
-        resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+        this.clientRoute.put("/client/details", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.userController.updateUserDetails(req, res);
         });
         this.clientRoute.put("/client/change-password", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
@@ -126,9 +124,7 @@ class ClientRoute {
          *  Client Session Management Routes
         * ========================== */
         // logout
-        this.clientRoute.post('/client/logout', auth_middleware_1.verifyAuth, 
-        // authorizeRole(["client"])
-        resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+        this.clientRoute.post('/client/logout', auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.authController.logout(req, res);
         });
         this.clientRoute.post("/client/refresh-token", auth_middleware_1.decodeToken, (req, res) => {

@@ -19,6 +19,10 @@ let CategoryDTO = class CategoryDTO {
 exports.CategoryDTO = CategoryDTO;
 __decorate([
     (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Object)
+], CategoryDTO.prototype, "_id", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], CategoryDTO.prototype, "categoryId", void 0);
 __decorate([

@@ -23,9 +23,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RescheduleBookingUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
-const notification_1 = require("../../shared/dtos/notification");
-const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_2 = require("../../shared/constants");
 let RescheduleBookingUseCase = class RescheduleBookingUseCase {
     constructor(_bookingRepository, _pushNotificationService, _vendorRepository) {
         this._bookingRepository = _bookingRepository;
@@ -41,7 +41,7 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
             const existingDate = new Date(booking.date[0]).toDateString();
             const newRequestedDate = new Date(selectedDate).toDateString();
             if (existingDate === newRequestedDate) {
-                throw new custom_error_1.CustomError("Selected date is the same as the current booking date.", constants_1.HTTP_STATUS.BAD_REQUEST);
+                throw new custom_error_1.CustomError("Selected date is the same as the current booking date.", constants_2.HTTP_STATUS.BAD_REQUEST);
             }
             yield this._bookingRepository.updateOne({ bookingId }, {
                 $set: {
@@ -50,7 +50,7 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                     rescheduleStatus: "Requested"
                 },
             });
-            this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has a new reschedule request from the vendor for ${selectedDate}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+            this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has a new reschedule request from the vendor for ${selectedDate}.`, constants_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
         });
     }
     approveOrRejectRescheduleBooking(bookingId, status) {
@@ -91,8 +91,8 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                         rescheduleStatus: "Approved"
                     },
                 });
-                this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been successfully rescheduled to ${new Date(booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
-                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `The client has accepted your reschedule request. New date: ${new Date(booking.rescheduleDate).toDateString()}.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
+                this._pushNotificationService.sendNotification(booking.clientId, "booking", `Your booking has been successfully rescheduled to ${new Date(booking.rescheduleDate).toDateString()}.`, constants_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `The client has accepted your reschedule request. New date: ${new Date(booking.rescheduleDate).toDateString()}.`, constants_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
             }
             if (status === "Rejected") {
                 yield this._bookingRepository.updateOne({ bookingId }, {
@@ -116,8 +116,8 @@ let RescheduleBookingUseCase = class RescheduleBookingUseCase {
                     }
                 }
                 yield this._vendorRepository.vendorSave(vendor);
-                this._pushNotificationService.sendNotification(booking.clientId, "booking", `You have rejected the vendor's request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
-                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `Client has rejected your request to reschedule the booking.`, notification_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
+                this._pushNotificationService.sendNotification(booking.clientId, "booking", `You have rejected the vendor's request to reschedule the booking.`, constants_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "client");
+                this._pushNotificationService.sendNotification(booking.vendorId, "booking", `Client has rejected your request to reschedule the booking.`, constants_1.NotificationType.RESCHEDULE_SERVICE_BOOKING, "vendor");
             }
         });
     }

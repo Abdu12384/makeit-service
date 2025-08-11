@@ -23,6 +23,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlackListTokenUseCase = void 0;
 const tsyringe_1 = require("tsyringe");
+const custom_error_1 = require("../../domain/utils/custom.error");
+const constants_1 = require("../../shared/constants");
 let BlackListTokenUseCase = class BlackListTokenUseCase {
     constructor(_tokenService, _redisTokenRepository) {
         this._tokenService = _tokenService;
@@ -32,7 +34,7 @@ let BlackListTokenUseCase = class BlackListTokenUseCase {
         return __awaiter(this, void 0, void 0, function* () {
             const decode = this._tokenService.verifyAccessToken(token);
             if (!decode || typeof decode === "string" || !decode.exp) {
-                throw new Error("Invalid Token: Missing expiratrion time");
+                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.TOKEN_EXPIRED, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             const expiresIn = decode.exp - Math.floor(Date.now() / 1000);
             if (expiresIn > 0) {

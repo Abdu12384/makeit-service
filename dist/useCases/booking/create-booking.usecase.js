@@ -26,7 +26,7 @@ const tsyringe_1 = require("tsyringe");
 const unique_uuid_helper_1 = require("../../shared/utils/unique-uuid.helper");
 const custom_error_1 = require("../../domain/utils/custom.error");
 const constants_1 = require("../../shared/constants");
-const notification_1 = require("../../shared/dtos/notification");
+const constants_2 = require("../../shared/constants");
 let CreateBookingUseCase = class CreateBookingUseCase {
     constructor(_bookingRepository, _pushNotificationService) {
         this._bookingRepository = _bookingRepository;
@@ -54,7 +54,7 @@ let CreateBookingUseCase = class CreateBookingUseCase {
                 vendorId,
                 date: [date],
             });
-            yield this._pushNotificationService.sendNotification(vendorId, notification_1.NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
+            yield this._pushNotificationService.sendNotification(vendorId, constants_2.NotificationType.SERVICE_BOOKING, `You have received a new booking for ${new Date(date).toDateString()}`, "booking", "vendor");
         });
     }
 };

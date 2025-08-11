@@ -1,6 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VENDOR_APPLICATION_MAIL_CONTENT = exports.RESET_PASSWORD_MAIL_CONTENT = exports.VERIFICATION_MAIL_CONTENT = exports.ERROR_MESSAGES = exports.SUCCESS_MESSAGES = exports.HTTP_STATUS = void 0;
+exports.VENDOR_APPLICATION_MAIL_CONTENT = exports.RESET_PASSWORD_MAIL_CONTENT = exports.VERIFICATION_MAIL_CONTENT = exports.ERROR_MESSAGES = exports.SUCCESS_MESSAGES = exports.HTTP_STATUS = exports.NotificationType = void 0;
+var NotificationType;
+(function (NotificationType) {
+    NotificationType["SERVICE_BOOKING"] = "service_booking";
+    NotificationType["TICKET_BOOKING"] = "ticket_booking";
+    NotificationType["CANCEL_SERVICE_BOOKING"] = "cancel_service_booking";
+    NotificationType["CANCEL_TICKET_BOOKING"] = "cancel_ticket_booking";
+    NotificationType["CHAT_MESSAGE"] = "chat_message";
+    NotificationType["RESCHEDULE_SERVICE_BOOKING"] = "reschedule_service_booking";
+    NotificationType["BOOKIG_ADVANCE_PAYMENT"] = "booking_advance_payment";
+    NotificationType["BOOKING_REJECTED"] = "booking_rejected";
+    NotificationType["BOOKING_APPROVED"] = "booking_approved";
+    NotificationType["BOOKING_COMPLETED"] = "booking_completed";
+    NotificationType["BOOKING_CANCELLED"] = "booking_cancelled";
+})(NotificationType || (exports.NotificationType = NotificationType = {}));
 exports.HTTP_STATUS = {
     // ✅ Success responses
     OK: 200, // Request was successful (e.g., fetching data, updating without response body)
@@ -102,6 +116,13 @@ exports.ERROR_MESSAGES = {
     PASSWORD_SAME: "New password must be different from current password",
     EVENT_LOCKED: "You already initiated a ticket booking. Please wait a few minutes before trying again.",
     BOOKING_LOCKED: "You already initiated a booking. Please wait a few minutes before trying again.",
+    BOOKING_ALREADY_PAID: "This booking is already fully paid.",
+    NO_BALANCE_AMOUNT: "No balance amount available to pay.",
+    BOOKING_NOT_FOUND: "Booking not found",
+    VENDOR_NOT_FOUND: "Vendor not found",
+    STRIPE_PAYMENT_FAILED: "Stripe payment failed",
+    EMAIL_REQUIRED: "Email is required",
+    VENDOR_ACCOUNTS_CANNOT_BE_CREATED_USING_GOOGLE: "Vendor accounts cannot be created using Google. Please Register First",
 };
 const VERIFICATION_MAIL_CONTENT = (otp) => `
 <!DOCTYPE html>
