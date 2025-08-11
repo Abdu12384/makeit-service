@@ -19,7 +19,6 @@ export class ClientRoute {
 
          this.clientRoute.put("/client/details",
          verifyAuth,
-         // authorizeRole(["client"])
          blockStatusMiddleware.checkStatus as RequestHandler,
          (req: Request, res:Response) =>{
           userController.updateUserDetails(req,res)
@@ -284,7 +283,6 @@ export class ClientRoute {
            // logout
           this.clientRoute.post('/client/logout',
             verifyAuth,
-            // authorizeRole(["client"])
             blockStatusMiddleware.checkStatus as RequestHandler,
             (req: Request,res:Response) =>{
              authController.logout(req, res)

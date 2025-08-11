@@ -12,7 +12,7 @@ import { generateUniqueId } from "../../shared/utils/unique-uuid.helper";
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
 import { ITicketEntity } from "../../domain/entities/ticket.entity";
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
-import { NotificationType } from "../../shared/dtos/notification";
+import { NotificationType } from "../../shared/constants";
 import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface";
 import { config } from "../../shared/config";
 

@@ -2,8 +2,9 @@ import { inject, injectable } from "tsyringe"
 import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface"
 import { ICancelBookingUseCase } from "../../domain/interface/useCaseInterface/booking/cancel-booking-usecase.interface"
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface"
-import { NotificationType } from "../../shared/dtos/notification"
+import { ERROR_MESSAGES, HTTP_STATUS, NotificationType } from "../../shared/constants"
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface"
+import { CustomError } from "../../domain/utils/custom.error"
 
 
 
@@ -28,7 +29,7 @@ export class CancelBookingUseCase implements ICancelBookingUseCase{
     async execute(bookingId:string): Promise<void>{
         const booking = await this._bookingRepository.findOne({bookingId})
         if(!booking){
-            throw new Error("Booking not found")
+            throw new CustomError(ERROR_MESSAGES.BOOKING_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
         }
 
         booking.status = "Cancelled"
@@ -36,7 +37,7 @@ export class CancelBookingUseCase implements ICancelBookingUseCase{
 
         const vendor = await this._vendorRepository.VendorfindOne(booking.vendorId);
 
-        if (!vendor) throw new Error("Vendor not found");
+        if (!vendor) throw new CustomError(ERROR_MESSAGES.VENDOR_NOT_FOUND,HTTP_STATUS.NOT_FOUND);
 
         if (!Array.isArray(vendor.bookedDates)) {
             vendor.bookedDates = [];

@@ -15,6 +15,21 @@ export type PopulatedItem = IServiceEntity;
 export type CreateCategoryDTO = Omit<ICategoryEntity, "categoryId">;
 
 
+export enum NotificationType {
+  SERVICE_BOOKING = "service_booking",
+  TICKET_BOOKING = "ticket_booking",
+  CANCEL_SERVICE_BOOKING = "cancel_service_booking",
+  CANCEL_TICKET_BOOKING = "cancel_ticket_booking",
+  CHAT_MESSAGE = "chat_message",
+  RESCHEDULE_SERVICE_BOOKING = "reschedule_service_booking",
+  BOOKIG_ADVANCE_PAYMENT = "booking_advance_payment",
+  BOOKING_REJECTED = "booking_rejected",
+  BOOKING_APPROVED = "booking_approved",
+  BOOKING_COMPLETED = "booking_completed",
+  BOOKING_CANCELLED = "booking_cancelled"
+}
+
+
 export const HTTP_STATUS = {
 	// ✅ Success responses
 	OK: 200, // Request was successful (e.g., fetching data, updating without response body)
@@ -123,6 +138,13 @@ export const ERROR_MESSAGES = {
 	PASSWORD_SAME: "New password must be different from current password",
   EVENT_LOCKED: "You already initiated a ticket booking. Please wait a few minutes before trying again.",
   BOOKING_LOCKED: "You already initiated a booking. Please wait a few minutes before trying again.",
+  BOOKING_ALREADY_PAID: "This booking is already fully paid.",
+  NO_BALANCE_AMOUNT: "No balance amount available to pay.",
+  BOOKING_NOT_FOUND: "Booking not found",
+  VENDOR_NOT_FOUND: "Vendor not found",
+  STRIPE_PAYMENT_FAILED: "Stripe payment failed",
+  EMAIL_REQUIRED: "Email is required",
+  VENDOR_ACCOUNTS_CANNOT_BE_CREATED_USING_GOOGLE: "Vendor accounts cannot be created using Google. Please Register First",
 } as const;
 
 

@@ -22,7 +22,6 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
     ) {}
 
 
-
     async execute(email: string): Promise<void> {
 
         const {exists} = await this._userExitenceService.findUserByEmail(email)
@@ -36,8 +35,7 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
         
         const otp =  this._otpService.generateOtp()
 
-              
-            
+                
          await this._otpService.storeOtp(email, otp)
           
            await this._emailService.sendOtpEmail(
@@ -45,6 +43,5 @@ export class sendOtpEmailUseCase implements ISendOtpEmailUseCase{
             "MAKEIT - Verify Your Email",
              otp
             )
-
     }
 }

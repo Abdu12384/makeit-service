@@ -5,6 +5,8 @@ import { IPaymentService } from "../../domain/interface/servicesInterface/paymen
 import { IPaymentRepository } from "../../domain/interface/repositoryInterfaces/payment/payment-repository";
 import { IBookingEntity } from "../../domain/entities/booking.entity";
 import { IRedisTokenRepository } from "../../domain/interface/repositoryInterfaces/redis/redis-token-repository.interface";
+import { CustomError } from "../../domain/utils/custom.error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 
 
@@ -23,12 +25,12 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
 
 
     const paymentIntent = await this._stripeService.confirmPayment(paymentIntentId);
-    if (!paymentIntent) throw new Error("Failed to confirm Stripe payment");
+    if (!paymentIntent) throw new CustomError(ERROR_MESSAGES.STRIPE_PAYMENT_FAILED,HTTP_STATUS.BAD_REQUEST);
 
 
     const existingBooking = await this._bookingRepository.findOne({bookingId:booking.bookingId})
       if(!existingBooking){
-        throw new Error("Booking not found")
+        throw new CustomError(ERROR_MESSAGES.BOOKING_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
       }
 
     const paidAmount = paymentIntent.amount / 100;
@@ -60,7 +62,7 @@ export class ConfirmPaymentUseCase implements IBookingConfirmPaymentUseCase {
         { bookingId: booking.bookingId },
         { status: "failed" }
       );
-      throw new Error("Stripe payment not successful");
+      throw new CustomError(ERROR_MESSAGES.STRIPE_PAYMENT_FAILED,HTTP_STATUS.BAD_REQUEST);
     } 
     await this._redisTokenRepository.deleteEventLock(booking.clientId, booking.serviceId);
 

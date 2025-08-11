@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IBookingRepository } from "../../domain/interface/repositoryInterfaces/booking/booking-repository.interface";
 import { IRescheduleBookingUseCase } from "../../domain/interface/useCaseInterface/booking/resudule-booking-usecase.interface";
 import { IPushNotificationService } from "../../domain/interface/servicesInterface/push-notification-service-interface";
-import { NotificationType } from "../../shared/dtos/notification";
+import { NotificationType } from "../../shared/constants";
 import { CustomError } from "../../domain/utils/custom.error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IVendorRepository } from "../../domain/interface/repositoryInterfaces/users/vendor.repository.interface";

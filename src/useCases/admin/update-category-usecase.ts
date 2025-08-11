@@ -2,6 +2,8 @@ import { inject, injectable } from "tsyringe"
 import { IUpdateStatusCategoryUseCase } from "../../domain/interface/useCaseInterface/admin/update-category-usecase.interface"
 import { ICategoryRepository } from "../../domain/interface/repositoryInterfaces/admin/category-repository.interface"
 import { ICategoryEntity } from "../../domain/entities/category.entity"
+import { plainToInstance } from "class-transformer"
+import { CategoryDTO } from "../../shared/dtos/category.dto"
 
 
 
@@ -21,7 +23,10 @@ export class UpdateStatusCategoryUseCase implements IUpdateStatusCategoryUseCase
         {categoryId},
         {status}
       )
-      return category
+
+      const categories = plainToInstance(CategoryDTO, category, { excludeExtraneousValues: true }); 
+      
+      return categories
    }
 }
 
