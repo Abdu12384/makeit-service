@@ -32,14 +32,17 @@ let CheckEventBookingAvliblityUseCase = class CheckEventBookingAvliblityUseCase 
     }
     execute(eventId, userId, ticketCount) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('event id here', eventId);
             const event = yield this._eventRepository.findOne({ eventId });
+            console.log('event', event);
             if (!event)
                 throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
             const ticket = yield this._ticketRepository.findOne({ eventId, clientId: userId });
-            if (!ticket) {
-                throw new custom_error_1.CustomError(constants_1.ERROR_MESSAGES.REQUEST_NOT_FOUND, constants_1.HTTP_STATUS.NOT_FOUND);
-            }
-            if (ticket.ticketCount + ticketCount > event.maxTicketsPerUser) {
+            console.log('ticket', ticket);
+            //  if(!ticket){ 
+            //   throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+            // }
+            if (ticket && (ticket.ticketCount + ticketCount > event.maxTicketsPerUser)) {
                 throw new custom_error_1.CustomError(`You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - ticket.ticketCount} more ticket(s).`, constants_1.HTTP_STATUS.BAD_REQUEST);
             }
             if (event.totalTicket === event.ticketPurchased) {

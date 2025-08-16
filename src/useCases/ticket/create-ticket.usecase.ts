@@ -48,7 +48,7 @@ export class CreateTicketUseCase implements ICreateTicketUseCase {
     if(eventDetails.status === "cancelled") throw new CustomError("Event cancelled",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails.status === "completed") throw new CustomError("Event already completed",HTTP_STATUS.FORBIDDEN) 
     if(eventDetails?.ticketPurchased && eventDetails?.ticketPurchased === eventDetails.totalTicket) throw new CustomError("Ticket Sold Out",HTTP_STATUS.FORBIDDEN)
-    if (eventDetails?.ticketPurchased && eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
+    if(eventDetails?.ticketPurchased && eventDetails?.ticketPurchased + totalCount > eventDetails.totalTicket) throw new CustomError(`Only ${eventDetails.totalTicket - eventDetails.ticketPurchased} tickets are available. Please reduce the quantity.`,HTTP_STATUS.FORBIDDEN)
      
       const HOSTNAME = process.env.HOSTNAME
       const ticketId = generateUniqueId()

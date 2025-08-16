@@ -5,6 +5,7 @@ import { CustomRequest } from "../middlewares/auth.middleware";
 import { HTTP_STATUS } from "../../shared/constants";
 import { handleErrorResponse } from "../../shared/utils/error.handler";
 import { IGetWalletByIdUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-by-id-usecase.interface";
+import { IGetWalletBalanceUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-balance-usecase.interface";
 
 
 
@@ -14,7 +15,9 @@ export class WalletController implements IWalletController{
     
     constructor(
         @inject("IGetWalletByIdUseCase")
-        private readonly _getWalletByIdUseCase:IGetWalletByIdUseCase
+        private readonly _getWalletByIdUseCase:IGetWalletByIdUseCase,
+        @inject("IGetWalletBalanceUseCase")
+        private readonly _getWalletBalanceUseCase:IGetWalletBalanceUseCase
     ){}
 
 
@@ -46,7 +49,34 @@ export class WalletController implements IWalletController{
         }
     }
 
-
+    async getWalletAmount(req:Request,res:Response):Promise<void>{
+        try {
+            const {userId} = (req as CustomRequest).user
+            const wallet = await this._getWalletBalanceUseCase.execute(
+              userId
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                wallet
+            })
+        } catch (error) {
+            handleErrorResponse(req,res,error)
+        }
+    }
     
+    async walletPayment(req:Request,res:Response):Promise<void>{
+        try {
+            const {userId} = (req as CustomRequest).user
+            const wallet = await this._getWalletBalanceUseCase.execute(
+              userId
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                wallet
+            })
+        } catch (error) {
+            handleErrorResponse(req,res,error)
+        }
+    }
         
 }

@@ -139,6 +139,10 @@ import { IGetVendorBookedDatesUseCase } from "../../domain/interface/useCaseInte
 import { GetVendorBookedDatesUseCase } from "../../useCases/booking/get-vendor-booked-dates.usecase";
 import { IGetAllEventsByLocationUseCase } from "../../domain/interface/useCaseInterface/event/get-all-events-by-location-usecase.interface";
 import { GetAllEventsByLocationUseCase } from "../../useCases/event/get-all-events-by-location";
+import { IGetWalletBalanceUseCase } from "../../domain/interface/useCaseInterface/wallet/get-wallet-balance-usecase.interface";
+import { GetWalletBalanceUseCase } from "../../useCases/wallet/get-wallet-balance.usecase";
+import { IWalletPaymentUseCase } from "../../domain/interface/useCaseInterface/wallet/wallet-payment-usecase.interface";
+import { WalletPaymentUseCase } from "../../useCases/wallet/wallet-payment.usecase";
 
 
 
@@ -377,6 +381,13 @@ export class UseCaseRegistry {
       useClass: GetAllEventsByLocationUseCase
     })
     
+    container.register<IGetWalletBalanceUseCase>("IGetWalletBalanceUseCase",{
+      useClass: GetWalletBalanceUseCase
+    })
+
+    container.register<IWalletPaymentUseCase>("IWalletPaymentUseCase",{
+      useClass: WalletPaymentUseCase
+    })
    //======================= Register Bycripts =======================//
 
      container.register<IPasswordHasher>("IPasswordHasher",{

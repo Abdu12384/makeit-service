@@ -96,6 +96,9 @@ class ClientRoute {
         this.clientRoute.post("/client/confirm-ticket-payment", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.ticketController.confirmTicketAndPayment(req, res);
         });
+        this.clientRoute.post("/client/purchase-ticket", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.ticketController.purchaseTicketWithWallet(req, res);
+        });
         this.clientRoute.put("/client/cancel-ticket/:ticketId", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.ticketController.cancelTicket(req, res);
         });
@@ -104,6 +107,9 @@ class ClientRoute {
         * ========================== */
         this.clientRoute.get("/client/wallet", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
             resolver_1.walletController.getWalletById(req, res);
+        });
+        this.clientRoute.get("/client/wallet/amount", auth_middleware_1.verifyAuth, resolver_1.blockStatusMiddleware.checkStatus, (req, res) => {
+            resolver_1.walletController.getWalletAmount(req, res);
         });
         /** ==========================
          *  Client Review Management Routes

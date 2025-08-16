@@ -70,6 +70,7 @@ exports.SUCCESS_MESSAGES = {
     PROFILE_UPDATED: "Profile updated",
     SESSION_EXTENDED: "Session extended",
     TICKET_CONFIRMED: "Ticket confirmed",
+    PURCHASE_SUCCESS: "Purchase successful",
 };
 exports.ERROR_MESSAGES = {
     WRONG_ID: "Invalid ID",

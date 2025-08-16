@@ -22,17 +22,23 @@ export class CheckEventBookingAvliblityUseCase implements ICheckEventBookingAvli
     
     async execute(eventId:string,userId:string,ticketCount:number):Promise<void>{
         
+      console.log('event id here',eventId)
       const event = await this._eventRepository.findOne({eventId})
+      console.log('event',event)
       if (!event) throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
 
       const ticket = await this._ticketRepository.findOne({eventId,clientId:userId})
+      console.log('ticket',ticket)
+      //  if(!ticket){ 
+      //   throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)
+      // }
 
-       if(!ticket){ throw new CustomError(ERROR_MESSAGES.REQUEST_NOT_FOUND,HTTP_STATUS.NOT_FOUND)}
-
-        if(ticket.ticketCount + ticketCount > event.maxTicketsPerUser){
-            throw new CustomError(  `You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - ticket.ticketCount} more ticket(s).`,
-              HTTP_STATUS.BAD_REQUEST)
-        }
+      if (ticket && (ticket.ticketCount + ticketCount > event.maxTicketsPerUser)) {
+        throw new CustomError(
+          `You have already reached your ticket limit. You can only book ${event.maxTicketsPerUser - ticket.ticketCount} more ticket(s).`,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
 
         if(event.totalTicket === event.ticketPurchased){
           throw new CustomError("Event is already full",HTTP_STATUS.BAD_REQUEST)

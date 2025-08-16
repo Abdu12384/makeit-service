@@ -88,6 +88,7 @@ export const SUCCESS_MESSAGES = {
 	PROFILE_UPDATED: "Profile updated",
 	SESSION_EXTENDED: "Session extended",
   TICKET_CONFIRMED: "Ticket confirmed",
+  PURCHASE_SUCCESS: "Purchase successful",
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -145,6 +146,7 @@ export const ERROR_MESSAGES = {
   STRIPE_PAYMENT_FAILED: "Stripe payment failed",
   EMAIL_REQUIRED: "Email is required",
   VENDOR_ACCOUNTS_CANNOT_BE_CREATED_USING_GOOGLE: "Vendor accounts cannot be created using Google. Please Register First",
+
 } as const;
 
 

@@ -62,11 +62,11 @@ let EventController = class EventController {
     getAllEvents(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { page, limit, search } = req.query;
+                const { page, limit, search, lat, lng } = req.query;
                 const pageNumber = Number(page);
                 const pageSize = Number(limit);
                 const searchTermString = typeof search === "string" ? search : "";
-                const events = yield this._getAllEventsUseCase.execute(pageNumber, pageSize, searchTermString);
+                const events = yield this._getAllEventsUseCase.execute(pageNumber, pageSize, searchTermString, Number(lat), Number(lng));
                 res.status(constants_1.HTTP_STATUS.OK).json({
                     success: true,
                     events,
