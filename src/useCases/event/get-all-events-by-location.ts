@@ -24,7 +24,6 @@ export class GetAllEventsByLocationUseCase implements IGetAllEventsByLocationUse
             lng,
             radius
         })
-
         return events
     }
 }

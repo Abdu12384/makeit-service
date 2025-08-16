@@ -78,14 +78,16 @@ export class EventController implements IEventController{
 
     async getAllEvents(req:Request,res:Response):Promise<void>{
       try {
-        const {page,limit,search} = req.query
+        const {page,limit,search,lat,lng} = req.query
         const pageNumber = Number(page)
         const pageSize = Number(limit)
         const searchTermString = typeof search === "string" ? search : ""
         const events = await this._getAllEventsUseCase.execute(
           pageNumber,
           pageSize,
-          searchTermString
+          searchTermString,
+          Number(lat),
+          Number(lng)
         )
         res.status(HTTP_STATUS.OK).json({
           success:true,

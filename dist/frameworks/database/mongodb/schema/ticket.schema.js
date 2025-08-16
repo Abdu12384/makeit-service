@@ -49,7 +49,7 @@ exports.ticketSchema = new mongoose_1.Schema({
     paymentTransactionId: {
         type: String,
         ref: 'payment',
-        required: true
+        // required: true
     },
     totalAmount: {
         type: Number,

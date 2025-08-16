@@ -95,5 +95,4 @@ export class LoginUserUseCase implements ILoginUserUseCase{
          console.log(users)
          return users
     }
-
 }

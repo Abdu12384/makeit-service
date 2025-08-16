@@ -27,12 +27,13 @@ const error_handler_1 = require("../../shared/utils/error.handler");
 const constants_1 = require("../../shared/constants");
 const constants_2 = require("../../shared/constants");
 let TicketController = class TicketController {
-    constructor(_createTicketUseCase, _confirmTicketUseCase, _getAllTicketsByIdUseCase, _verifyTicketUseCase, _cancelTicketUseCase) {
+    constructor(_createTicketUseCase, _confirmTicketUseCase, _getAllTicketsByIdUseCase, _verifyTicketUseCase, _cancelTicketUseCase, _walletPaymentUseCase) {
         this._createTicketUseCase = _createTicketUseCase;
         this._confirmTicketUseCase = _confirmTicketUseCase;
         this._getAllTicketsByIdUseCase = _getAllTicketsByIdUseCase;
         this._verifyTicketUseCase = _verifyTicketUseCase;
         this._cancelTicketUseCase = _cancelTicketUseCase;
+        this._walletPaymentUseCase = _walletPaymentUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //  Create Ticket 
@@ -134,6 +135,28 @@ let TicketController = class TicketController {
             }
         });
     }
+    // ══════════════════════════════════════════════════════════
+    //  Purchase Ticket With Wallet 
+    // ══════════════════════════════════════════════════════════
+    purchaseTicketWithWallet(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('nbnbnbnbn', req.body);
+                const { amount, eventId, ticket, type, totalTicketCount, vendorId, paymentMethod } = req.body;
+                const { userId } = req.user;
+                const clientId = userId;
+                const Ticket = yield this._walletPaymentUseCase.execute(ticket, amount, eventId, type, totalTicketCount, vendorId, clientId, paymentMethod);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    message: constants_2.SUCCESS_MESSAGES.PURCHASE_SUCCESS,
+                    Ticket,
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
+            }
+        });
+    }
 };
 exports.TicketController = TicketController;
 exports.TicketController = TicketController = __decorate([
@@ -143,6 +166,7 @@ exports.TicketController = TicketController = __decorate([
     __param(2, (0, tsyringe_1.inject)("IGetAllTicketsByIdUseCase")),
     __param(3, (0, tsyringe_1.inject)("IVerifyTicketUseCase")),
     __param(4, (0, tsyringe_1.inject)("ICancelTicketUseCase")),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    __param(5, (0, tsyringe_1.inject)("IWalletPaymentUseCase")),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], TicketController);
 //# sourceMappingURL=ticket.contoller.js.map

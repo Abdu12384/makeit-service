@@ -176,7 +176,7 @@ export class ClientRoute {
        (req: Request, res:Response) =>{
          eventController.checkEventBookingAvailability(req,res)
        })
-
+       
        this.clientRoute.get("/nearby",
        (req: Request, res:Response) =>{
          eventController.getAllEventsByLocation(req,res)
@@ -211,7 +211,12 @@ export class ClientRoute {
          ticketController.confirmTicketAndPayment(req,res)
        })
        
-
+       this.clientRoute.post("/client/purchase-ticket",
+       verifyAuth,
+       blockStatusMiddleware.checkStatus as RequestHandler,
+       (req: Request, res:Response) =>{
+         ticketController.purchaseTicketWithWallet(req,res)
+       })
 
 
        this.clientRoute.put("/client/cancel-ticket/:ticketId",
@@ -239,7 +244,12 @@ export class ClientRoute {
       })
 
 
-
+       this.clientRoute.get("/client/wallet/amount",
+       verifyAuth,
+       blockStatusMiddleware.checkStatus as RequestHandler,
+       (req: Request, res:Response) =>{
+         walletController.getWalletAmount(req,res)
+       })
 
 
       /** ==========================

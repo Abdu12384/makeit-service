@@ -49,7 +49,7 @@ export const ticketSchema = new Schema<ITicketModel>({
     paymentTransactionId: {
         type: String,
         ref: 'payment',
-        required: true
+        // required: true
     },
     totalAmount: {
         type: Number,

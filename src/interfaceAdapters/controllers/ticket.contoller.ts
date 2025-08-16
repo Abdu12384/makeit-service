@@ -10,6 +10,8 @@ import { CustomRequest } from "../middlewares/auth.middleware";
 import { IGetAllTicketsByIdUseCase } from "../../domain/interface/useCaseInterface/ticket/get-all-tickets-by-id-usecase.interface";
 import { IVerifyTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/varify-ticket-usecase.inteface";
 import { ICancelTicketUseCase } from "../../domain/interface/useCaseInterface/ticket/cancel-ticket-usecase.interface";
+import { PurchaseTicketDto } from "../../shared/dtos/request/ticket-requst.dto";
+import { IWalletPaymentUseCase } from "../../domain/interface/useCaseInterface/wallet/wallet-payment-usecase.interface";
 
 
 
@@ -36,6 +38,8 @@ export class TicketController implements ITicketController {
       private _verifyTicketUseCase: IVerifyTicketUseCase,
       @inject("ICancelTicketUseCase")
       private _cancelTicketUseCase: ICancelTicketUseCase,
+      @inject("IWalletPaymentUseCase")
+      private _walletPaymentUseCase: IWalletPaymentUseCase,
     ){}
 
 
@@ -175,6 +179,38 @@ export class TicketController implements ITicketController {
                 cancelTicket,
             })
             
+        } catch (error) {
+            handleErrorResponse(req,res, error)
+        }
+    }
+
+
+
+// ══════════════════════════════════════════════════════════
+//  Purchase Ticket With Wallet 
+// ══════════════════════════════════════════════════════════
+
+    async purchaseTicketWithWallet(req: Request, res: Response): Promise<void> {
+        try {
+            console.log('nbnbnbnbn',req.body)
+            const {amount, eventId, ticket, type, totalTicketCount, vendorId, paymentMethod} = req.body as PurchaseTicketDto
+            const {userId} = (req as CustomRequest).user 
+            const clientId = userId
+            const Ticket = await this._walletPaymentUseCase.execute(
+                ticket,
+                amount,
+                eventId,
+                type,
+                totalTicketCount,
+                vendorId,
+                clientId,
+                paymentMethod,
+            )
+            res.status(HTTP_STATUS.OK).json({
+                success:true,
+                message:SUCCESS_MESSAGES.PURCHASE_SUCCESS,
+                Ticket,
+            })
         } catch (error) {
             handleErrorResponse(req,res, error)
         }

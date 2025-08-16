@@ -27,7 +27,7 @@ let GetAllEventsUseCase = class GetAllEventsUseCase {
     constructor(_eventRepository) {
         this._eventRepository = _eventRepository;
     }
-    execute(pageNumber, pageSize, searchTermString) {
+    execute(pageNumber, pageSize, searchTermString, lat, lng) {
         return __awaiter(this, void 0, void 0, function* () {
             const validPageNumber = Math.max(1, pageNumber || 1);
             const validPageSize = Math.max(1, pageSize || 10);
@@ -39,7 +39,25 @@ let GetAllEventsUseCase = class GetAllEventsUseCase {
             if (searchTermString) {
                 filter.title = { $regex: searchTermString, $options: "i" };
             }
-            const { items, total } = yield this._eventRepository.findAll(filter, skip, validPageSize, { createdAt: -1 });
+            let items = [];
+            let total = 0;
+            if (lat && lng) {
+                const locationEvents = yield this._eventRepository.findAllByLocation({
+                    lat,
+                    lng,
+                    radius: 10
+                });
+                const filtered = searchTermString
+                    ? locationEvents.filter(ev => ev.title.toLowerCase().includes(searchTermString.toLowerCase()))
+                    : locationEvents;
+                total = filtered.length;
+                items = filtered.slice(skip, skip + validPageSize);
+            }
+            else {
+                const result = yield this._eventRepository.findAll(filter, skip, validPageSize, { createdAt: -1 });
+                items = result.items;
+                total = result.total;
+            }
             const response = {
                 events: items,
                 total: Math.ceil(total / validPageSize)

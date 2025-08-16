@@ -75,6 +75,8 @@ const block_event_usecase_1 = require("../../useCases/event/block-event-usecase"
 const resedul_booking_usecase_1 = require("../../useCases/booking/resedul-booking.usecase");
 const get_vendor_booked_dates_usecase_1 = require("../../useCases/booking/get-vendor-booked-dates.usecase");
 const get_all_events_by_location_1 = require("../../useCases/event/get-all-events-by-location");
+const get_wallet_balance_usecase_1 = require("../../useCases/wallet/get-wallet-balance.usecase");
+const wallet_payment_usecase_1 = require("../../useCases/wallet/wallet-payment.usecase");
 class UseCaseRegistry {
     static registerUseCase() {
         // ======================= Auth ==========================//
@@ -245,6 +247,12 @@ class UseCaseRegistry {
         });
         tsyringe_1.container.register("IGetAllEventsByLocationUseCase", {
             useClass: get_all_events_by_location_1.GetAllEventsByLocationUseCase
+        });
+        tsyringe_1.container.register("IGetWalletBalanceUseCase", {
+            useClass: get_wallet_balance_usecase_1.GetWalletBalanceUseCase
+        });
+        tsyringe_1.container.register("IWalletPaymentUseCase", {
+            useClass: wallet_payment_usecase_1.WalletPaymentUseCase
         });
         //======================= Register Bycripts =======================//
         tsyringe_1.container.register("IPasswordHasher", {

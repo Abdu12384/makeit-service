@@ -6,4 +6,5 @@ export interface ITicketController {
     getAllTicketsByClientId(req: Request, res: Response): Promise<void>;
     verifyTicket(req: Request, res: Response): Promise<void>;
     cancelTicket(req: Request, res: Response): Promise<void>;
+    purchaseTicketWithWallet(req: Request, res: Response): Promise<void>;
 }

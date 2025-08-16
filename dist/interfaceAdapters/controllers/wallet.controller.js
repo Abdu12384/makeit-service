@@ -26,8 +26,9 @@ const tsyringe_1 = require("tsyringe");
 const constants_1 = require("../../shared/constants");
 const error_handler_1 = require("../../shared/utils/error.handler");
 let WalletController = class WalletController {
-    constructor(_getWalletByIdUseCase) {
+    constructor(_getWalletByIdUseCase, _getWalletBalanceUseCase) {
         this._getWalletByIdUseCase = _getWalletByIdUseCase;
+        this._getWalletBalanceUseCase = _getWalletBalanceUseCase;
     }
     // ══════════════════════════════════════════════════════════
     //   Get Wallet By Id
@@ -50,11 +51,42 @@ let WalletController = class WalletController {
             }
         });
     }
+    getWalletAmount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId } = req.user;
+                const wallet = yield this._getWalletBalanceUseCase.execute(userId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    wallet
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
+            }
+        });
+    }
+    walletPayment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId } = req.user;
+                const wallet = yield this._getWalletBalanceUseCase.execute(userId);
+                res.status(constants_1.HTTP_STATUS.OK).json({
+                    success: true,
+                    wallet
+                });
+            }
+            catch (error) {
+                (0, error_handler_1.handleErrorResponse)(req, res, error);
+            }
+        });
+    }
 };
 exports.WalletController = WalletController;
 exports.WalletController = WalletController = __decorate([
     (0, tsyringe_1.injectable)(),
     __param(0, (0, tsyringe_1.inject)("IGetWalletByIdUseCase")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, tsyringe_1.inject)("IGetWalletBalanceUseCase")),
+    __metadata("design:paramtypes", [Object, Object])
 ], WalletController);
 //# sourceMappingURL=wallet.controller.js.map
